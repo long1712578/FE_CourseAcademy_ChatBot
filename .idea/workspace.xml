@@ -26,7 +26,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/component" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
@@ -36,6 +36,7 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\tranh\OneDrive\Documents\GitHub\FE_CourseAcademy_ChatBot\src\component" />
       <recent name="C:\Users\tranh\OneDrive\Documents\GitHub\FE_CourseAcademy_ChatBot" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -54,7 +55,8 @@
       <workItem from="1624547997388" duration="1386000" />
       <workItem from="1624549450565" duration="1683000" />
       <workItem from="1624676976327" duration="930000" />
-      <workItem from="1624985222356" duration="6043000" />
+      <workItem from="1624985222356" duration="6525000" />
+      <workItem from="1625060167843" duration="12191000" />
     </task>
     <servers />
   </component>

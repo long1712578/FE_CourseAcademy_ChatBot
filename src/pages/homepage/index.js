@@ -1,5 +1,6 @@
 import React from "react"
-import MostHighLightComponent from '../../component/homepage/mostHighLightComponent'
+import MostHighLightComponent from '../../component/homepage/MostHighLightComponent'
+import MostViewComponent from "../../component/homepage/MostViewComponent";
 const HomePage = () =>
 {
     // if(localStorage.getItem("user"))
@@ -10,6 +11,7 @@ const HomePage = () =>
             <React.Fragment>
                 {/*<Header/>*/}
                 <MostHighLightComponent/>
+                <MostViewComponent/>
                 {/*<Footer/>*/}
             </React.Fragment>
         </div>
