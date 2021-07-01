@@ -5,7 +5,6 @@ import { Carousel,Card } from 'antd';
 import CallAPI from "../../../until/callAPI";
 import {toast} from "react-toastify";
 import Loader from "../../loader";
-import Row from "antd/es/descriptions/Row";
 const contentStyle = {
     height: '260px',
     color: '#fff',
