@@ -1,1 +1,0 @@
-// gọi api có authorize
