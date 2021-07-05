@@ -27,7 +27,7 @@ const MostHighLightComponent=()=>{
         fetchData();
     }, [])
     if(isLoading) return (
-        <div style={{marginLeft:'700px'}}>
+        <div style={{marginLeft:'200px'}}>
             <Loader/>
         </div>
     )

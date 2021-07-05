@@ -21,7 +21,7 @@ const MostViewComponent=()=>{
     }, [])
     console.log(setListNewCourse.length);
     if(isLoading) return (
-        <div style={{marginLeft:'700px'}}>
+        <div style={{marginLeft:'200px'}}>
             <Loader/>
         </div>
     )
@@ -32,7 +32,7 @@ const MostViewComponent=()=>{
                     listNewCourse.length>0?
                         listNewCourse.map((data,index)=>{
                             return(
-                                <Card.Grid bordered={true} style={{width:'20%',border:'1px solid black'}}>
+                                <Card.Grid bordered={true} style={{width:'50%',border:'1px solid black'}}>
                                     {data.name}
                                     <span  style={{float:"right"}}>
                                                       {data.price}$

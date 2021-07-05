@@ -4,6 +4,7 @@ import MostViewComponent from "../../component/homepage/MostViewComponent";
 import NewCourse from "../../component/homepage/NewCourse";
 import MostCategoryRegis from "../../component/homepage/MostCategoryRegis";
 import Header from "../../component/header";
+import Footer from "../../component/footer";
 
 const HomePage = () =>
 {
@@ -13,12 +14,12 @@ const HomePage = () =>
     return(
         <div>
             <React.Fragment>
-                {/*<Header/>*/}
+                <Header/>
                 <MostHighLightComponent/>
                 <MostViewComponent/>
                 <NewCourse/>
                 <MostCategoryRegis/>
-                {/*<Footer/>*/}
+                <Footer/>
             </React.Fragment>
         </div>
     )

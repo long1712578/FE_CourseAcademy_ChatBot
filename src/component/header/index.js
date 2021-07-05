@@ -1,87 +1,51 @@
-import {Button, Form, FormControl, Nav, Navbar} from "react-bootstrap";
-const Header=()=>{
-    return(
-        <>
-            {/*<header className="header_area">*/}
-            {/*    <div className="main_menu">*/}
-            {/*        <nav className="navbar navbar-expand-lg navbar-light">*/}
-            {/*            <div className="container">*/}
-            {/*                <a className="navbar-brand logo_h" href="index.html"><img src="img/logo.png" alt=""></img></a>*/}
-            {/*                <button className="navbar-toggle" type="button" data-toggle="collapse"*/}
-            {/*                        data-target="#navbarSupportedContent"*/}
-            {/*                        aria-controls="navbarSupportedContent" aria-expanded="false"*/}
-            {/*                        aria-label="Toggle navigation">*/}
-            {/*                    <span className="icon-bar"></span>*/}
-            {/*                    <span className="icon-bar"></span>*/}
-            {/*                    <span className="icon-bar"></span>*/}
-            {/*                </button>*/}
-            {/*                <div className="collapse navbar-collapse offset" id="navbarSupportedContent">*/}
-            {/*                    <ul className="nav navbar-nav menu_nav ml-auto mr-auto">*/}
-            {/*                        <li className="nav-item"><a className="nav-link" href="index.html">Home</a></li>*/}
-            {/*                        <li className="nav-item active submenu dropdown">*/}
-            {/*                            <a href="#" className="nav-link dropdown-toggle" data-toggle="dropdown"*/}
-            {/*                               role="button" aria-haspopup="true"*/}
-            {/*                               aria-expanded="false">Shop</a>*/}
-            {/*                            <ul className="dropdown-menu">*/}
-            {/*                                <li className="nav-item"><a className="nav-link" href="category.html">Shop*/}
-            {/*                                    Category</a></li>*/}
-            {/*                                <li className="nav-item"><a className="nav-link" href="single-product.html">Product*/}
-            {/*                                    Details</a></li>*/}
-            {/*                                <li className="nav-item"><a className="nav-link" href="checkout.html">Product*/}
-            {/*                                    Checkout</a></li>*/}
-            {/*                                <li className="nav-item"><a className="nav-link"*/}
-            {/*                                                            href="confirmation.html">Confirmation</a></li>*/}
-            {/*                                <li className="nav-item"><a className="nav-link" href="cart.html">Shopping*/}
-            {/*                                    Cart</a></li>*/}
-            {/*                            </ul>*/}
-            {/*                        </li>*/}
-            {/*                        <li className="nav-item submenu dropdown">*/}
-            {/*                            <a href="#" className="nav-link dropdown-toggle" data-toggle="dropdown"*/}
-            {/*                               role="button" aria-haspopup="true"*/}
-            {/*                               aria-expanded="false">Blog</a>*/}
-            {/*                            <ul className="dropdown-menu">*/}
-            {/*                                <li className="nav-item"><a className="nav-link" href="blog.html">Blog</a>*/}
-            {/*                                </li>*/}
-            {/*                                <li className="nav-item"><a className="nav-link"*/}
-            {/*                                                            href="register.html">Register</a></li>*/}
-            {/*                                <li className="nav-item"><a className="nav-link" href="single-blog.html">Blog*/}
-            {/*                                    Details</a></li>*/}
-            {/*                            </ul>*/}
-            {/*                        </li>*/}
-            {/*                        <li className="nav-item submenu dropdown">*/}
-            {/*                            <a href="#" className="nav-link dropdown-toggle" data-toggle="dropdown"*/}
-            {/*                               role="button" aria-haspopup="true"*/}
-            {/*                               aria-expanded="false">Pages</a>*/}
-            {/*                            <ul className="dropdown-menu">*/}
-            {/*                                <li className="nav-item"><a className="nav-link" href="login.html">Login</a>*/}
-            {/*                                </li>*/}
-            {/*                                <li className="nav-item"><a className="nav-link"*/}
-            {/*                                                            href="tracking-order.html">Tracking</a></li>*/}
-            {/*                            </ul>*/}
-            {/*                        </li>*/}
-            {/*                        <li className="nav-item"><a className="nav-link" href="contact.html">Contact</a>*/}
-            {/*                        </li>*/}
-            {/*                    </ul>*/}
+import React from 'react'
 
-            {/*                    <ul className="nav-shop">*/}
-            {/*                        <li className="nav-item">*/}
-            {/*                            <button><i className="ti-search"></i></button>*/}
-            {/*                        </li>*/}
-            {/*                        <li className="nav-item">*/}
-            {/*                            <button><i className="ti-shopping-cart"></i><span*/}
-            {/*                                className="nav-shop__circle">3</span></button>*/}
-            {/*                        </li>*/}
-            {/*                        <li className="nav-item"><a className="button button-header" href="#">Buy Now</a>*/}
-            {/*                        </li>*/}
-            {/*                    </ul>*/}
-            {/*                </div>*/}
-            {/*            </div>*/}
-            {/*        </nav>*/}
-            {/*    </div>*/}
-            {/*</header>*/}
-            <h1>header</h1>
-        </>
+export default function Header() {
+    return (
+        <header className="section-header">
+            <section className="header-main border-bottom">
+                <div className="container">
+                    <div className="row align-items-center">
+                        <div className="col-lg-2 col-4">
+                            <a href="/"className="brand-wrap">
+                                Company Name
+                            </a>
+                        </div>
+                        <div className="col-lg-6 col-sm-12">
+                            <form action="#" className="search">
+                                <div className="input-group w-100">
+                                    <input type="text" className="form-control" placeholder="Search"/>
+                                    <div className="input-group-append">
+                                        <button className="btn btn-primary" type="submit">
+                                            <i className="fa fa-search"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div className="col-lg-4 col-sm-6 col-12">
+                            <div className="widgets-wrap float-md-right">
+                                <div className="widget-header  mr-3">
+                                    <a href="#" className="icon icon-sm rounded-circle border"><i
+                                        className="fa fa-shopping-cart"></i></a>
+                                    <span className="badge badge-pill badge-danger notify">0</span>
+                                </div>
+                                <div className="widget-header icontext">
+                                    <a className="icon icon-sm rounded-circle border"><i
+                                        className="fa fa-user"></i></a>
+                                    <div className="text">
+                                        <span className="text-muted">Welcome!</span>
+                                        <div>
+                                            <a>Sign in</a> |
+                                            <a> Register</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </header>
     )
 }
-
-export default Header;

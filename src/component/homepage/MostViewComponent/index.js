@@ -21,7 +21,7 @@ const MostViewComponent=()=>{
     }, [])
     console.log(setListCourseMostView.length);
     if(isLoading) return (
-        <div style={{marginLeft:'700px'}}>
+        <div style={{marginLeft:'200px'}}>
             <Loader/>
         </div>
     )
@@ -39,7 +39,6 @@ const MostViewComponent=()=>{
                                                 </span>
                                                 <EyeOutlined style={{float:"right",margin:'5px'}}>
                                                 </EyeOutlined>
-
                                             </Card.Grid>
                                     );
 

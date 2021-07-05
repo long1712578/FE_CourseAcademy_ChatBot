@@ -28,7 +28,7 @@ const MostHighLightComponent=()=>{
     }, [])
     console.log(listCourseHighLight.length);
     if(isLoading) return (
-        <div style={{marginLeft:'700px'}}>
+        <div style={{marginLeft:'200px'}}>
             <Loader/>
         </div>
     )
@@ -55,7 +55,7 @@ const MostHighLightComponent=()=>{
                                                 </div>
                                                 <div style={{marginTop: '15px'}}>
                                                     <p style={{float: 'left'}}>Rating in
-                                                        week: {data.rat_week.split('.0000')}<span
+                                                        week: {data.rat.split('.0000')}<span
                                                             className="fa fa-star checked"></span></p>
                                                     <p className="card-price">Price: {data.price}$</p>
                                                 </div>
