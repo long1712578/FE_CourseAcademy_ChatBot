@@ -17,6 +17,14 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
   <component name="ProjectId" id="1uOsVodvOGF2SnMmNhb2w8OpOCG" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -43,6 +51,7 @@
       <recent name="C:\Users\tranh\OneDrive\Documents\GitHub\FE_CourseAcademy_ChatBot" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\tranh\OneDrive\Documents\GitHub\FE_CourseAcademy_ChatBot\public\assets\images\items" />
       <recent name="C:\Users\tranh\OneDrive\Documents\GitHub\FE_CourseAcademy_ChatBot\public\assets" />
       <recent name="C:\Users\tranh\OneDrive\Documents\GitHub\FE_CourseAcademy_ChatBot\src\component\homepage\mostHighLightComponent" />
       <recent name="C:\Users\tranh\OneDrive\Documents\GitHub\FE_CourseAcademy_ChatBot\src\pages\dashboard" />
@@ -62,7 +71,8 @@
       <workItem from="1624985222356" duration="6525000" />
       <workItem from="1625060167843" duration="12458000" />
       <workItem from="1625152663991" duration="7683000" />
-      <workItem from="1625324143504" duration="15282000" />
+      <workItem from="1625324143504" duration="15633000" />
+      <workItem from="1625670360691" duration="7664000" />
     </task>
     <servers />
   </component>
