@@ -14,7 +14,7 @@ const ProductList=()=>{
     const [currentPage, setCurrentPage] = useState(1);
     const [listCategory,setListCategory]=useState([]);
     const [idCategory,setIdCategory]=useState('-1');
-
+    const [search,setSearch]=useState('');
     useEffect(() => {
         const fetchData = async () => {
             const res = await CallAPI("GET", null, `/categories`);
@@ -26,16 +26,17 @@ const ProductList=()=>{
         }
         fetchData();
     }, [])
+
     useEffect(() => {
         const fetchData = async () => {
             let res=null;
             if(idCategory==='-1')
             {
-                res = await CallAPI("GET", null, `/courses?page=${currentPage}`);
+                res = await CallAPI("GET", null, `/courses?page=${currentPage}&search=${search}`);
             }
             else
             {
-                res = await CallAPI("GET", null, `/courses?page=${currentPage}&category_id=${idCategory}`);
+                res = await CallAPI("GET", null, `/courses?page=${currentPage}&category_id=${idCategory}&search=${search}`);
             }
             if(res.status === 1) {
                 setIsLoading(false);
@@ -46,18 +47,31 @@ const ProductList=()=>{
                 toast.error("Something went wrong. Try later")
         }
         fetchData();
-    }, [currentPage,pages,idCategory])
-    console.log(listProduct);
+    }, [currentPage,pages,idCategory,search])
+
+    console.log(listProduct)
     const onChangeCurrentPage=(data)=>{
-        setCurrentPage(data)
+        setCurrentPage(data);
         return data;
     }
-    function onChangeCategories(value) {
+    const sortByRatingDESC=()=>
+    {
+        console.log('sort')
+        const listProductSortRating=listProduct.sort((a,b)=>(a.course.rating_average>b.course.rating_average)?-1:1);
+        console.log(listProductSortRating)
+        setListProduct(listProductSortRating)
+    }
+    const onChangeCategories=(value) =>{
         setIdCategory(value);
+        setSearch('');
         console.log(value)
     }
 
-
+    const btnsearch=()=>{
+        const value= document.getElementById("txtSearch").value;
+        setSearch(value);
+        console.log(value);
+    }
     if(isLoading) return (
         <div style={{marginLeft:'200px'}}>
             <Loader/>
@@ -82,30 +96,20 @@ const ProductList=()=>{
                                             <a href="#" data-toggle="collapse" data-target="#collapse_1"
                                                aria-expanded="true" className="">
                                                 <i className="icon-control fa fa-chevron-down"></i>
-                                                <h6 className="title">Product type</h6>
+                                                <h6 className="title">Search Course</h6>
                                             </a>
                                         </header>
                                         <div className="filter-content collapse show" id="collapse_1">
                                             <div className="card-body">
                                                 <form className="pb-3">
                                                     <div className="input-group">
-                                                        <input type="text" className="form-control" placeholder="Search"/>
+                                                        <input id="txtSearch" type="text" className="form-control" placeholder="Search"/>
                                                         <div className="input-group-append">
-                                                            <button className="btn btn-light" type="button"><i
+                                                            <button className="btn btn-light" type="button" onClick={btnsearch}><i
                                                                 className="fa fa-search"></i></button>
                                                         </div>
                                                     </div>
                                                 </form>
-
-                                                <ul className="list-menu">
-                                                    <li><a href="#">People </a></li>
-                                                    <li><a href="#">Watches </a></li>
-                                                    <li><a href="#">Cinema </a></li>
-                                                    <li><a href="#">Clothes </a></li>
-                                                    <li><a href="#">Home items </a></li>
-                                                    <li><a href="#">Animals</a></li>
-                                                    <li><a href="#">People </a></li>
-                                                </ul>
                                             </div>
                                         </div>
                                     </article>
@@ -170,7 +174,7 @@ const ProductList=()=>{
                                                                type="number"/>
                                                     </div>
                                                 </div>
-                                                <button className="btn btn-block btn-primary">Apply</button>
+                                                <button className="btn btn-block btn-primary" onClick={sortByRatingDESC}>Apply</button>
                                             </div>
                                         </div>
                                     </article>
@@ -245,7 +249,7 @@ const ProductList=()=>{
                                         <Select
                                             showSearch
                                             style={{ width: 200 }}
-                                            placeholder="Select a person"
+                                            placeholder="Select a category"
                                             optionFilterProp="children"
                                             onChange={onChangeCategories}
                                             onSearch
@@ -285,9 +289,12 @@ const ProductList=()=>{
                                                             <figcaption className="info-wrap">
                                                                 <div className="fix-height">
                                                                     <a href="#" className="title">{data.course.name}</a>
+                                                                    <a href="#" style={{color:"darkred"}}>Teacher: {data.user.fullname}</a>
                                                                     <div className="price-wrap mt-2">
                                                                         <span className="price">{data.course.promotion_price}</span>
                                                                         <del className="price-old">{data.course.price}</del>
+                                                                        <span style={{float:"right"}}>Rating: {data.course.rating_average}<span
+                                                                            className="fa fa-star checked"></span></span>
                                                                     </div>
                                                                 </div>
                                                                 <a href="#" className="btn btn-block btn-primary">Add to
@@ -314,7 +321,7 @@ const ProductList=()=>{
 
                                 </div>
                                 <div style={{textAlign:"center"}}>
-                                    <Pagination  simple onChange={onChangeCurrentPage} total={pages*10} />
+                                    <Pagination  simple onChange={onChangeCurrentPage}  total={pages*10} />
                                 </div>
 
                             </main>
