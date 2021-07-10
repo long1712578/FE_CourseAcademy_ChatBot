@@ -6,6 +6,7 @@ import CallAPI from "../../until/callAPI";
 import {toast} from "react-toastify";
 import Loader from "../../component/loader";
 import {Pagination, Select} from "antd";
+import ProductCart from "../../component/Product";
 const { Option } = Select;
 const ProductList=()=>{
     const [listProduct,setListProduct]=useState([]);
@@ -73,9 +74,12 @@ const ProductList=()=>{
         console.log(value);
     }
     if(isLoading) return (
+        <React.Fragment>
+        <Header/>
         <div style={{marginLeft:'200px'}}>
             <Loader/>
         </div>
+        </React.Fragment>
     )
     return (
         <React.Fragment>
@@ -279,28 +283,15 @@ const ProductList=()=>{
                                                 listProduct.map((data, index) => {
                                                     return (
                                                         <div className="col-md-4" key={index}>
-                                                        <figure className="card card-product-grid">
-                                                            <div className="img-wrap">
-                                                                <span className="badge badge-danger"> NEW </span>
-                                                                <img src="assets/images/items/course.jpg"/>
-                                                                <a className="btn-overlay" href="#"><i
-                                                                    className="fa fa-search-plus"></i> Quick view</a>
-                                                            </div>
-                                                            <figcaption className="info-wrap">
-                                                                <div className="fix-height">
-                                                                    <a href="#" className="title">{data.course.name}</a>
-                                                                    <a href="#" style={{color:"darkred"}}>Teacher: {data.user.fullname}</a>
-                                                                    <div className="price-wrap mt-2">
-                                                                        <span className="price">{data.course.promotion_price}</span>
-                                                                        <del className="price-old">{data.course.price}</del>
-                                                                        <span style={{float:"right"}}>Rating: {data.course.rating_average}<span
-                                                                            className="fa fa-star checked"></span></span>
-                                                                    </div>
-                                                                </div>
-                                                                <a href="#" className="btn btn-block btn-primary">Add to
-                                                                    cart </a>
-                                                            </figcaption>
-                                                        </figure>
+                                                            <ProductCart idCourse={data.course.id}
+                                                                         nameCourse={data.course.name}
+                                                                         nameTeacher={data.user.fullname}
+                                                                         price={data.course.price}
+                                                                         promotionPrice={data.course.promotion_price}
+                                                                         rating={data.course.rating_average}
+
+                                                            >
+                                                            </ProductCart>
                                                         </div>
                                                     )
                                                 })
