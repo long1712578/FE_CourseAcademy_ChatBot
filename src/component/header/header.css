@@ -1,0 +1,21 @@
+.logo-course{
+    height: 50px;
+    width: 50px;
+}
+.bg-dark {
+    background-color: #289306!important;
+}
+.input-search{
+    margin-left: 39px;
+    width: 275px !important;
+}
+.account{
+    margin-left: 210px;
+}
+.btn-outline-success {
+    background-color: #28a745;
+    color: black;
+}
+.navbar-dark .navbar-nav .nav-link {
+    color: black;
+}

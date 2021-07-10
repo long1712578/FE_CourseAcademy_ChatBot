@@ -1,13 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import Signup from './pages/authentication/signup';
+import Header from './component/header';
+import Footer from './component/footer';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <Header />
+  <Signup />
+  <Footer />
+</React.StrictMode>,
   document.getElementById('root')
 );
 
