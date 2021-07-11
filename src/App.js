@@ -8,24 +8,30 @@ import './App.css';
 import HomePage from "./pages/homepage";
 import ProductList from "./pages/ProductList";
 import Product from "./pages/SingleProduct";
+import { createTheme } from '@material-ui/core/styles';
+import { ThemeProvider } from "@material-ui/core/styles";
+
+import theme from "assets/theme/theme.js";
 
 function App() {
   return (
-      <Router>
-          <Switch>
-              <Route path="/" exact>
-                  <HomePage/>
-              </Route>
-              <Route path="/courses" exact>
-                  <ProductList/>
-              </Route>
-              <Route path="/courses/:id">
-                  <Product/>
-              </Route>
+    <HomePage/>
+    // <ThemeProvider theme={theme}>
+    //   <Router>
+    //       <Switch>
+    //           <Route path="/" exact>
+    //               <HomePage/>
+    //           </Route>
+    //           <Route path="/courses" exact>
+    //               <ProductList/>
+    //           </Route>
+    //           <Route path="/courses/:id">
+    //               <Product/>
+    //           </Route>
 
-          </Switch>
-      </Router>
-
+    //       </Switch>
+    //   </Router>
+    // </ThemeProvider>
   );
 }
 
