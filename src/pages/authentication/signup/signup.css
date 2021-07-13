@@ -1,0 +1,73 @@
+.login-form {
+    max-width: 300px;
+    margin-top: 2rem;
+    --tw-space-y-reverse: 0;
+    margin-top: calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(1.5rem * var(--tw-space-y-reverse));
+  }
+  .login-form-forgot {
+    float: right;
+  }
+  .login-form-forgot {
+    float: left;
+  }
+  .login-form-button {
+    width: 100%;
+  }
+  .ant-form label {
+    color: #2e3cdc;
+    font-size: 18px;
+    margin-left: 123px;
+  }
+  .login{
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    @media (min-width: 1024px) { align-items: baseline; };
+    justify-content: center;
+    @media (min-width: 1024px) { 	padding-top: 8rem;
+      padding-bottom: 8rem; }
+      padding-left: 1rem;
+      padding-right: 1rem;
+    @media (min-width: 640px) {padding-left: 1.5rem;
+        padding-right: 1.5rem;}
+    @media (min-width: 1024px) { padding-left: 2rem;
+          padding-right: 2rem; }
+  }
+  .login-background{
+    box-shadow: 5px 10px aqua;
+    border-radius: 0.75rem;
+    width: 100%;
+    @media (min-width: 768px) { width: 25%; };
+  
+  }
+  .login-container{
+    padding: 1rem;
+  }
+  .login-image{
+    margin-left: 534px;
+    margin-right: auto;
+    margin-top: 0px;
+    height: 5rem;
+    width: auto;
+  }
+  .login-title h2{
+    margin-top: 0px;
+    text-align: center;
+    font-size: 2rem;
+    line-height: 2rem;
+    font-weight: 800;
+    color: rgb(218, 25, 25);
+   text-shadow: 3px 1px rgb(233, 84, 84);
+  }
+  .ant-btn-primary {
+    margin-left: 171px;
+    color: #fff;
+    background: #1890ff;
+    border-color: #1890ff;
+    text-shadow: 0 -1px 0 rgb(0 0 0 / 12%);
+    box-shadow: 0 2px 0 rgb(0 0 0 / 5%);
+}
+.goto-login h3{
+  text-align: center;
+}
