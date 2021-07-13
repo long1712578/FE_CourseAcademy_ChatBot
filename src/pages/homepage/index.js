@@ -8,17 +8,15 @@ import Footer from "../../component/footer";
 
 const HomePage = () =>
 {
-    // if(localStorage.getItem("user"))
-    //     return (<Redirect to="/dashboard" />)
 
     return(
         <div>
             <React.Fragment>
                 <Header/>
                 {/* <MostHighLightComponent/> */}
-                <MostViewComponent/>
+                {/* <MostViewComponent/>
                 <NewCourse/>
-                <MostCategoryRegis/>
+                <MostCategoryRegis/> */}
                 <Footer/>
             </React.Fragment>
         </div>

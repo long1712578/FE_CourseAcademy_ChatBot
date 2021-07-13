@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 import './App.css';
 import HomePage from "./pages/homepage";
+import CartProduct from "./pages/CartProduct";
 import ProductList from "./pages/ProductList";
 import Product from "./pages/SingleProduct";
 import { createTheme } from '@material-ui/core/styles';
@@ -15,7 +16,7 @@ import theme from "assets/theme/theme.js";
 
 function App() {
   return (
-    <HomePage/>
+    <Product></Product>
     // <ThemeProvider theme={theme}>
     //   <Router>
     //       <Switch>

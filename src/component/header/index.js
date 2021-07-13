@@ -22,26 +22,15 @@ import {
 
 export default function Header(props) {
   return (
-    <div className="header">
-      <div className="row">
-        <div className="col-md-12">
-          <Navbar
-            className="color-nav"
-            bg="dark"
-            variant="dark"
-            expand="lg"
-            sticky="top"
-          >
+    <div className="header-course">
+      <div className="header-top">
+          <Navbar className="color-nav" bg="dark" variant="dark" expand="lg" sticky="top">
             <Navbar.Brand href="#home">
-              <img className="logo-course" src="./images/logo-course.jpg"></img>
+              <img className="logo-course" src="./images/your-logo.png" ></img>
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
-              <Nav className="mr-auto">
-                <Nav.Link href="/home">&nbsp;Trang chủ</Nav.Link>
-                <Nav.Link href="/course">&nbsp;Khoá học</Nav.Link>
-                <Nav.Link href="/information">&nbsp;Thông tin</Nav.Link>
-                <Nav.Link href="/contact">&nbsp;Liên lạc</Nav.Link>
+              <Nav className="nav-header-right">
                 <Form inline>
                   <FormControl
                     type="text"
@@ -50,7 +39,28 @@ export default function Header(props) {
                   />
                   <Button variant="outline-success"><SearchOutlined /> &nbsp;Tìm kiếm</Button>
                 </Form>
-                <NavDropdown className="mr-sm-2 account" title="Tài khoản" id="basic-nav-dropdown">
+                <div className="header-button">
+                  <Button className="btn-login">Đăng nhập</Button>
+                  <Button >Đăng ký</Button>
+                </div>
+                
+                <Nav.Link href="/cart" className="">
+                  <div className="cart-icon"><i className="fa fa-shopping-cart"></i></div>
+                  <div className="cart-number">0</div>
+                </Nav.Link>
+              </Nav>
+            </Navbar.Collapse>
+          </Navbar>
+        </div>
+        
+      <div className="home-header">
+          <div className="home-logo"><i class="fas fa-home"></i></div>
+          <div className="left-header">
+              <Nav.Link className="link-home-header" href="/home">&nbsp;Trang chủ</Nav.Link>
+              <Nav.Link className="link-home-header" href="/course">&nbsp;Khoá học</Nav.Link>
+              <Nav.Link className="link-home-header" href="/information">&nbsp;Thông tin</Nav.Link>
+              <Nav.Link className="link-home-header" href="/contact">&nbsp;Liên lạc</Nav.Link>
+              <NavDropdown className="link-home-header" title="Tài khoản" id="basic-nav-dropdown">
                   <NavDropdown.Item href="/login">
                   <LoginOutlined /> &nbsp;Đăng nhập
                   </NavDropdown.Item>
@@ -63,15 +73,10 @@ export default function Header(props) {
                   <NavDropdown.Item href="/logout">
                   <LogoutOutlined /> &nbsp; Đăng xuất
                   </NavDropdown.Item>
-                </NavDropdown>
-                <Nav.Link href="/cart" className="cart">
-                <ShoppingCartOutlined />&nbsp;Giỏ Hàng
-                </Nav.Link>
-              </Nav>
-            </Navbar.Collapse>
-          </Navbar>
+              </NavDropdown>
+          </div>
+            
         </div>
-      </div>
     </div>
   );
 }
