@@ -237,7 +237,7 @@ const ProductList=()=>{
 
                                 </div>
                                 <div style={{textAlign:"center"}}>
-                                    <Pagination  simple onChange={onChangeCurrentPage}  total={pages*10} />
+                                    <Pagination  simple onChange={onChangeCurrentPage} total={pages*10} />
                                 </div>
 
                             </main>
