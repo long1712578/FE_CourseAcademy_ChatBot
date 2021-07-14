@@ -1,7 +1,7 @@
 import moment from "moment";
 import React from "react";
 
-const CardProduct=({img,name,description,rating,promotionPrice,price,lastUpdate,numberOfRating,numberOfEnrroled})=>{
+const CardProduct=({img,name,summary,description,rating,promotionPrice,price,lastUpdate,numberOfRating,numberOfEnrroled})=>{
     return(
         <article className="card">
             <div className="card-body">
@@ -17,15 +17,22 @@ const CardProduct=({img,name,description,rating,promotionPrice,price,lastUpdate,
                         <article>
                             <h3 className="title">{name}</h3>
                             <div className="mb-3">
-                                <h6>Decription:</h6>
+                                <h6>Summary:</h6>
                                 <ul className="list-dots mb-0">
-                                    <li>{description}</li>
+                                    <li>{summary}</li>
                                 </ul>
                             </div>
                             <hr/>
                             <div>
-                                            <span className="label-rating mr-3 text-muted">Rating: {rating} <span
-                                                className="fa fa-star checked"></span></span>
+                                {
+                                    numberOfRating>0?
+                                        <span className="label-rating mr-3 text-muted">Rating: {rating} <span
+                                            className="fa fa-star checked"></span></span>
+                                        :
+                                        <>
+                                            <span style={{marginLeft:5,color:"red"}}>No one has rated it yet</span>
+                                        </>
+                                }
                             </div>
                             <div>
                                 <span className="label-rating mr-3 text-muted">Number of ratings: {numberOfRating}</span>
@@ -37,7 +44,13 @@ const CardProduct=({img,name,description,rating,promotionPrice,price,lastUpdate,
                                 <a className="btn-link mr-3 text-muted" style={{marginLeft:10}}> <i
                                     className="fa fa-heart"></i> Save to watch list</a>
                             </div>
-
+                            <hr/>
+                            <div className="mb-3">
+                                <h6>Decription:</h6>
+                                <ul className="list-dots mb-0">
+                                    <li>{description}</li>
+                                </ul>
+                            </div>
                             <hr/>
 
                             <div className="mb-3">

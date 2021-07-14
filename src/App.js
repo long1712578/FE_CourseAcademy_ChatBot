@@ -8,6 +8,7 @@ import './App.css';
 import HomePage from "./pages/homepage";
 import ProductList from "./pages/ProductList";
 import Product from "./pages/SingleProduct";
+import AddCourse from "./pages/AddCourse";
 
 function App() {
   return (
@@ -21,6 +22,9 @@ function App() {
               </Route>
               <Route path="/courses/:id">
                   <Product/>
+              </Route>
+              <Route path="/add-course">
+                  <AddCourse/>
               </Route>
 
           </Switch>

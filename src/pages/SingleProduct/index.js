@@ -50,6 +50,7 @@ const Product=()=>{
                 <div className="container">
                     <CardProduct img={course.image}
                                  name={course.name}
+                                 summary={course.summary}
                                  description={course.description}
                                  rating={course.rating_average}
                                  numberOfRating={rating.length}
