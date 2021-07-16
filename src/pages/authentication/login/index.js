@@ -1,18 +1,38 @@
-import React from "react";
+import React, {useState} from "react";
 import "antd/dist/antd.css";
 import "./login.css";
+import { useHistory } from 'react-router-dom';
+import CallUnAuthorize from "../../../until/callUnAuthorize";
 import { Form, Input, Button, Checkbox } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import {toast} from "react-toastify";
 function Login() {
-  const onFinish = (values) => {
-    console.log('Received values of form: ', values);
+  const [checkSignin, setCheckSignin] = useState(false);
+  const router = useHistory();
+  const onFinish = (data) => {
+    console.log('Received values of form: ', data);
+    const fetchData = async () => {
+      const res = await CallUnAuthorize("POST", {...data}, '/sign-in');
+      if(res.status === 1) {
+          // Chyen sang mang hinh dang nhap
+          console.log(res);
+          setCheckSignin(true);
+          localStorage.setItem('user', JSON.stringify(res.data));
+          router.push('/user');
+      }
+      else{
+        setCheckSignin(false);
+        toast.error("login fail!");
+      }
+
+  };
+  fetchData();
   };
   return (
     <div className="login">
       <div className="login-background">
         <div className="login-container">
           <div className="login-title">
-            <img className="login-image" src="./images/account/logo-login.png" alt="Workflow"></img>
             <h2> Đăng nhập</h2>
           </div>
           <Form
@@ -32,12 +52,13 @@ function Login() {
                 },
               ]}
             >
-              <Input
+              <Input className="UserName"
                 prefix={<UserOutlined className="site-form-item-icon" />}
                 placeholder="Username"
               />
             </Form.Item>
             <Form.Item
+              className="Password"
               name="password"
               rules={[
                 {
@@ -70,7 +91,7 @@ function Login() {
               >
                 Đăng nhập
               </Button>
-              Hoặc <a href="">Đăng kí</a>
+              Hoặc <a href="/signup">Đăng kí</a>
             </Form.Item>
           </Form>
         </div>

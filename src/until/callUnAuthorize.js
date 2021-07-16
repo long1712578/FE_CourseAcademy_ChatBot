@@ -11,7 +11,7 @@ const CallUnAuthorize = async (method, body, pathURL) =>
             data: body,
         });
 
-        if(response.status === 200)
+        if(response.status === 200 || response.status === 201)
             return {status: 1, data: response.data};
     } catch(err)
     {

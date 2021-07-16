@@ -17,6 +17,7 @@ const MostHighLightComponent=()=>{
     useEffect(() => {
         const fetchData = async () => {
             const res = await CallAPI("GET", null, "/guest-course/most-highlight");
+            console.log('status', res.status)
             if(res.status === 1) {
                 setIsLoading(false);
                 setListCourseHighLight(res.data);

@@ -54,7 +54,7 @@ export default function Header(props) {
         </div>
         
       <div className="home-header">
-          <div className="home-logo"><i class="fas fa-home"></i></div>
+          <div className="home-logo"><i className="fas fa-home"></i></div>
           <div className="left-header">
               <Nav.Link className="link-home-header" href="/home">&nbsp;Trang chủ</Nav.Link>
               <Nav.Link className="link-home-header" href="/course">&nbsp;Khoá học</Nav.Link>

@@ -16,23 +16,24 @@ import theme from "assets/theme/theme.js";
 
 function App() {
   return (
-    <Product></Product>
-    // <ThemeProvider theme={theme}>
-    //   <Router>
-    //       <Switch>
-    //           <Route path="/" exact>
-    //               <HomePage/>
-    //           </Route>
-    //           <Route path="/courses" exact>
-    //               <ProductList/>
-    //           </Route>
-    //           <Route path="/courses/:id">
-    //               <Product/>
-    //           </Route>
-
-    //       </Switch>
-    //   </Router>
-    // </ThemeProvider>
+    <ThemeProvider theme={theme}>
+      <Router>
+          <Switch>
+              <Route path="" exact>
+                  <HomePage></HomePage>
+              </Route>
+              <Route path="/courses">
+                  <ProductList/>
+              </Route>
+              <Route path="/cart">
+                  <CartProduct/>
+              </Route>
+              <Route path="/courses/:id">
+                  <Product/>
+              </Route>
+          </Switch>
+      </Router>
+    </ThemeProvider>
   );
 }
 
