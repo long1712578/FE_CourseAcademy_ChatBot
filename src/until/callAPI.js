@@ -7,7 +7,7 @@ const URL_API = hostConstant.API_LINK;
 const CallAPI = async (method, body, pathURL) =>
 {
     const user = await JSON.parse(localStorage.getItem('user'));
-    const token = user ? user.jwt_token : null;
+    const token = user ? user.accessToken : null;
     if(!token) return {status: -1, err: "UnAuthorization"}
 
     try{
@@ -27,18 +27,22 @@ const CallAPI = async (method, body, pathURL) =>
             if(err.response.status === 400)
                 return {status: 0, err: err.response.data}
             if(err.response.status === 401){
-                const refresh = user ? user.refresh_token : null;
-                const reFetchToken = await CallUnAuthorize("POST", {token: refresh}, "Users/refresh-token");
+                const refresh = user ? user.refreshToken : null;
+                const reFetchToken = await CallUnAuthorize("POST", {accessToken: token, refreshToken: refresh}, "/sign-in/refesh");
                 if(reFetchToken.status === 1)
                 {
                     await localStorage.removeItem("user");
-                    await localStorage.setItem("user", JSON.stringify(reFetchToken.data));
+                    const data = {
+                        accessToken: reFetchToken.data,
+                        refreshToken: refresh
+                    }
+                    await localStorage.setItem("user", JSON.stringify(data));
                     try{
                         const response = await axios({
                             method: method,
                             url: URL_API + pathURL,
                             data: body,
-                            headers: {"Authorization": `Bearer ${reFetchToken.data.jwt_token}`}
+                            headers: {"Authorization": `Bearer ${reFetchToken.data}`}
                         });
                         if(response.status === 200)
                         {

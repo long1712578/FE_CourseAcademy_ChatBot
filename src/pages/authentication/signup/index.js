@@ -1,5 +1,7 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import React, { useState } from "react";
+import { useHistory } from 'react-router-dom';
+import CallUnAuthorize from "../../../until/callUnAuthorize";
+import {toast} from "react-toastify";
 import "antd/dist/antd.css";
 import { Form, Input, Select, Checkbox, Button, DatePicker } from "antd";
 import "./signup.css";
@@ -36,9 +38,37 @@ const tailFormItemLayout = {
 };
 function Signup() {
   const [form] = Form.useForm();
+  const [checkRegister, setCheckRegister] = useState(false);
+  const router = useHistory();
 
-  const onFinish = (values) => {
-    console.log("Received values of form: ", values);
+  const onFinish = (data) => {
+    const fetchData = async () => {
+      const user = {
+        fullname: data.fullname,
+        username: data.username,
+        password: data.password,
+        address: data.address,
+        email: data.email,
+        phone: data.phone,
+        gender: data.gender,
+        avatar: data.avatar,
+        role_id: data.role_id
+      };
+      console.log('value', user);
+      const res = await CallUnAuthorize("POST", {...user}, '/sign-up');
+      console.log('res', res);
+      if(res.status === 1) {
+          // Chyen sang mang hinh dang nhap
+          setCheckRegister(true);
+          router.push('/login');
+      }
+      else{
+        setCheckRegister(false);
+        toast.error("Register not success!");
+      }
+
+  };
+  fetchData();
   };
 
   const prefixSelector = (
@@ -54,29 +84,26 @@ function Signup() {
     </Form.Item>
   );
   return (
-    <div className="login">
-      <div className="login-background" style={{ 
-      backgroundImage: `url("./images/theme-signup.jpg")` 
-    }}>
-        <div className="login-container">
-          <div className="login-title">
-            <h2> Đăng kí</h2>
+    <div className="signup">
+      <div className="signup-background" >
+        <div className="signup-container">
+          <div className="signup-title">
+            <h2> Register</h2>
           </div>
-          <Form
+          <div className="card-signup">
+            <Form
             {...formItemLayout}
             form={form}
             name="register"
             onFinish={onFinish}
             initialValues={{
-            //   residence: ["zhejiang", "hangzhou", "xihu"],
               prefix: "84",
             }}
             scrollToFirstError
           >
-            <Form.Item name="fullName" label="FullName">
+            <Form.Item name="fullname" label="FullName" >
               <Input />
             </Form.Item>
-
             <Form.Item
               name="username"
               label="Username"
@@ -133,7 +160,7 @@ function Signup() {
               <Input.Password />
             </Form.Item>
 
-            <Form.Item name="address" label="Địa chỉ">
+            <Form.Item name="address" label="Address">
               <Input />
             </Form.Item>
 
@@ -183,17 +210,33 @@ function Signup() {
               ]}
             >
               <Select placeholder="select your gender">
-                <Option value="male">Nam</Option>
-                <Option value="female">Nữ</Option>
-                <Option value="other">Giới tính khác</Option>
+                <Option value= {0}>Female</Option>
+                <Option value={1}>Male</Option>
               </Select>
             </Form.Item>
 
-            <Form.Item name="date-birday" label="Ngày sinh">
+            <Form.Item
+              name="role_id"
+              label="role"
+              rules={[
+                {
+                  required: true,
+                  message: "Please select role!",
+                },
+              ]}
+            >
+              <Select placeholder="select your role">
+                <Option value={1}>Admin</Option>
+                <Option value={2}>Teacher</Option>
+                <Option value={3}>User</Option>
+              </Select>
+            </Form.Item>
+
+            <Form.Item name="date_of_birth" label="Birth day">
               <DatePicker />
             </Form.Item>
 
-            <Form.Item name="avatar" label="Ảnh">
+            <Form.Item name="avatar" label="Avatar">
               <Input />
             </Form.Item>
 
@@ -211,16 +254,18 @@ function Signup() {
               {...tailFormItemLayout}
             >
               <Checkbox>
-                Tôi đã đọc <a href="">thoả thuận</a>
+                T had red <a href="">agreement</a>
               </Checkbox>
             </Form.Item>
             <Form.Item {...tailFormItemLayout}>
               <Button type="primary" htmlType="submit">
-                Đăng kí
+                Register
               </Button>
             </Form.Item>
           </Form>
-          <div className="goto-login"><h3>Tôi đã có tài khoản <a href="">Đăng nhập</a></h3></div>
+          </div>
+          
+          <div className="goto-login"><h3>I had account <a href="/login">Signin</a></h3></div>
         </div>
       </div>
     </div>
