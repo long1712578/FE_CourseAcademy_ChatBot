@@ -6,29 +6,31 @@ import Header from "../../component/header";
 import Footer from "../../component/footer";
 import Description from "./DescriptionProduct/index";
 import Loader from "../../component/loader";
+import './index.css';
 const Product = () => {
-  // const [course,setCourse]=useState();
-  // const [isLoading,setIsLoading]=useState(true);
-  // const id=useParams();
-  // useEffect(() => {
-  //     const fetchData = async () => {
-  //         const res = await CallAPI("GET", null, `/guest-course/information/${id.id}`);
-  //         if(res.status === 1) {
-  //             setCourse(res.data);
-  //             setIsLoading(false);
-  //         }
-  //         else
-  //             toast.error("Something went wrong. Try later")
-  //     }
-  //     fetchData();
-  // }, [])
-  // if(isLoading) return (
-  //     <React.Fragment>
-  //         <div style={{marginLeft:'200px'}}>
-  //             <Loader/>
-  //         </div>
-  //     </React.Fragment>
-  // )
+  const [course,setCourse]=useState();
+  const [isLoading,setIsLoading]=useState(true);
+  const id=useParams();
+  useEffect(() => {
+      const fetchData = async () => {
+          const res = await CallAPI("GET", null, `/guest-course/information/${id.id}`);
+          if(res.status === 1) {
+            console.log('res', res.data);
+              setCourse(res.data);
+              setIsLoading(false);
+          }
+          else
+              toast.error("Something went wrong. Try later")
+      }
+      fetchData();
+  }, [])
+  if(isLoading) return (
+      <React.Fragment>
+          <div style={{marginLeft:'200px'}}>
+              <Loader/>
+          </div>
+      </React.Fragment>
+  )
   return (
     // <React.Fragment>
     <div>
@@ -42,8 +44,8 @@ const Product = () => {
                   <article className="gallery-wrap">
                     <div className="card img-big-wrap">
                       <a href="#">
-                        {" "}
-                        <img src="" />
+                        {""}
+                        <img className="image-detail" src={course.course[0].image} />
                       </a>
                     </div>
                   </article>
@@ -53,11 +55,11 @@ const Product = () => {
                     <a href="#" className="text-primary btn-link">
                       Course
                     </a>
-                    <h3 className="title">course.name</h3>
+                    <h3 className="title">{course.course[0].name}</h3>
                     <div>
                       <ul className="rating-stars"></ul>
                       <span className="label-rating mr-3 text-muted">
-                        course.rating_average
+                        {course.course[0].rating_average}
                         <span className="fa fa-star checked"></span>
                       </span>
                       <a href="#" className="btn-link  mr-3 text-muted">
@@ -71,7 +73,7 @@ const Product = () => {
                     <div className="mb-3">
                       <h6>Course Description</h6>
                       <ul className="list-dots mb-0">
-                        <li>course.description</li>
+                        <li>{course.course[0].description}</li>
                       </ul>
                     </div>
 
@@ -116,7 +118,7 @@ const Product = () => {
                     </div>
 
                     <div className="mb-3">
-                      <var className="price h4">$230.00</var> <br />
+                      <var className="price h4">$ {course.course[0].price}</var> <br />
                       <span className="monthly">
                         $32.00 / monthly{" "}
                         <a href="#" className="btn-link">

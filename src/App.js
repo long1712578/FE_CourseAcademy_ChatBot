@@ -3,6 +3,7 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
+  Redirect,
 } from "react-router-dom";
 import './App.css';
 import HomePage from "./pages/homepage";
@@ -11,6 +12,9 @@ import ProductList from "./pages/ProductList";
 import Product from "./pages/SingleProduct";
 import { createTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from "@material-ui/core/styles";
+import Login from './pages/authentication/login';
+import Signup from './pages/authentication/signup';
+import Profile from './pages/profile';
 
 import theme from "assets/theme/theme.js";
 
@@ -19,10 +23,10 @@ function App() {
     <ThemeProvider theme={theme}>
       <Router>
           <Switch>
-              <Route path="" exact>
+              <Route path="/home" exact>
                   <HomePage></HomePage>
               </Route>
-              <Route path="/courses">
+              <Route path="/courses" exact>
                   <ProductList/>
               </Route>
               <Route path="/cart">
@@ -31,6 +35,16 @@ function App() {
               <Route path="/courses/:id">
                   <Product/>
               </Route>
+              <Route path="/profile">
+                  <Profile/>
+              </Route>
+              <Route path="/login">
+                  <Login/>
+              </Route>
+              <Route path="/signup">
+                  <Signup/>
+              </Route>
+              <Redirect from="/" to="/home" />
           </Switch>
       </Router>
     </ThemeProvider>

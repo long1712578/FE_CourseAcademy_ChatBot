@@ -26,7 +26,7 @@ export default function Header(props) {
       <div className="header-top">
           <Navbar className="color-nav" bg="dark" variant="dark" expand="lg" sticky="top">
             <Navbar.Brand href="#home">
-              <img className="logo-course" src="./images/your-logo.png" ></img>
+              <img className="logo-course" src="/images/your-logo.png"></img>
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
