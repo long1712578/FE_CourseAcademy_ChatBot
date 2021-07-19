@@ -22,6 +22,8 @@ function callback(key) {
 }
 
 const Profile = () => {
+  let decode = null;
+  let userId = null;
   const router = useHistory();
   const user = JSON.parse(localStorage.getItem("user"));
   if (!user) {
@@ -30,7 +32,8 @@ const Profile = () => {
   } else {
     const accessToken = user.accessToken;
     if (accessToken) {
-      const decode = jwt_decode(accessToken);
+      decode = jwt_decode(accessToken);
+      userId = decode.userId;
     }else{
       localStorage.removeItem("user");
       router.push("/login");
@@ -50,7 +53,7 @@ const Profile = () => {
               }
               key="1"
             >
-              <Information />
+              <Information userInfo = {decode}/>
             </TabPane>
             <TabPane
               tab={
@@ -61,7 +64,7 @@ const Profile = () => {
               }
               key="2"
             >
-              <Order />
+              <Order id ={userId}/>
             </TabPane>
             <TabPane
               tab={
@@ -72,7 +75,7 @@ const Profile = () => {
               }
               key="3"
             >
-              <CourseFavourite />
+              <CourseFavourite id ={userId}/>
             </TabPane>
             <TabPane
               tab={
@@ -83,7 +86,7 @@ const Profile = () => {
               }
               key="4"
             >
-              <ChangePassword />
+              <ChangePassword id ={userId}/>
             </TabPane>
           </Tabs>
         </div>

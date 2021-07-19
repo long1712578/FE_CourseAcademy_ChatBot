@@ -1,21 +1,26 @@
-import React, { useEffect } from "react";
+import React, { useEffect, Component, useState } from "react";
 import { Button } from "antd";
 import { useForm } from "react-hook-form";
 import CallAPI from "../../../until/callAPI";
 import { toast } from "react-toastify";
 import './changePassword.css';
+import SweetAlert from 'sweetalert2-react';
 
-const ChangePassword = () => {
-  const id = 1;
+
+const ChangePassword = ({id}) => {
   // Goi api de load user
-
+  const [state, setState] = useState({show: false});
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
-  const onSubmit = (data) => {
-    console.log("data", data);
+  const onSubmit = (data, e) => {
+    const values ={
+      newPass: data.password_new,
+      oldPass: data.password_now
+    };
     const fetchData = async () => {
-      const res = await CallAPI("put", null, `/user/${id}`);
-      console.log("status", res.status);
+      const res = await CallAPI("put", values, `/users/${id}/password`);
       if (res.status === 1) {
+        e.target.reset();
+        setState({ show: true });
       } else toast.error("Something went wrong. Try later");
     };
     fetchData();
@@ -53,13 +58,19 @@ const ChangePassword = () => {
                      <span className="error-span">* {errors.again_password && 'Password new not choose or  not same password new.'}</span>
                 </div>
               </fieldset>
-              <Button type="primary" htmlType="submit" danger>
+              <Button type="primary" htmlType="submit"  danger>
               Update
             </Button>
             </form>
           </div>
         </div>
       </div>
+      <SweetAlert
+        show={state.show}
+        title="Change pass"
+        text="Sucess!!!"
+        onConfirm={() => setState({ show: false })}
+      />
     </div>
   );
 };

@@ -9,8 +9,7 @@ function callback(key) {
   console.log(key);
 }
 
-const Information = () => {
-  const id = 1;
+const Information = ({userInfo}) => {
   // Goi api de load user
 
   const { register, handleSubmit } = useForm();
@@ -19,12 +18,19 @@ const Information = () => {
     setDisableInput(false);
   };
   const onSubmit = (data) => {
-    console.log("data", data);
+    const userUpdate = {
+      email: data.email,
+      phone: data.phone,
+      username: data.username,
+      date_of_birth: data.birth_date
+    }
     const fetchData = async () => {
-      const res = await CallAPI("put", null, `/user/${id}`);
+      const res = await CallAPI("put", userUpdate, `/users/${userInfo.userId}`);
       console.log("status", res.status);
       if (res.status === 1) {
         setDisableInput(true);
+        //Xuat thong bao Cap nhat thanh cong
+
       } else toast.error("Something went wrong. Try later");
     };
     fetchData();
@@ -47,7 +53,7 @@ const Information = () => {
                   <input
                     className="col-sm-9"
                     disabled={disableInput}
-                    {...register("email", { value: "long@gmail.com" })}
+                    {...register("email", { value: `${userInfo.email}` })}
                   ></input>
                 </div>
                 <div className="row">
@@ -56,7 +62,7 @@ const Information = () => {
                     className="col-sm-9"
                     name="phone"
                     disabled={disableInput}
-                    {...register("phone", { value: "0123456789" })}
+                    {...register("phone", { value: `${userInfo.phone}` })}
                   ></input>
                 </div>
                 <div className="row">
@@ -65,7 +71,7 @@ const Information = () => {
                     className="col-sm-9"
                     name="birth-date"
                     disabled={disableInput}
-                    {...register("birth-date", { value: "2021/07/22" })}
+                    {...register("birth_date", { value: `${userInfo.birthDate}` })}
                   ></input>
                 </div>
                 <div className="row">
@@ -74,7 +80,7 @@ const Information = () => {
                     className="col-sm-9"
                     name="username"
                     disabled={disableInput}
-                    {...register("usename", { value: "longpham" })}
+                    {...register("username", { value: `${userInfo.userName}` })}
                   ></input>
                 </div>
               </fieldset>
