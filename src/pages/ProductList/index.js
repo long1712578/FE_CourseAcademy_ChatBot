@@ -1,4 +1,3 @@
-
 import React, {useEffect, useState} from 'react'
 import Header from "../../component/header";
 import Footer from "../../component/footer";
@@ -69,6 +68,7 @@ const ProductList=()=>{
                 setIsLoading(false);
                 setListProduct(res.data.courses);
                 setPages(res.data.totalPage);
+                setIsLoading(false);
             }
             else
                 toast.error("Something went wrong. Try later")
@@ -224,7 +224,7 @@ const ProductList=()=>{
                                                 <>
                                                     <div style={{
                                                         textAlign: "center",
-                                                        backgroundColor: '#364d79',
+                                                        backgroundColor: 'grey',
                                                         width: '100%',
                                                         height: '260px',
                                                         lineHeight: '260px',

@@ -17,7 +17,7 @@ const CardSameCourse=({mostBuySameCategory})=>{
                                     <Card title={data.name} style={{
                                         width: '100%',
                                         backgroundColor: '#e5d5c1',
-                                        height: '220px',
+                                        height: '260px',
                                         margin: 'auto',
                                         textAlign: 'center',
                                     }}
