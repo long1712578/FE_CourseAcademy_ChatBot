@@ -57,7 +57,7 @@ export default function Header(props) {
           <div className="home-logo"><i className="fas fa-home"></i></div>
           <div className="left-header">
               <Nav.Link className="link-home-header" href="/home">&nbsp;Trang chủ</Nav.Link>
-              <Nav.Link className="link-home-header" href="/course">&nbsp;Khoá học</Nav.Link>
+              <Nav.Link className="link-home-header" href="/courses">&nbsp;Khoá học</Nav.Link>
               <Nav.Link className="link-home-header" href="/information">&nbsp;Thông tin</Nav.Link>
               <Nav.Link className="link-home-header" href="/contact">&nbsp;Liên lạc</Nav.Link>
               <NavDropdown className="link-home-header" title="Tài khoản" id="basic-nav-dropdown">

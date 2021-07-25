@@ -1,18 +1,85 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import "./description.css";
 import { Tabs } from "antd";
+import { useForm } from 'react-hook-form';
 import ReactStars from "react-rating-stars-component";
+import CallAPI from '../../../until/callAPI';
+import SweetAlert from 'sweetalert2-react';
 
 const { TabPane } = Tabs;
+
 
 function callback(key) {
   console.log(key);
 }
-const ratingChanged = (newRating) => {
-    console.log(newRating);
-  };
 
-function Description() {
+function Description({courseId, userId}) {
+  const { register, handleSubmit } = useForm();
+  const [comments, setComments] = useState("");
+  const [rating, setRating] = useState(0);
+  const [checkComment, setCheckComment] = useState({show: false});
+  const [checkReview, setCheckReview] = useState({show: false});
+  useEffect(() => {
+    const fetchData = async () => {
+        const res = await CallAPI("GET", null, `/comments/course/${courseId}`);
+        if(res.status === 1) {
+          setComments(res.data.cmd);
+        }
+        else{
+          setComments("");
+        }
+    }
+    fetchData();
+  }, []);
+
+  const onSubmit = (data, e) => {
+    createComment(data.message_comment, e)
+  }
+
+  const createComment = async (cmd, e) => {
+    const res = await CallAPI(
+      "POST",
+      { courseId: parseInt(courseId),
+        userId:  parseInt(userId),
+        comment: cmd
+      },
+      `/comments`
+    );
+    if (res.status === 1) {
+      const res = await CallAPI("GET", null, `/comments/course/${courseId}`);
+        if(res.status === 1) {
+          setComments(res.data.cmd);
+        }
+        else{
+          setComments("");
+        }
+      setCheckComment({show: true});
+      e.target.reset();
+    } else {
+      setCheckComment({show: false});
+    }
+  };
+  const ratingChanged = (newRating) => {
+    setRating(newRating);
+  };
+  const createReview = async () => {
+
+    const res = await CallAPI(
+      "POST",
+      { 
+        courseId: parseInt(courseId),
+        userId:  parseInt(userId),
+        rating
+      },
+      `/comments`
+    );
+    if (res.status === 1) {
+      setRating(0);
+      setCheckReview({show: true});
+    } else {
+      setCheckReview({show: false});
+    }
+  };
   return (
     <section className="product_description_area">
       <div className="container">
@@ -21,133 +88,75 @@ function Description() {
             <div className="row">
               <div className="col-lg-6">
                 <div className="comment_list">
-                  <div className="review_item">
-                    <div className="media">
-                      <div className="d-flex">
-                        <img src="https://png.pngtree.com/png-clipart/20190520/original/pngtree-vector-users-icon-png-image_4144740.jpg" alt="" />
+                  {
+                    comments.length > 0 ?
+                    comments.map((data, index) => {
+                      return (
+                        <div className="review_item" key={index}>
+                        <div className="media">
+                          <div className="d-flex">
+                            <img src="https://png.pngtree.com/png-clipart/20190520/original/pngtree-vector-users-icon-png-image_4144740.jpg" alt="" />
+                          </div>
+                          <div className="media-body">
+                            <h6>{data.user.fullname}</h6>
+                            <h6>{data.rating.create_at}</h6>
+                          </div>
+                        </div>
+                        <p className="content-comment">
+                          {data.rating.comment}
+                        </p>
                       </div>
-                      <div className="media-body">
-                        <h4>Blake Ruiz</h4>
-                        <h5>12th Feb, 2018 at 05:56 pm</h5>
-                        <a className="reply_btn" href="#">
-                          Reply
-                        </a>
-                      </div>
-                    </div>
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                      sed do eiusmod tempor incididunt ut labore et dolore magna
-                      aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                      ullamco laboris nisi ut aliquip ex ea commodo
-                    </p>
+                      )
+                  }): 
+                  <>
+                  <div style={{
+                      textAlign: "center",
+                      backgroundColor: '#364d79',
+                      width: '100%',
+                      height: '260px',
+                      lineHeight: '260px',
+                      marginBottom:'20px'
+                  }} className="flex-row justify-content-center">
+                      <p style={{fontSize: 30, fontWeight: 350}}>No comment!</p>
                   </div>
-                  <div className="review_item reply">
-                    <div className="media">
-                      <div className="d-flex">
-                        <img src="https://png.pngtree.com/png-clipart/20190520/original/pngtree-vector-users-icon-png-image_4144740.jpg" alt="" />
-                      </div>
-                      <div className="media-body">
-                        <h4>Blake Ruiz</h4>
-                        <h5>12th Feb, 2018 at 05:56 pm</h5>
-                        <a className="reply_btn" href="#">
-                          Reply
-                        </a>
-                      </div>
-                    </div>
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                      sed do eiusmod tempor incididunt ut labore et dolore magna
-                      aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                      ullamco laboris nisi ut aliquip ex ea commodo
-                    </p>
-                  </div>
-                  <div className="review_item">
-                    <div className="media">
-                      <div className="d-flex">
-                        <img src="https://png.pngtree.com/png-clipart/20190520/original/pngtree-vector-users-icon-png-image_4144740.jpg" alt="" />
-                      </div>
-                      <div className="media-body">
-                        <h4>Blake Ruiz</h4>
-                        <h5>12th Feb, 2018 at 05:56 pm</h5>
-                        <a className="reply_btn" href="#">
-                          Reply
-                        </a>
-                      </div>
-                    </div>
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                      sed do eiusmod tempor incididunt ut labore et dolore magna
-                      aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                      ullamco laboris nisi ut aliquip ex ea commodo
-                    </p>
-                  </div>
-                </div>
+              </>
+                  }
+                 </div>
               </div>
               <div className="col-lg-6">
                 <div className="review_box">
                   <h4>Post a comment</h4>
                   <form
                     className="row contact_form"
-                    action="contact_process.php"
-                    method="post"
                     id="contactForm"
-                    noValidate="novalidate"
-                  >
-                    <div className="col-md-12">
-                      <div className="form-group">
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="name"
-                          name="name"
-                          placeholder="Your Full name"
-                        />
-                      </div>
-                    </div>
-                    <div className="col-md-12">
-                      <div className="form-group">
-                        <input
-                          type="email"
-                          className="form-control"
-                          id="email"
-                          name="email"
-                          placeholder="Email Address"
-                        />
-                      </div>
-                    </div>
-                    <div className="col-md-12">
-                      <div className="form-group">
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="number"
-                          name="number"
-                          placeholder="Phone Number"
-                        />
-                      </div>
-                    </div>
+                    noValidate="novalidate" onSubmit={handleSubmit(onSubmit)}>
                     <div className="col-md-12">
                       <div className="form-group">
                         <textarea
                           className="form-control"
-                          name="message"
                           id="message"
-                          rows={1}
+                          rows={2}
                           placeholder="Message"
                           defaultValue={""}
+                          {...register("message_comment", {required: true})}
                         />
                       </div>
                     </div>
                     <div className="col-md-12 text-right">
                       <button
                         type="submit"
-                        value="submit"
                         className="btn primary-btn"
                       >
-                        Submit Now
+                        Comment Now
                       </button>
                     </div>
                   </form>
+                  <SweetAlert
+                    show={checkComment.show}
+                    title="Comment"
+                    text="Sucess!!!"
+                    onConfirm={() => setCheckComment({ show: false })}
+                  />
                 </div>
               </div>
             </div>
@@ -163,54 +172,17 @@ function Description() {
                     size={24}
                     activeColor="#ffd700"
                 />
-                <p>Outstanding</p>
-                <form action="#/" className="form-contact form-review mt-3">
-                  <div className="form-group">
-                    <input
-                      className="form-control"
-                      name="name"
-                      type="text"
-                      placeholder="Enter your name"
-                      required
-                    />
-                  </div>
-                  <div className="form-group">
-                    <input
-                      className="form-control"
-                      name="email"
-                      type="email"
-                      placeholder="Enter email address"
-                      required
-                    />
-                  </div>
-                  <div className="form-group">
-                    <input
-                      className="form-control"
-                      name="subject"
-                      type="text"
-                      placeholder="Enter Subject"
-                    />
-                  </div>
-                  <div className="form-group">
-                    <textarea
-                      className="form-control different-control w-100"
-                      name="textarea"
-                      id="textarea"
-                      cols={30}
-                      rows={5}
-                      placeholder="Enter Message"
-                      defaultValue={""}
-                    />
-                  </div>
-                  <div className="form-group text-center text-md-right mt-3">
-                    <button
-                      type="submit"
-                      className="button button--active button-review"
-                    >
-                      Submit Now
-                    </button>
-                  </div>
-                </form>
+                <button
+                      type="button"
+                      className="button button--active button-review" onClick={createReview}>
+                      Review Now
+                </button>
+                <SweetAlert
+                  show={checkReview.show}
+                  title="Review"
+                  text="Sucess!!!"
+                  onConfirm={() => setCheckReview({ show: false })}
+                 />
               </div>
             </div>
           </TabPane>

@@ -75,3 +75,10 @@ img {
     content: "\f005";
     color: #c5e611;
 } */
+.comment_list{
+    max-height: 215px;
+    overflow-y: scroll;
+}
+.content-comment{
+    color: rgb(20, 20, 243);
+}

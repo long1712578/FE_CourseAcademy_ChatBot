@@ -17,7 +17,8 @@ const CallAPI = async (method, body, pathURL) =>
             data: body,
             headers: {"Authorization": `Bearer ${token ? token : null}`}
         });
-        if(response.status === 200)
+        console.log(response);
+        if(response.status === 200 || response.status === 201)
             return {status: 1, data: response.data};
     } catch(err)
     {

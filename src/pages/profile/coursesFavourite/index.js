@@ -1,65 +1,63 @@
-import React, { useState, useEffect  } from "react";
-import 'antd/dist/antd.css';
-import { Table, Space, Button } from 'antd';
+import React, { useState, useEffect } from "react";
+import "antd/dist/antd.css";
+import { Table, Space, Button } from "antd";
 import CallAPI from "../../../until/callAPI";
-import {
-  Link
-} from 'react-router-dom';
+import { Link } from "react-router-dom";
+import ProductCart from '../../../component/Product/index';
 
-
-const CourseFavourite  = ({id})  => {
+const CourseFavourite = ({ id }) => {
   const [favourites, setFavourites] = useState([]);
   const [loading, setloading] = useState(true);
   useEffect(() => {
     const fetchData = async () => {
-      await CallAPI("GET", null, `/users/${id}/watch-list`).then(
-        (res)  => {
-          setloading(false);
-          setFavourites(
-            res.data.map((row) => ({
-              key: row.id,
-              name: row.name,
-              image: row.image,
-              price:  row.price,
-              rating_average: row.rating_average,
-            }))
-          )
-        }
-      );
+      await CallAPI("GET", null, `/users/${id}/watch-list`).then((res) => {
+        setloading(false);
+        setFavourites(res.data);
+        console.log(favourites);
+      });
     };
     fetchData();
   }, []);
 
-  const columns = [
-    {
-      title: "Name",
-      dataIndex: "name",
-    },
-    {
-      title: "Image",
-      dataIndex: "image",
-    },
-    {
-      title: "Price",
-      dataIndex: "price",
-    },
-    {
-      title: "Rating",
-      dataIndex: "rating_average",
-    },
-    {
-      title: "Action",
-      dataIndex: "action",
-      render: (text, record) => (
-        <Space size="middle">
-          <Link to={`/courses/${record.key}`} className="btn btn-primary">Detail</Link>
-          <Button type="primary" danger>Delete</Button>
-        </Space>
-      ),
-    },
-  ];
   return (
-    <Table columns={columns} dataSource={favourites} />
+    <div>
+      <div className="row">
+        {favourites.length > 0 ? (
+          favourites.map((data, index) => {
+            return (
+              <div className="col-md-4" key={index}>
+                <ProductCart
+                  idCourse={data.id}
+                  nameCourse={data.name}
+                  nameTeacher={""}
+                  price={data.price}
+                  promotionPrice={data.promotion_price}
+                  rating={data.rating_average}
+                ></ProductCart>
+              </div>
+            );
+          })
+        ) : (
+          <>
+            <div
+              style={{
+                textAlign: "center",
+                backgroundColor: "#364d79",
+                width: "100%",
+                height: "260px",
+                lineHeight: "260px",
+                marginBottom: "20px",
+              }}
+              className="flex-row justify-content-center"
+            >
+              <p style={{ fontSize: 30, fontWeight: 350 }}>
+                There are no recently courses!
+              </p>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
   );
 };
 export default CourseFavourite;
