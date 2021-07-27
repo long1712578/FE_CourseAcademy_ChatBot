@@ -17,6 +17,7 @@ import Signup from './pages/authentication/signup';
 import Profile from './pages/profile';
 
 import theme from "assets/theme/theme.js";
+import AddCourse from "./pages/AddCourse";
 
 function App() {
   return (
@@ -44,7 +45,11 @@ function App() {
               <Route path="/signup">
                   <Signup/>
               </Route>
+              <Route path="/add-course">
+                  <AddCourse/>
+              </Route>
               <Redirect from="/" to="/home" />
+
           </Switch>
       </Router>
     </ThemeProvider>

@@ -6,9 +6,9 @@ import CallAPI from "../../../until/callAPI";
 import {toast} from "react-toastify";
 import Loader from "../../loader";
 const contentStyle = {
-    height: '260px',
+    height: '140px',
     color: '#fff',
-    lineHeight: '260px',
+    lineHeight: '140px',
     background: '#364d79',
 };
 const MostHighLightComponent=()=>{
@@ -33,6 +33,7 @@ const MostHighLightComponent=()=>{
     )
     return (
         <React.Fragment>
+            <h6 style={{marginLeft:'25px'}}>The list of the most registered categories of the week</h6>
             <Carousel autoplay>
                 {
                     listCategoryMostRegis.length > 0 ?
@@ -43,13 +44,14 @@ const MostHighLightComponent=()=>{
                                         <Card title={data.name} style={{
                                             width: '90%',
                                             backgroundColor: '#e5d5c1',
-                                            height: '220px',
+                                            height: '140px',
                                             margin: 'auto',
                                             textAlign: 'center',
                                         }}
                                               loading={isLoading}
                                         >
                                             <div style={{marginTop: '15px'}}>
+
                                                 <p style={{float: 'left'}}>
                                                     Number of subscribers : {data.tNumber}
                                                         </p>
