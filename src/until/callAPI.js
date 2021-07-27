@@ -15,7 +15,7 @@ const CallAPI = async (method, body, pathURL) =>
             method: method,
             url: URL_API + pathURL,
             data: body,
-            headers: {"Authorization": `Bearer ${token ? token : null}`}
+            headers: {"Authorization": `${token ? token : null}`}
         });
         console.log(response);
         if(response.status === 200 || response.status === 201)
@@ -43,7 +43,7 @@ const CallAPI = async (method, body, pathURL) =>
                             method: method,
                             url: URL_API + pathURL,
                             data: body,
-                            headers: {"Authorization": `Bearer ${reFetchToken.data}`}
+                            headers: {"Authorization": `${reFetchToken.data}`}
                         });
                         if(response.status === 200)
                         {
