@@ -99,3 +99,6 @@ i.fas.fa-home {
     background-color: silver;
     border-color: silver;
 }
+#basic-nav-dropdown{
+    text-transform: uppercase;
+}

@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react"
 import {Card, Col, Row} from "antd";
 import CallAPI from "../../../until/callAPI";
+import CallUnAuthorize from "../../../until/callUnAuthorize";
 import {toast} from "react-toastify";
 import Loader from "../../loader";
 import {EyeOutlined, StarOutlined} from '@ant-design/icons';
@@ -10,7 +11,7 @@ const MostViewComponent = () => {
     const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
         const fetchData = async () => {
-            const res = await CallAPI("GET", null, "/guest-course/most-view");
+            const res = await CallUnAuthorize("GET", null, "/guest-course/most-view");
             if (res.status === 1) {
                 setIsLoading(false);
                 setListCourseMostView(res.data);

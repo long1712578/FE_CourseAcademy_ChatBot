@@ -3,6 +3,7 @@ import 'antd/dist/antd.css';
 import './index.css';
 import {Carousel, Card} from 'antd';
 import CallAPI from "../../../until/callAPI";
+import CallUnAuthorize from "../../../until/callUnAuthorize";
 import {toast} from "react-toastify";
 import Loader from "../../loader";
 
@@ -17,7 +18,7 @@ const MostHighLightComponent = () => {
     const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
         const fetchData = async () => {
-            const res = await CallAPI("GET", null, "/guest-course/most-highlight");
+            const res = await CallUnAuthorize("GET", null, "/guest-course/most-highlight");
             if (res.status === 1) {
                 setIsLoading(false);
                 setListCourseHighLight(res.data);

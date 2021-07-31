@@ -1,7 +1,7 @@
 import moment from "moment";
 import React from "react";
 
-const CardProduct=({img,name,summary,description,rating,promotionPrice,price,lastUpdate,numberOfRating,numberOfEnrroled})=>{
+const CardProduct=({id,img,name,summary,description,rating,promotionPrice,price,lastUpdate,numberOfRating,numberOfEnrroled})=>{
     return(
         <article className="card">
             <div className="card-body">
@@ -60,7 +60,7 @@ const CardProduct=({img,name,summary,description,rating,promotionPrice,price,las
 
                             <div className="mb-4">
                                 <a href="#" className="btn btn-primary mr-1">Buy now</a>
-                                <a href="#" className="btn btn-light">Add to card</a>
+                                <a href={`/courses/${id}/preview`} className="btn btn-success ">Preview</a>
                             </div>
                             <div>
                                 Last update: {lastUpdate}

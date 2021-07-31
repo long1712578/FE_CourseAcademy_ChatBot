@@ -17,7 +17,6 @@ const CallAPI = async (method, body, pathURL) =>
             data: body,
             headers: {"Authorization": `${token ? token : null}`}
         });
-        console.log(response);
         if(response.status === 200 || response.status === 201)
             return {status: 1, data: response.data};
     } catch(err)
@@ -33,8 +32,9 @@ const CallAPI = async (method, body, pathURL) =>
                 if(reFetchToken.status === 1)
                 {
                     await localStorage.removeItem("user");
+                    console.log("acess", reFetchToken.data.accessToken);
                     const data = {
-                        accessToken: reFetchToken.data,
+                        accessToken: reFetchToken.data.accessToken,
                         refreshToken: refresh
                     }
                     await localStorage.setItem("user", JSON.stringify(data));
@@ -43,9 +43,9 @@ const CallAPI = async (method, body, pathURL) =>
                             method: method,
                             url: URL_API + pathURL,
                             data: body,
-                            headers: {"Authorization": `${reFetchToken.data}`}
+                            headers: {"Authorization": JSON.stringify(`${reFetchToken.data.accessToken}`)}
                         });
-                        if(response.status === 200)
+                        if(response.status === 200 || response.status === 201)
                         {
                             return {status: 1, data: response.data};
 

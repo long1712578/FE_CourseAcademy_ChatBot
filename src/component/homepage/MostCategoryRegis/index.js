@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react"
 import 'antd/dist/antd.css';
 import './index.css';
 import { Carousel,Card } from 'antd';
-import CallAPI from "../../../until/callAPI";
+import CallUnAuthorize from "../../../until/callUnAuthorize";
 import {toast} from "react-toastify";
 import Loader from "../../loader";
 const contentStyle = {
@@ -16,7 +16,7 @@ const MostHighLightComponent=()=>{
     const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
         const fetchData = async () => {
-            const res = await CallAPI("GET", null, "/guest-course/most-regis");
+            const res = await CallUnAuthorize("GET", null, "/guest-course/most-regis");
             if(res.status === 1) {
                 setIsLoading(false);
                 setListCategoryMostRegis(res.data);

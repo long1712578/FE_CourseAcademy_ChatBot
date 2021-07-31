@@ -13,6 +13,7 @@ import moment from "moment";
 import CardTeacher from "../../component/SingleProduct/CardTeacher";
 import CardSameCourse from "../../component/SingleProduct/CardSameCourse";
 import CardComment from "../../component/SingleProduct/CardComment";
+import CardReview from "../../component/SingleProduct/CartReview";
 const Product = () => {
   const [course, setCourse] = useState();
   const [rating, setRating] = useState();
@@ -22,6 +23,10 @@ const Product = () => {
   const [listFeedback, setListFeedback] = useState([]);
   const id = useParams();
   const { TabPane } = Tabs;
+  const user = JSON.parse(localStorage.getItem("user"));
+  const accessToken = user.accessToken;
+  const decode = jwt_decode(accessToken);
+  const userId = decode.userId;
 
 
 function callback(key) {
@@ -34,7 +39,6 @@ function callback(key) {
         null,
         `/guest-course/information/${id.id}`
       );
-      console.log("res", res);
       if (res.status === 1) {
         setCourse(res.data.course[0]);
         setRating(res.data.countRate);
@@ -62,6 +66,7 @@ function callback(key) {
       <section className="section-content padding-y bg">
         <div className="container">
           <CardProduct
+            id = {course.id}
             img={course.image}
             name={course.name}
             summary={course.summary}
@@ -84,6 +89,7 @@ function callback(key) {
             <TabPane tab="Review" key="2">
               <CardReview
                courseId = {id.id}
+               userId = {userId}
               />
             </TabPane>
           </Tabs>
