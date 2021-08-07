@@ -34,7 +34,6 @@ const Product=()=>{
         }
         fetchData();
     }, [id])
-    console.log(listFeedback)
     if(isLoading) return (
         <React.Fragment>
             <Header/>

@@ -9,15 +9,16 @@ import Checkbox from "antd/es/checkbox/Checkbox";
 import {Select} from "antd";
 import 'react-toastify/dist/ReactToastify.css';
 import {Card, Button} from "antd"
+import {useParams} from "react-router";
 import LoadingMask from "react-loadingmask";
 import "react-loadingmask/dist/react-loadingmask.css";
 
 const {Option} = Select;
 
 
-const AddCourse = () => {
+const UpdateCourse = () => {
     const [isLoading, setIsloading] = useState(false);
-    const [idCategory, setIdCategory] = useState('-1');
+    const [idCategory, setIdCategory] = useState();
     const [title, setTitle] = useState();
     const [summary, setSummary] = useState();
     const [price, setPrice] = useState();
@@ -27,10 +28,54 @@ const AddCourse = () => {
     const [status, setStatus] = useState(false);
     const [listCategory, setListCategory] = useState([]);
     const [showImg, setShowImg] = useState();
-    const [isShowImg,setIsShowImg]=useState("none")
+
     const [lstFileDoc, setLstFileDoc] = useState([]);
     const [lstFileVideo, setLstFileVideo] = useState([]);
     const refImg = useRef();
+    const id = useParams();
+
+    useEffect(() => {
+        let isLoadSucces = true;
+        const fetchData = async () => {
+            const res = await CallAPI("GET", null, `/guest-course/information/${id.id}`);
+            if (res.status === 1) {
+                const dataCourse = res.data.course[0];
+                setIdCategory(dataCourse.category_id);
+                setTitle(dataCourse.name);
+                setValueDes(dataCourse.description);
+                setSummary(dataCourse.summary);
+                setPrice(dataCourse.price);
+                setPromotionPrice(dataCourse.promotion_price);
+                setSrcImage(dataCourse.image);
+                setShowImg(dataCourse.image);
+                if (dataCourse.course_status_id === 1) {
+                    setStatus(true)
+                } else setStatus(false)
+            } else isLoadSucces = false;
+            const resDoc = await CallAPI("GET", null, `/documents?course_id=${id.id}`);
+            if (resDoc.status === 1) {
+                const dataDoc = resDoc.data;
+                dataDoc.forEach((item) => {
+                    setLstFileDoc(lstFileDoc => [...lstFileDoc, item.document])
+                })
+            } else isLoadSucces = false;
+            const resVideo = await CallAPI("GET", null, `/videos?course_id=${id.id}`);
+            if (resVideo.status === 1) {
+                const dataVideo = resVideo.data;
+                dataVideo.forEach((item) => {
+                    setLstFileVideo(lstFileVideo => [...lstFileVideo, item.video])
+                })
+            } else isLoadSucces = false;
+            if (!isLoadSucces) {
+                return toast.error("Load course to update failed,try again", {
+                    toastId: -10,
+                    autoClose: 2000,
+                });
+            }
+
+        }
+        fetchData();
+    }, [id])
     useEffect(() => {
         const fetchData = async () => {
             const res = await CallAPI("GET", null, `/categories`);
@@ -47,24 +92,77 @@ const AddCourse = () => {
     const handleAddVideo = () => {
         document.getElementById('btnAddVideo').click();
     }
-    const handleAddFileDoc = (e) => {
+    const handleAddFileDoc = async (e) => {
         e.persist();
+        setIsloading(true);
         const param = e.target.files[0];
-        setLstFileDoc(lstFileDoc => [...lstFileDoc, param]);
+        let dataDoc = new FormData();
+        dataDoc.append('url', param)
+        dataDoc.append('course_id', id.id)
+        dataDoc.append('name', param.name);
+
+        const resDoc = await CallAPI('POST', dataDoc, `/documents`);
+        setIsloading(false);
+        if (resDoc.status === 1) {
+            setLstFileDoc(lstFileDoc => [...lstFileDoc, param]);
+            return toast.success("Updated", {toastId: 10, autoClose: 2000})
+        } else {
+            return toast.error("Update document failed, try again", {
+                toastId: -10,
+                autoClose: 2000,
+            });
+        }
     }
-    const handleAddFileVideo = (e) => {
+    const handleAddFileVideo = async (e) => {
         e.persist();
+        setIsloading(true);
         const param = e.target.files[0];
-        setLstFileVideo(lstFileVideo => [...lstFileVideo, param]);
+        let dataVideo = new FormData();
+        dataVideo.append('url', param)
+        dataVideo.append('course_id', id.id)
+        dataVideo.append('name', param.name);
+
+        const resDoc = await CallAPI('POST', dataVideo, `/videos`);
+        setIsloading(false);
+        if (resDoc.status === 1) {
+            setLstFileVideo(lstFileVideo => [...lstFileVideo, param]);
+            return toast.success("Updated", {toastId: 10, autoClose: 2000})
+        } else {
+            return toast.error("Update document failed, try again", {
+                toastId: -10,
+                autoClose: 2000,
+            });
+        }
     }
 
-    const handleRemoveDoc = (name) => {
-        setLstFileDoc(lstFileDoc.filter(item => item.name !== name));
+    const handleRemoveDoc = async (name, id) => {
+        setIsloading(true);
+        const resRemoveDoc = await CallAPI('DELETE', null, `/documents/${id}`);
+        setIsloading(false);
+        if (resRemoveDoc.status === 1) {
+            setLstFileDoc(lstFileDoc.filter(item => item.name !== name));
+            return toast.success("Updated", {toastId: 10, autoClose: 2000})
+        } else {
+            return toast.error("Update document failed, try again", {
+                toastId: -10,
+                autoClose: 2000,
+            });
+        }
 
     };
-
-    const handleRemoveVideo = (name) => {
-        setLstFileVideo(lstFileVideo.filter(item => item.name !== name));
+    const handleRemoveVideo = async (name, id) => {
+        setIsloading(true);
+        const resRemoveVideo = await CallAPI('DELETE', null, `/videos/${id}`);
+        setIsloading(false);
+        if (resRemoveVideo.status === 1) {
+            setLstFileVideo(lstFileVideo.filter(item => item.name !== name));
+            return toast.success("Updated", {toastId: 10, autoClose: 2000})
+        } else {
+            return toast.error("Update document failed, try again", {
+                toastId: -10,
+                autoClose: 2000,
+            });
+        }
     };
 
     const handleChangeName = (e) => {
@@ -86,8 +184,7 @@ const AddCourse = () => {
     const handleImage = (e) => {
         e.persist();
         const param = e.target.files[0];
-        setSrcImage(param)
-        setIsShowImg("initial")
+        setSrcImage(param);
         let reader = new FileReader();
         reader.onload = function () {
             setShowImg(reader.result);
@@ -102,25 +199,6 @@ const AddCourse = () => {
     const onChangeStatus = (e) => {
         setStatus(e.target.checked);
     }
-    const resetImg = () => {
-        refImg.current.value = "";
-        setSrcImage(null)
-        setShowImg(null)
-        setIsShowImg("none")
-    };
-    const removeAllDataInsert = () => {
-        setTitle('');
-        setSummary('');
-        setPrice('');
-        setPromotionPrice('');
-        setValueDes('');
-        setSrcImage('');
-        resetImg();
-        setLstFileDoc([]);
-        setLstFileVideo([]);
-        setStatus(false);
-
-    }
 
     const handleSaveCourse = async () => {
         setIsloading(true);
@@ -129,15 +207,13 @@ const AddCourse = () => {
             setIdCategory('0');
             return;
         }
-
         const formData = new FormData();
-
         formData.append("name", title);
         formData.append("description", valueDes.replace(/<(.|\n)*?>/g, '').trim())
         formData.append("summary", summary)
         formData.append("image", srcImage)
         formData.append("category_id", idCategory)
-        formData.append("created_by", 7)
+        formData.append("created_by", 11)
         if (status === true) {
             formData.append("course_status_id", 1)
         } else formData.append("course_status_id", 2)
@@ -145,39 +221,13 @@ const AddCourse = () => {
         formData.append("promotion_price", promotionPrice)
         formData.append("course_field_id", 3);
 
-        const res = await CallAPI('POST', formData, `/courses`);
+        const res = await CallAPI('PUT', formData, `/courses/${id.id}`);
         if (res.status === 1) {
             isSuccess = true;
-            const idCourse = res.data.id;
-            lstFileDoc.forEach(async (item) => {
-                let dataDoc = new FormData();
-                dataDoc.append('url', item)
-                dataDoc.append('course_id', idCourse)
-                dataDoc.append('name', item.name);
-
-                const resDoc = await CallAPI('POST', dataDoc, '/documents');
-                if (resDoc.status === 1)
-                    isSuccess = true;
-                else
-                    isSuccess = false;
-            })
-            lstFileVideo.forEach(async (item) => {
-                let dataVideo = new FormData();
-                dataVideo.append('url', item)
-                dataVideo.append('course_id', idCourse)
-                dataVideo.append('name', item.name);
-
-                const resVideo = await CallAPI('POST', dataVideo, '/videos')
-                if (resVideo.status === 1)
-                    isSuccess = true;
-                else
-                    isSuccess = false;
-            })
-        }
+        } else isSuccess = false;
 
         if (isSuccess === true) {
             setIsloading(false)
-            removeAllDataInsert();
             return toast.success("Saved", {toastId: 10, autoClose: 2000})
         } else {
             return toast.error("Save course failed, try again", {
@@ -190,10 +240,10 @@ const AddCourse = () => {
         <React.Fragment>
             <LoadingMask loading={isLoading} text={"loading..."}>
                 <Header/>
-                <div class="container main-container">
-                    <div class="row">
-                        <div class="col-lg-12 mt-5">
-                            <h3 className="text-center mt-5 mb-5">Reactjs Eccommerce Site - Add Course</h3>
+                <div className="container main-container">
+                    <div className="row">
+                        <div className="col-lg-12 mt-5">
+                            <h3 className="text-center mt-5 mb-5">Reactjs Eccommerce Site - Update Course</h3>
                             <div className="mt-5 mb-5">
                                 <div className="form-group">
                                     <h6>Course name:</h6>
@@ -238,7 +288,7 @@ const AddCourse = () => {
                                 </div>
                                 <div className="form-group">
                                     <h6>Course image</h6>
-                                    <img src={showImg}  style={{width: 293, height: 220, marginRight: 20,display: `${isShowImg}`}} />
+                                    <img src={showImg} style={{width: 293, height: 220, marginRight: 20}}/>
                                     <input type="file" id="image" accept=".png, .jpg" style={{cursor: "pointer"}}
                                            onChange={handleImage} ref={refImg}/>
                                 </div>
@@ -255,8 +305,8 @@ const AddCourse = () => {
                                         placeholder="Select a category"
                                         optionFilterProp="children"
                                         onChange={onChangeCategories}
-                                        onSearch
-
+                                        onSearsh
+                                        value={idCategory}
                                     >
                                         {
                                             listCategory.map((data, index) => {
@@ -290,7 +340,7 @@ const AddCourse = () => {
                                     lstFileDoc.map((data, index) => {
                                         return (
                                             <Card title={`Document ${index + 1}`} key={index}
-                                                  extra={<a onClick={() => handleRemoveDoc(data.name)}><i
+                                                  extra={<a onClick={() => handleRemoveDoc(data.name, data.id)}><i
                                                       className="fa fa-trash"></i></a>} style={{marginTop: 20}}>
                                                 <div style={{marginBottom: 20}}>
                                                     <h6>Name:</h6>
@@ -313,7 +363,7 @@ const AddCourse = () => {
                                     lstFileVideo.map((data, index) => {
                                         return (
                                             <Card title={`Video ${index + 1}`} key={index}
-                                                  extra={<a onClick={() => handleRemoveVideo(data.name)}><i
+                                                  extra={<a onClick={() => handleRemoveVideo(data.name, data.id)}><i
                                                       className="fa fa-trash"></i></a>} style={{marginTop: 20}}>
                                                 <div style={{marginBottom: 20}}>
                                                     <h6>Name:</h6>
@@ -328,18 +378,18 @@ const AddCourse = () => {
                                         onClick={handleSaveCourse}>
                                     {isLoading ? '... ' :
                                         <i className="fas fa-save" style={{marginRight: 5, paddingTop: 2}}></i>}
-                                    Save
+                                    Update
                                 </button>
                             </div>
                         </div>
                     </div>
 
                 </div>
-                <ToastContainer position="bottom-center"/>
                 <Footer/>
             </LoadingMask>
+            <ToastContainer position="bottom-center"/>
         </React.Fragment>
 
     )
 }
-export default AddCourse;
+export default UpdateCourse;

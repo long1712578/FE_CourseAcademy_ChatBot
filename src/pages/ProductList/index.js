@@ -33,22 +33,18 @@ const ProductList=()=>{
             let res=null;
             if(idCategory==='-1'&&filter==='-1')
             {
-                console.log('kh cate kh filter')
                 res = await CallAPI("GET", null, `/courses?page=${currentPage}&search=${search}`);
             }
             else if(idCategory!=='-1'&&filter==='-1')
             {
-                console.log('có cate kh filter')
                 res = await CallAPI("GET", null, `/courses?page=${currentPage}&category_id=${idCategory}&search=${search}`);
             }else if(idCategory==='-1'&&filter!=='-1')
             {
                 if(filter==='1')
                 {
-                    console.log('kh cate có filter rating ')
                     res = await CallAPI("GET", null, `/courses?page=${currentPage}&search=${search}&sort_by=rating_average&sort_type=desc`);
                 }else if(filter==='2')
                 {
-                    console.log('kh cate có filter price ')
                     res = await CallAPI("GET", null, `/courses?page=${currentPage}&search=${search}&sort_by=promotion_price&sort_type=asc`);
                 }
             }
@@ -56,11 +52,9 @@ const ProductList=()=>{
             {
                 if(filter==='1')
                 {
-                    console.log('có cate có filter rating ')
                     res = await CallAPI("GET", null, `/courses?page=${currentPage}&category_id=${idCategory}&search=${search}&sort_by=rating_average&sort_type=desc`);
                 }else if(filter==='2')
                 {
-                    console.log('có cate có filter price ')
                     res = await CallAPI("GET", null, `/courses?page=${currentPage}&category_id=${idCategory}&search=${search}&sort_by=promotion_price&sort_type=asc`);
                 }
             }
@@ -76,22 +70,14 @@ const ProductList=()=>{
         fetchData();
     }, [currentPage,pages,idCategory,search,filter])
 
-    console.log(listProduct)
     const onChangeCurrentPage=(data)=>{
         setCurrentPage(data);
         return data;
     }
-    const sortByRatingDESC=()=>
-    {
-        console.log('sort')
-        const listProductSortRating=listProduct.sort((a,b)=>(a.course.rating_average>b.course.rating_average)?-1:1);
-        console.log(listProductSortRating)
-        setListProduct(listProductSortRating)
-    }
+
     const onChangeCategories=(value) =>{
         setIdCategory(value);
         setSearch('');
-        console.log(value)
     }
 
     const btnsearch=()=>{
@@ -174,7 +160,7 @@ const ProductList=()=>{
                             <main className="col-md-9">
                                 <header className="border-bottom mb-4 pb-3">
                                     <div className="form-inline">
-                                        <span className="mr-md-auto">32 Items found </span>
+                                        <span className="mr-md-auto">Items found </span>
                                         <Select
                                             showSearch
                                             style={{ width: 200 }}

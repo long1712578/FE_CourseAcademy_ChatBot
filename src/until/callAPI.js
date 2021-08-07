@@ -23,7 +23,6 @@ const CallAPI = async (method, body, pathURL) =>
     {
         if(err.response)
         {
-            console.log(err.response)
             if(err.response.status === 400)
                 return {status: 0, err: err.response.data}
             if(err.response.status === 401){

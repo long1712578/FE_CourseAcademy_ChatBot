@@ -19,7 +19,7 @@ const MostViewComponent = () => {
         }
         fetchData();
     }, [])
-    console.log(setListCourseMostView.length);
+
     if (isLoading) return (
         <div style={{marginLeft: '200px'}}>
             <Loader/>
