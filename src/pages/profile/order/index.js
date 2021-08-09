@@ -11,7 +11,7 @@ const Order = ({ id }) => {
       const res = await CallAPI("GET", null, `/orders?user_id=${id}`).then(
         res  => {
           setloading(false);
-          setOrders(
+          setOrders((res.data)?
             res.data.courseOrders.map((row) => ({
               key: row.id,
               name: row.course.name,
@@ -19,6 +19,7 @@ const Order = ({ id }) => {
               price:  row.course.price,
               dateBuy: row.course_order.enroll_at,
             }))
+            : []
           )
         }
       );
@@ -34,6 +35,10 @@ const Order = ({ id }) => {
     {
       title: "Image",
       dataIndex: "image",
+      render: (text, record) => {
+        return (
+         <img src={record.image}/>
+       );},
     },
     {
       title: "Price",

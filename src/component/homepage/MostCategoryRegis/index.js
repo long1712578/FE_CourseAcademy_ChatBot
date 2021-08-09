@@ -2,13 +2,13 @@ import React, {useEffect, useState} from "react"
 import 'antd/dist/antd.css';
 import './index.css';
 import { Carousel,Card } from 'antd';
-import CallAPI from "../../../until/callAPI";
+import CallUnAuthorize from "../../../until/callUnAuthorize";
 import {toast} from "react-toastify";
 import Loader from "../../loader";
 const contentStyle = {
-    height: '260px',
+    height: '140px',
     color: '#fff',
-    lineHeight: '260px',
+    lineHeight: '140px',
     background: '#364d79',
 };
 const MostHighLightComponent=()=>{
@@ -16,7 +16,7 @@ const MostHighLightComponent=()=>{
     const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
         const fetchData = async () => {
-            const res = await CallAPI("GET", null, "/guest-course/most-regis");
+            const res = await CallUnAuthorize("GET", null, "/guest-course/most-regis");
             if(res.status === 1) {
                 setIsLoading(false);
                 setListCategoryMostRegis(res.data);
@@ -33,6 +33,7 @@ const MostHighLightComponent=()=>{
     )
     return (
         <React.Fragment>
+            <h6 style={{marginLeft:'25px'}}>The list of the most registered categories of the week</h6>
             <Carousel autoplay>
                 {
                     listCategoryMostRegis.length > 0 ?
@@ -43,13 +44,14 @@ const MostHighLightComponent=()=>{
                                         <Card title={data.name} style={{
                                             width: '90%',
                                             backgroundColor: '#e5d5c1',
-                                            height: '220px',
+                                            height: '140px',
                                             margin: 'auto',
                                             textAlign: 'center',
                                         }}
                                               loading={isLoading}
                                         >
                                             <div style={{marginTop: '15px'}}>
+
                                                 <p style={{float: 'left'}}>
                                                     Number of subscribers : {data.tNumber}
                                                         </p>

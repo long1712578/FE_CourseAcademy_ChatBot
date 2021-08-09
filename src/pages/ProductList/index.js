@@ -1,8 +1,7 @@
-
 import React, {useEffect, useState} from 'react'
 import Header from "../../component/header";
 import Footer from "../../component/footer";
-import CallAPI from "../../until/callAPI";
+import CallUnAuthorize from "../../until/callUnAuthorize";
 import {toast} from "react-toastify";
 import Loader from "../../component/loader";
 import {Pagination, Select} from "antd";
@@ -16,9 +15,10 @@ const ProductList=()=>{
     const [listCategory,setListCategory]=useState([]);
     const [idCategory,setIdCategory]=useState('-1');
     const [search,setSearch]=useState('');
+    const [filter,setFilter]=useState('-1');
     useEffect(() => {
         const fetchData = async () => {
-            const res = await CallAPI("GET", null, `/categories`);
+            const res = await CallUnAuthorize("GET", null, `/categories`);
             if(res.status === 1) {
                 setListCategory(res.data);
             }
@@ -31,24 +31,49 @@ const ProductList=()=>{
     useEffect(() => {
         const fetchData = async () => {
             let res=null;
-            if(idCategory==='-1')
+            if(idCategory==='-1'&&filter==='-1')
             {
-                res = await CallAPI("GET", null, `/courses?page=${currentPage}&search=${search}`);
+                res = await CallUnAuthorize("GET", null, `/courses?page=${currentPage}&search=${search}`);
             }
-            else
+            else if(idCategory!=='-1'&&filter==='-1')
             {
-                res = await CallAPI("GET", null, `/courses?page=${currentPage}&category_id=${idCategory}&search=${search}`);
+                console.log('có cate kh filter')
+                res = await CallUnAuthorize("GET", null, `/courses?page=${currentPage}&category_id=${idCategory}&search=${search}`);
+            }else if(idCategory==='-1'&&filter!=='-1')
+            {
+                if(filter==='1')
+                {
+                    console.log('kh cate có filter rating ')
+                    res = await CallUnAuthorize("GET", null, `/courses?page=${currentPage}&search=${search}&sort_by=rating_average&sort_type=desc`);
+                }else if(filter==='2')
+                {
+                    console.log('kh cate có filter price ')
+                    res = await CallUnAuthorize("GET", null, `/courses?page=${currentPage}&search=${search}&sort_by=promotion_price&sort_type=asc`);
+                }
+            }
+            else if(idCategory!=='-1'&&filter!=='-1')
+            {
+                if(filter==='1')
+                {
+                    console.log('có cate có filter rating ')
+                    res = await CallUnAuthorize("GET", null, `/courses?page=${currentPage}&category_id=${idCategory}&search=${search}&sort_by=rating_average&sort_type=desc`);
+                }else if(filter==='2')
+                {
+                    console.log('có cate có filter price ')
+                    res = await CallUnAuthorize("GET", null, `/courses?page=${currentPage}&category_id=${idCategory}&search=${search}&sort_by=promotion_price&sort_type=asc`);
+                }
             }
             if(res.status === 1) {
                 setIsLoading(false);
                 setListProduct(res.data.courses);
                 setPages(res.data.totalPage);
+                setIsLoading(false);
             }
             else
                 toast.error("Something went wrong. Try later")
         }
         fetchData();
-    }, [currentPage,pages,idCategory,search])
+    }, [currentPage,pages,idCategory,search,filter])
 
     console.log(listProduct)
     const onChangeCurrentPage=(data)=>{
@@ -71,7 +96,9 @@ const ProductList=()=>{
     const btnsearch=()=>{
         const value= document.getElementById("txtSearch").value;
         setSearch(value);
-        console.log(value);
+    }
+    const onChangeFilter=(value)=>{
+        setFilter(value)
     }
     if(isLoading) return (
         <React.Fragment>
@@ -122,125 +149,22 @@ const ProductList=()=>{
                                             <a href="#" data-toggle="collapse" data-target="#collapse_2"
                                                aria-expanded="true" className="">
                                                 <i className="icon-control fa fa-chevron-down"></i>
-                                                <h6 className="title">Brands </h6>
+                                                <h6 className="title">More filter </h6>
                                             </a>
                                         </header>
                                         <div className="filter-content collapse show" id="collapse_2">
                                             <div className="card-body">
-                                                <label className="custom-control custom-checkbox">
-                                                    <input type="checkbox" className="custom-control-input"/>
-                                                    <div className="custom-control-label">Mercedes
-                                                        <b className="badge badge-pill badge-light float-right">120</b>
-                                                    </div>
-                                                </label>
-                                                <label className="custom-control custom-checkbox">
-                                                    <input type="checkbox" className="custom-control-input"/>
-                                                    <div className="custom-control-label">Toyota
-                                                        <b className="badge badge-pill badge-light float-right">15</b></div>
-                                                </label>
-                                                <label className="custom-control custom-checkbox">
-                                                    <input type="checkbox" className="custom-control-input"/>
-                                                    <div className="custom-control-label">Mitsubishi
-                                                        <b className="badge badge-pill badge-light float-right">35</b></div>
-                                                </label>
-                                                <label className="custom-control custom-checkbox">
-                                                    <input type="checkbox" className="custom-control-input"/>
-                                                    <div className="custom-control-label">Nissan
-                                                        <b className="badge badge-pill badge-light float-right">89</b></div>
-                                                </label>
-                                                <label className="custom-control custom-checkbox">
-                                                    <input type="checkbox" className="custom-control-input"/>
-                                                    <div className="custom-control-label">Honda
-                                                        <b className="badge badge-pill badge-light float-right">30</b></div>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </article>
-                                    <article className="filter-group">
-                                        <header className="card-header">
-                                            <a href="#" data-toggle="collapse" data-target="#collapse_3"
-                                               aria-expanded="true" className="">
-                                                <i className="icon-control fa fa-chevron-down"></i>
-                                                <h6 className="title">Price range </h6>
-                                            </a>
-                                        </header>
-                                        <div className="filter-content collapse show" id="collapse_3">
-                                            <div className="card-body">
-                                                <input type="range" className="custom-range" min="0" max="100" name=""/>
-                                                <div className="form-row">
-                                                    <div className="form-group col-md-6">
-                                                        <label>Min</label>
-                                                        <input className="form-control" placeholder="$0" type="number"/>
-                                                    </div>
-                                                    <div className="form-group text-right col-md-6">
-                                                        <label>Max</label>
-                                                        <input className="form-control" placeholder="$1,0000"
-                                                               type="number"/>
-                                                    </div>
-                                                </div>
-                                                <button className="btn btn-block btn-primary" onClick={sortByRatingDESC}>Apply</button>
-                                            </div>
-                                        </div>
-                                    </article>
-                                    <article className="filter-group">
-                                        <header className="card-header">
-                                            <a href="#" data-toggle="collapse" data-target="#collapse_4"
-                                               aria-expanded="true" className="">
-                                                <i className="icon-control fa fa-chevron-down"></i>
-                                                <h6 className="title">Sizes </h6>
-                                            </a>
-                                        </header>
-                                        <div className="filter-content collapse show" id="collapse_4">
-                                            <div className="card-body">
-                                                <label className="checkbox-btn">
-                                                    <input type="checkbox"/>
-                                                    <span className="btn btn-light"> XS </span>
-                                                </label>
-                                                <label className="checkbox-btn">
-                                                    <input type="checkbox"/>
-                                                    <span className="btn btn-light"> SM </span>
-                                                </label>
-                                                <label className="checkbox-btn">
-                                                    <input type="checkbox"/>
-                                                    <span className="btn btn-light"> LG </span>
-                                                </label>
-                                                <label className="checkbox-btn">
-                                                    <input type="checkbox"/>
-                                                    <span className="btn btn-light"> XXL </span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </article>
-                                    <article className="filter-group">
-                                        <header className="card-header">
-                                            <a href="#" data-toggle="collapse" data-target="#collapse_5"
-                                               aria-expanded="false" className="">
-                                                <i className="icon-control fa fa-chevron-down"></i>
-                                                <h6 className="title">More filter </h6>
-                                            </a>
-                                        </header>
-                                        <div className="filter-content collapse in" id="collapse_5">
-                                            <div className="card-body">
-                                                <label className="custom-control custom-radio">
-                                                    <input type="radio" name="myfilter_radio" checked=""
-                                                           className="custom-control-input"/>
-                                                    <div className="custom-control-label">Any condition</div>
-                                                </label>
-                                                <label className="custom-control custom-radio">
-                                                    <input type="radio" name="myfilter_radio"
-                                                           className="custom-control-input"/>
-                                                    <div className="custom-control-label">Brand new</div>
-                                                </label>
-                                                <label className="custom-control custom-radio">
-                                                    <input type="radio" name="myfilter_radio"
-                                                           className="custom-control-input"/>
-                                                    <div className="custom-control-label">Used items</div>
-                                                </label>
-                                                <label className="custom-control custom-radio">
-                                                    <input type="radio" name="myfilter_radio"
-                                                           className="custom-control-input"/>
-                                                    <div className="custom-control-label">Very old</div>
-                                                </label>
+                                                <Select
+                                                    showSearch
+                                                    style={{ width: 200 }}
+                                                    placeholder="Filter by..."
+                                                    optionFilterProp="children"
+                                                    onChange={onChangeFilter}
+                                                >
+                                                    <Option value='-1'>None</Option>
+                                                    <Option value='1'>Rating points decrease</Option>
+                                                    <Option value='2'>Prices ascending</Option>
+                                                </Select>
                                             </div>
                                         </div>
                                     </article>
@@ -289,7 +213,7 @@ const ProductList=()=>{
                                                                          price={data.course.price}
                                                                          promotionPrice={data.course.promotion_price}
                                                                          rating={data.course.rating_average}
-
+                                                                         nameCategory={data.category.name}
                                                             >
                                                             </ProductCart>
                                                         </div>
@@ -299,20 +223,20 @@ const ProductList=()=>{
                                                 <>
                                                     <div style={{
                                                         textAlign: "center",
-                                                        backgroundColor: '#364d79',
+                                                        backgroundColor: 'grey',
                                                         width: '100%',
                                                         height: '260px',
                                                         lineHeight: '260px',
                                                         marginBottom:'20px'
                                                     }} className="flex-row justify-content-center">
-                                                        <p style={{fontSize: 30, fontWeight: 350}}>There are no recently courses!</p>
+                                                        <p style={{fontSize: 30, fontWeight: 350,textAlign:"center",marginTop:100}}>There are no recently courses!</p>
                                                     </div>
                                                 </>
                                         }
 
                                 </div>
                                 <div style={{textAlign:"center"}}>
-                                    <Pagination  simple onChange={onChangeCurrentPage}  total={pages*10} />
+                                    <Pagination  simple onChange={onChangeCurrentPage} total={pages*10} />
                                 </div>
 
                             </main>

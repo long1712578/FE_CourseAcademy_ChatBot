@@ -1,12 +1,13 @@
 import React from 'react'
 import {Link} from "react-router-dom";
 
-const ProductCart=({idCourse,nameCourse,nameTeacher,price,promotionPrice,rating,})=>{
+const ProductCart=({idCourse,nameCourse,nameTeacher,price,promotionPrice,rating,nameCategory})=>{
     return(
         <figure className="card card-product-grid">
             <Link className="link-no-decoration" to={`courses/${idCourse}`}>
             <div className="img-wrap">
                 <span className="badge badge-danger"> NEW </span>
+                <span className="badge badge-gray" style={{float:"right"}}>Category: {nameCategory}</span>
                 <img src="assets/images/items/course.jpg"/>
                 <a className="btn-overlay" href="#"><i
                     className="fa fa-search-plus"></i> Quick view</a>
@@ -19,8 +20,8 @@ const ProductCart=({idCourse,nameCourse,nameTeacher,price,promotionPrice,rating,
                     </Link>
                     <a style={{color:"darkred"}}>Teacher: {nameTeacher}</a>
                     <div className="price-wrap mt-2">
-                        <span className="price">{price}</span>
-                        <del className="price-old">{promotionPrice}</del>
+                        <span className="price">{promotionPrice}</span>
+                        <del className="price-old">{price}</del>
                         <span style={{float:"right"}}>Rating: {rating}<span
                             className="fa fa-star checked"></span></span>
                     </div>

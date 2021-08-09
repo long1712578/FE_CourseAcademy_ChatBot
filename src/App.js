@@ -7,7 +7,6 @@ import {
 } from "react-router-dom";
 import './App.css';
 import HomePage from "./pages/homepage";
-import CartProduct from "./pages/CartProduct";
 import ProductList from "./pages/ProductList";
 import Product from "./pages/SingleProduct";
 import { createTheme } from '@material-ui/core/styles';
@@ -15,8 +14,12 @@ import { ThemeProvider } from "@material-ui/core/styles";
 import Login from './pages/authentication/login';
 import Signup from './pages/authentication/signup';
 import Profile from './pages/profile';
+import RegisterProduct from './pages/RegisterProduct';
 
 import theme from "assets/theme/theme.js";
+import AddCourse from "./pages/AddCourse";
+import Contact from "pages/contact";
+import Introduce from "pages/introduce";
 
 function App() {
   return (
@@ -29,11 +32,17 @@ function App() {
               <Route path="/courses" exact>
                   <ProductList/>
               </Route>
-              <Route path="/cart">
-                  <CartProduct/>
+              <Route path="/introduce" exact>
+                  <Introduce/>
               </Route>
-              <Route path="/courses/:id">
+              <Route path="/contact" exact>
+                  <Contact/>
+              </Route>
+              <Route path="/courses/:id" exact>
                   <Product/>
+              </Route>
+              <Route path="/courses/:id/register" exact>
+                  <RegisterProduct/>
               </Route>
               <Route path="/profile">
                   <Profile/>
@@ -44,7 +53,11 @@ function App() {
               <Route path="/signup">
                   <Signup/>
               </Route>
+              <Route path="/add-course">
+                  <AddCourse/>
+              </Route>
               <Redirect from="/" to="/home" />
+
           </Switch>
       </Router>
     </ThemeProvider>

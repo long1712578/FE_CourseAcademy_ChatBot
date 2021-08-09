@@ -8,16 +8,15 @@ const CallAPI = async (method, body, pathURL) =>
 {
     const user = await JSON.parse(localStorage.getItem('user'));
     const token = user ? user.accessToken : null;
-    if(!token) return {status: -1, err: "UnAuthorization"}
-
+    if(!token) return {status: -1, err: "UnAuthorization2"}
     try{
         const response = await axios({
             method: method,
             url: URL_API + pathURL,
             data: body,
-            headers: {"Authorization": `Bearer ${token ? token : null}`}
+            headers: {"Authorization": `${token ? token : null}`}
         });
-        if(response.status === 200)
+        if(response.status === 200 || response.status === 201 ||  response.status === 204)
             return {status: 1, data: response.data};
     } catch(err)
     {
@@ -33,7 +32,7 @@ const CallAPI = async (method, body, pathURL) =>
                 {
                     await localStorage.removeItem("user");
                     const data = {
-                        accessToken: reFetchToken.data,
+                        accessToken: reFetchToken.data.accessToken,
                         refreshToken: refresh
                     }
                     await localStorage.setItem("user", JSON.stringify(data));
@@ -42,9 +41,9 @@ const CallAPI = async (method, body, pathURL) =>
                             method: method,
                             url: URL_API + pathURL,
                             data: body,
-                            headers: {"Authorization": `Bearer ${reFetchToken.data}`}
+                            headers: {"Authorization": JSON.stringify(`${reFetchToken.data.accessToken}`)}
                         });
-                        if(response.status === 200)
+                        if(response.status === 200 || response.status === 201 ||  response.status === 204)
                         {
                             return {status: 1, data: response.data};
 
@@ -56,7 +55,7 @@ const CallAPI = async (method, body, pathURL) =>
                 }
                 else
                 {
-                    return {status: -1, err: "UnAuthorization"}
+                    return {status: -1, err: "UnAuthorization1"}
                 }
             }
         }
