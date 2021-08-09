@@ -14,7 +14,7 @@ import { ThemeProvider } from "@material-ui/core/styles";
 import Login from './pages/authentication/login';
 import Signup from './pages/authentication/signup';
 import Profile from './pages/profile';
-import PreviewProduct from './pages/previewProduct';
+import RegisterProduct from './pages/RegisterProduct';
 
 import theme from "assets/theme/theme.js";
 import AddCourse from "./pages/AddCourse";
@@ -41,8 +41,8 @@ function App() {
               <Route path="/courses/:id" exact>
                   <Product/>
               </Route>
-              <Route path="/courses/:id/preview" exact>
-                  <PreviewProduct />
+              <Route path="/courses/:id/register" exact>
+                  <RegisterProduct/>
               </Route>
               <Route path="/profile">
                   <Profile/>

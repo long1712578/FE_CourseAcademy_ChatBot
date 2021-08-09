@@ -4,7 +4,7 @@ import SweetAlert from "sweetalert2-react";
 import { useForm } from "react-hook-form";
 import CallAPI from "../../../until/callAPI";
 
-const CardReview = ({ courseId, userId }) => {
+const CardReview = ({ courseId}) => {
   const { register, handleSubmit } = useForm();
   const [rating, setRating] = useState(0);
   const [checkReview, setCheckReview] = useState({ show: false });
@@ -20,7 +20,6 @@ const CardReview = ({ courseId, userId }) => {
       {
         comment,
         courseId: parseInt(courseId),
-        userId: parseInt(userId),
         rating,
       },
       `/comments`

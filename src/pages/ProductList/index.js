@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import Header from "../../component/header";
 import Footer from "../../component/footer";
-import CallAPI from "../../until/callAPI";
+import CallUnAuthorize from "../../until/callUnAuthorize";
 import {toast} from "react-toastify";
 import Loader from "../../component/loader";
 import {Pagination, Select} from "antd";
@@ -18,7 +18,7 @@ const ProductList=()=>{
     const [filter,setFilter]=useState('-1');
     useEffect(() => {
         const fetchData = async () => {
-            const res = await CallAPI("GET", null, `/categories`);
+            const res = await CallUnAuthorize("GET", null, `/categories`);
             if(res.status === 1) {
                 setListCategory(res.data);
             }
@@ -33,23 +33,22 @@ const ProductList=()=>{
             let res=null;
             if(idCategory==='-1'&&filter==='-1')
             {
-                console.log('kh cate kh filter')
-                res = await CallAPI("GET", null, `/courses?page=${currentPage}&search=${search}`);
+                res = await CallUnAuthorize("GET", null, `/courses?page=${currentPage}&search=${search}`);
             }
             else if(idCategory!=='-1'&&filter==='-1')
             {
                 console.log('có cate kh filter')
-                res = await CallAPI("GET", null, `/courses?page=${currentPage}&category_id=${idCategory}&search=${search}`);
+                res = await CallUnAuthorize("GET", null, `/courses?page=${currentPage}&category_id=${idCategory}&search=${search}`);
             }else if(idCategory==='-1'&&filter!=='-1')
             {
                 if(filter==='1')
                 {
                     console.log('kh cate có filter rating ')
-                    res = await CallAPI("GET", null, `/courses?page=${currentPage}&search=${search}&sort_by=rating_average&sort_type=desc`);
+                    res = await CallUnAuthorize("GET", null, `/courses?page=${currentPage}&search=${search}&sort_by=rating_average&sort_type=desc`);
                 }else if(filter==='2')
                 {
                     console.log('kh cate có filter price ')
-                    res = await CallAPI("GET", null, `/courses?page=${currentPage}&search=${search}&sort_by=promotion_price&sort_type=asc`);
+                    res = await CallUnAuthorize("GET", null, `/courses?page=${currentPage}&search=${search}&sort_by=promotion_price&sort_type=asc`);
                 }
             }
             else if(idCategory!=='-1'&&filter!=='-1')
@@ -57,11 +56,11 @@ const ProductList=()=>{
                 if(filter==='1')
                 {
                     console.log('có cate có filter rating ')
-                    res = await CallAPI("GET", null, `/courses?page=${currentPage}&category_id=${idCategory}&search=${search}&sort_by=rating_average&sort_type=desc`);
+                    res = await CallUnAuthorize("GET", null, `/courses?page=${currentPage}&category_id=${idCategory}&search=${search}&sort_by=rating_average&sort_type=desc`);
                 }else if(filter==='2')
                 {
                     console.log('có cate có filter price ')
-                    res = await CallAPI("GET", null, `/courses?page=${currentPage}&category_id=${idCategory}&search=${search}&sort_by=promotion_price&sort_type=asc`);
+                    res = await CallUnAuthorize("GET", null, `/courses?page=${currentPage}&category_id=${idCategory}&search=${search}&sort_by=promotion_price&sort_type=asc`);
                 }
             }
             if(res.status === 1) {

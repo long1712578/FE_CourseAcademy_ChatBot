@@ -14,11 +14,9 @@ function Login() {
     const fetchData = async () => {
       const res = await CallUnAuthorize("POST", {...data}, '/sign-in');
       if(res.status === 1) {
-          // Chyen sang mang hinh dang nhap
-          console.log(res);
           setCheckSignin(true);
           localStorage.setItem('user', JSON.stringify(res.data));
-          router.push('/user');
+          router.push('/home');
       }
       else{
         setCheckSignin(false);
@@ -33,7 +31,7 @@ function Login() {
       <div className="login-background">
         <div className="login-container">
           <div className="login-title">
-            <h2> Đăng nhập</h2>
+            <h2> Login</h2>
           </div>
           <Form
             name="normal_login"
@@ -48,7 +46,7 @@ function Login() {
               rules={[
                 {
                   required: true,
-                  message: "Vui lòng nhập Username!",
+                  message: "Please enter nhập Username!",
                 },
               ]}
             >
@@ -63,7 +61,7 @@ function Login() {
               rules={[
                 {
                   required: true,
-                  message: "Vui lòng nhập Password!",
+                  message: "please enter Password!",
                 },
               ]}
             >
@@ -75,11 +73,11 @@ function Login() {
             </Form.Item>
             <Form.Item>
               <Form.Item name="remember" valuePropName="checked" noStyle>
-                <Checkbox>Hiển thị</Checkbox>
+                <Checkbox>Display</Checkbox>
               </Form.Item>
 
               <a className="login-form-forgot" href="">
-                Quên password
+                forget password
               </a>
             </Form.Item>
 
@@ -89,9 +87,9 @@ function Login() {
                 htmlType="submit"
                 className="login-form-button"
               >
-                Đăng nhập
+                Login
               </Button>
-              Hoặc <a href="/signup">Đăng kí</a>
+              or <a href="/signup">Register</a>
             </Form.Item>
           </Form>
         </div>

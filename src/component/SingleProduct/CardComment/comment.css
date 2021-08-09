@@ -1,0 +1,7 @@
+.col-md-8.comment{
+    max-height: 400px;
+    overflow-y: scroll;
+}
+.content-review{
+    vertical-align: baseline
+}

@@ -8,8 +8,7 @@ const CallAPI = async (method, body, pathURL) =>
 {
     const user = await JSON.parse(localStorage.getItem('user'));
     const token = user ? user.accessToken : null;
-    if(!token) return {status: -1, err: "UnAuthorization"}
-
+    if(!token) return {status: -1, err: "UnAuthorization2"}
     try{
         const response = await axios({
             method: method,
@@ -17,7 +16,7 @@ const CallAPI = async (method, body, pathURL) =>
             data: body,
             headers: {"Authorization": `${token ? token : null}`}
         });
-        if(response.status === 200 || response.status === 201)
+        if(response.status === 200 || response.status === 201 ||  response.status === 204)
             return {status: 1, data: response.data};
     } catch(err)
     {
@@ -32,7 +31,6 @@ const CallAPI = async (method, body, pathURL) =>
                 if(reFetchToken.status === 1)
                 {
                     await localStorage.removeItem("user");
-                    console.log("acess", reFetchToken.data.accessToken);
                     const data = {
                         accessToken: reFetchToken.data.accessToken,
                         refreshToken: refresh
@@ -45,7 +43,7 @@ const CallAPI = async (method, body, pathURL) =>
                             data: body,
                             headers: {"Authorization": JSON.stringify(`${reFetchToken.data.accessToken}`)}
                         });
-                        if(response.status === 200 || response.status === 201)
+                        if(response.status === 200 || response.status === 201 ||  response.status === 204)
                         {
                             return {status: 1, data: response.data};
 
@@ -57,7 +55,7 @@ const CallAPI = async (method, body, pathURL) =>
                 }
                 else
                 {
-                    return {status: -1, err: "UnAuthorization"}
+                    return {status: -1, err: "UnAuthorization1"}
                 }
             }
         }
