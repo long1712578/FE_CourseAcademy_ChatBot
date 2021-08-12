@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react"
 import 'antd/dist/antd.css';
 import './index.css';
 import {Carousel, Card} from 'antd';
-import CallAPI from "../../../until/callAPI";
 import CallUnAuthorize from "../../../until/callUnAuthorize";
 import {toast} from "react-toastify";
 import Loader from "../../loader";

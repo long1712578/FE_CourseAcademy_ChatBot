@@ -11,7 +11,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import {Card, Button} from "antd"
 import LoadingMask from "react-loadingmask";
 import "react-loadingmask/dist/react-loadingmask.css";
+import CallUnAuthorize from "../../until/callUnAuthorize";
 
+import {Menu} from 'antd';
+
+const {SubMenu} = Menu;
 const {Option} = Select;
 
 
@@ -25,22 +29,39 @@ const AddCourse = () => {
     const [srcImage, setSrcImage] = useState();
     const [valueDes, setValueDes] = useState('');
     const [status, setStatus] = useState(false);
-    const [listCategory, setListCategory] = useState([]);
+    // const [listCategory, setListCategory] = useState([]);
     const [showImg, setShowImg] = useState();
-    const [isShowImg,setIsShowImg]=useState("none")
+    const [isShowImg, setIsShowImg] = useState("none")
+    const [listCategoryWeb, setListCategoryWeb] = useState([]);
+    const [listCategoryMobile, setListCategoryMobile] = useState([]);
     const [lstFileDoc, setLstFileDoc] = useState([]);
     const [lstFileVideo, setLstFileVideo] = useState([]);
+
     const refImg = useRef();
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         const res = await CallAPI("GET", null, `/categories`);
+    //         if (res.status === 1) {
+    //             setListCategory(res.data);
+    //         } else return (res.err);
+    //     }
+    //     fetchData();
+    // }, [])
     useEffect(() => {
         const fetchData = async () => {
-            const res = await CallAPI("GET", null, `/categories`);
-            if (res.status === 1) {
-                setListCategory(res.data);
-            } else return (res.err);
+            const resCateWeb = await CallUnAuthorize("GET", null, `/categories/field_id/1`);
+            const resCateMobile = await CallUnAuthorize("GET", null, `/categories/field_id/2`);
+            console.log(resCateWeb.data)
+            if (resCateMobile.status === 1 && resCateWeb.status === 1) {
+
+                setListCategoryWeb(resCateWeb.data)
+                setListCategoryMobile(resCateMobile.data);
+                //setListCategory(res.data);
+            } else
+                toast.error("Something went wrong. Try later")
         }
         fetchData();
     }, [])
-
     const handleAddDoc = () => {
         document.getElementById('btnAddDocument').click();
     }
@@ -127,6 +148,7 @@ const AddCourse = () => {
         let isSuccess = false;
         if (idCategory === '-1') {
             setIdCategory('0');
+            setIsloading(false);
             return;
         }
 
@@ -238,7 +260,8 @@ const AddCourse = () => {
                                 </div>
                                 <div className="form-group">
                                     <h6>Course image</h6>
-                                    <img src={showImg}  style={{width: 293, height: 220, marginRight: 20,display: `${isShowImg}`}} />
+                                    <img src={showImg}
+                                         style={{width: 293, height: 220, marginRight: 20, display: `${isShowImg}`}}/>
                                     <input type="file" id="image" accept=".png, .jpg" style={{cursor: "pointer"}}
                                            onChange={handleImage} ref={refImg}/>
                                 </div>
@@ -249,97 +272,123 @@ const AddCourse = () => {
                                 </div>
                                 <div className="form-group" style={{marginTop: 60}}>
                                     <h6>Category</h6>
-                                    <Select
-                                        showSearch
-                                        style={{width: 200}}
-                                        placeholder="Select a category"
-                                        optionFilterProp="children"
-                                        onChange={onChangeCategories}
-                                        onSearch
+                                    {/*    <Select*/}
+                                    {/*        showSearch*/}
+                                    {/*        style={{width: 200}}*/}
+                                    {/*        placeholder="Select a category"*/}
+                                    {/*        optionFilterProp="children"*/}
+                                    {/*        onChange={onChangeCategories}*/}
+                                    {/*        onSearch*/}
 
-                                    >
-                                        {
-                                            listCategory.map((data, index) => {
-                                                return (
-                                                    <Option key={index} value={data.id}>{data.name}</Option>
-                                                )
-                                            })
-                                        }
-                                    </Select>,
+                                    {/*    >*/}
+                                    {/*        {*/}
+                                    {/*            listCategory.map((data, index) => {*/}
+                                    {/*                return (*/}
+                                    {/*                    <Option key={index} value={data.id}>{data.name}</Option>*/}
+                                    {/*                )*/}
+                                    {/*            })*/}
+                                    {/*        }*/}
+                                    {/*    </Select>,*/}
+                                    {/*    <Checkbox style={{float: "right"}} checked={status}*/}
+                                    {/*              onChange={onChangeStatus}>Accomplished</Checkbox>*/}
+                                    {/*</div>*/}
+                                    <Menu onClick={onChangeCategories} style={{width: 200, border: '1'}}
+                                          mode="vertical">
+                                        <SubMenu key="sub2" title="Choose field level">
+                                            <SubMenu key="subMenuWeb" title="Web programming">
+                                                {
+                                                    listCategoryWeb.map((data) => {
+                                                        return (
+                                                            <Menu.Item key={data.id}>{data.name}</Menu.Item>
+                                                        )
+                                                    })
+                                                }
+                                            </SubMenu>
+                                            <SubMenu key="subMenuMobile" title="Mobile programming">
+                                                {
+                                                    listCategoryMobile.map((data) => {
+                                                        return (
+                                                            <Menu.Item key={data.id}>{data.name}</Menu.Item>
+                                                        )
+                                                    })
+                                                }
+                                            </SubMenu>
+                                        </SubMenu>
+                                    </Menu>
                                     <Checkbox style={{float: "right"}} checked={status}
                                               onChange={onChangeStatus}>Accomplished</Checkbox>
                                 </div>
-                                {
-                                    idCategory === '0' &&
-                                    <div>
+                                    {
+                                        idCategory === '0' &&
+                                        <div>
                                     <span id="warningOption"
                                           style={{color: "red", marginTop: 5}}>Please select category</span>
-                                    </div>
-                                }
-                                <Button className="mt-2 b-group-color" type="primary"
-                                        onClick={handleAddDoc}>
-                                    <i className="fa fa-plus" style={{marginRight: 5, paddingTop: 2}}/>
-                                    Add an document
-                                </Button>
-                                <input type="file" id="btnAddDocument" accept=".docs, .pdf"
-                                       style={{cursor: "pointer", display: "none"}} onChange={handleAddFileDoc}/>
-                                <div>
-                                    {lstFileDoc.length === 0 && <></>
+                                        </div>
                                     }
-                                    {lstFileDoc.length > 0 &&
-                                    lstFileDoc.map((data, index) => {
-                                        return (
-                                            <Card title={`Document ${index + 1}`} key={index}
-                                                  extra={<a onClick={() => handleRemoveDoc(data.name)}><i
-                                                      className="fa fa-trash"></i></a>} style={{marginTop: 20}}>
-                                                <div style={{marginBottom: 20}}>
-                                                    <h6>Name:</h6>
-                                                    <span>{data.name}</span>
-                                                </div>
-                                            </Card>
-                                        )
-                                    })}
+                                    <Button className="mt-2 b-group-color" type="primary"
+                                            onClick={handleAddDoc}>
+                                        <i className="fa fa-plus" style={{marginRight: 5, paddingTop: 2}}/>
+                                        Add an document
+                                    </Button>
+                                    <input type="file" id="btnAddDocument" accept=".docs, .pdf"
+                                           style={{cursor: "pointer", display: "none"}} onChange={handleAddFileDoc}/>
+                                    <div>
+                                        {lstFileDoc.length === 0 && <></>
+                                        }
+                                        {lstFileDoc.length > 0 &&
+                                        lstFileDoc.map((data, index) => {
+                                            return (
+                                                <Card title={`Document ${index + 1}`} key={index}
+                                                      extra={<a onClick={() => handleRemoveDoc(data.name)}><i
+                                                          className="fa fa-trash"></i></a>} style={{marginTop: 20}}>
+                                                    <div style={{marginBottom: 20}}>
+                                                        <h6>Name:</h6>
+                                                        <span>{data.name}</span>
+                                                    </div>
+                                                </Card>
+                                            )
+                                        })}
+                                    </div>
+                                    <br/>
+                                    <Button className="mt-2 b-group-color" type="primary"
+                                            onClick={handleAddVideo}>
+                                        <i className="fa fa-plus" style={{marginRight: 5, paddingTop: 2}}/>
+                                        Add an video
+                                    </Button>
+                                    <input type="file" id="btnAddVideo" accept=".avi,.mp4,.flv"
+                                           style={{cursor: "pointer", display: "none"}} onChange={handleAddFileVideo}/>
+                                    <div>
+                                        {lstFileVideo.length > 0 &&
+                                        lstFileVideo.map((data, index) => {
+                                            return (
+                                                <Card title={`Video ${index + 1}`} key={index}
+                                                      extra={<a onClick={() => handleRemoveVideo(data.name)}><i
+                                                          className="fa fa-trash"></i></a>} style={{marginTop: 20}}>
+                                                    <div style={{marginBottom: 20}}>
+                                                        <h6>Name:</h6>
+                                                        <span>{data.name}</span>
+                                                    </div>
+                                                </Card>
+                                            )
+                                        })}
+                                    </div>
+                                    <br/>
+                                    <button type="submit" className="btn btn-primary" style={{marginTop: 30}}
+                                            onClick={handleSaveCourse}>
+                                        {isLoading ? '... ' :
+                                            <i className="fas fa-save" style={{marginRight: 5, paddingTop: 2}}></i>}
+                                        Save
+                                    </button>
                                 </div>
-                                <br/>
-                                <Button className="mt-2 b-group-color" type="primary"
-                                        onClick={handleAddVideo}>
-                                    <i className="fa fa-plus" style={{marginRight: 5, paddingTop: 2}}/>
-                                    Add an video
-                                </Button>
-                                <input type="file" id="btnAddVideo" accept=".avi,.mp4,.flv"
-                                       style={{cursor: "pointer", display: "none"}} onChange={handleAddFileVideo}/>
-                                <div>
-                                    {lstFileVideo.length > 0 &&
-                                    lstFileVideo.map((data, index) => {
-                                        return (
-                                            <Card title={`Video ${index + 1}`} key={index}
-                                                  extra={<a onClick={() => handleRemoveVideo(data.name)}><i
-                                                      className="fa fa-trash"></i></a>} style={{marginTop: 20}}>
-                                                <div style={{marginBottom: 20}}>
-                                                    <h6>Name:</h6>
-                                                    <span>{data.name}</span>
-                                                </div>
-                                            </Card>
-                                        )
-                                    })}
-                                </div>
-                                <br/>
-                                <button type="submit" className="btn btn-primary" style={{marginTop: 30}}
-                                        onClick={handleSaveCourse}>
-                                    {isLoading ? '... ' :
-                                        <i className="fas fa-save" style={{marginRight: 5, paddingTop: 2}}></i>}
-                                    Save
-                                </button>
                             </div>
                         </div>
-                    </div>
 
-                </div>
-                <ToastContainer position="bottom-center"/>
+                    </div>
+                    <ToastContainer position="bottom-center"/>
                 <Footer/>
             </LoadingMask>
         </React.Fragment>
 
-    )
+)
 }
 export default AddCourse;

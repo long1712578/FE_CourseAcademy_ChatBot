@@ -6,21 +6,30 @@ import {toast} from "react-toastify";
 import Loader from "../../component/loader";
 import {Pagination, Select} from "antd";
 import ProductCart from "../../component/Product";
+import { Menu } from 'antd';
+
+const { SubMenu } = Menu;
 const { Option } = Select;
 const ProductList=()=>{
     const [listProduct,setListProduct]=useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [pages,setPages]= useState(1);
     const [currentPage, setCurrentPage] = useState(1);
-    const [listCategory,setListCategory]=useState([]);
+    const [listCategoryWeb,setListCategoryWeb]=useState([]);
+    const [listCategoryMobile,setListCategoryMobile]=useState([]);
     const [idCategory,setIdCategory]=useState('-1');
     const [search,setSearch]=useState('');
     const [filter,setFilter]=useState('-1');
     useEffect(() => {
         const fetchData = async () => {
-            const res = await CallUnAuthorize("GET", null, `/categories`);
-            if(res.status === 1) {
-                setListCategory(res.data);
+            const resCateWeb = await CallUnAuthorize("GET", null, `/categories/field_id/1`);
+            const resCateMobile = await CallUnAuthorize("GET", null, `/categories/field_id/2`);
+            console.log(resCateWeb.data)
+            if(resCateMobile.status === 1 && resCateWeb.status === 1) {
+
+                setListCategoryWeb(resCateWeb.data)
+                setListCategoryMobile(resCateMobile.data);
+                //setListCategory(res.data);
             }
             else
                 toast.error("Something went wrong. Try later")
@@ -75,9 +84,10 @@ const ProductList=()=>{
         return data;
     }
 
-    const onChangeCategories=(value) =>{
-        setIdCategory(value);
+    const handleChooseCategories=(value) =>{
+        setIdCategory(value.key);
         setSearch('');
+        console.log(value)
     }
 
     const btnsearch=()=>{
@@ -95,6 +105,7 @@ const ProductList=()=>{
         </div>
         </React.Fragment>
     )
+
     return (
         <React.Fragment>
             <Header/>
@@ -160,32 +171,56 @@ const ProductList=()=>{
                             <main className="col-md-9">
                                 <header className="border-bottom mb-4 pb-3">
                                     <div className="form-inline">
-                                        <span className="mr-md-auto">Items found </span>
-                                        <Select
-                                            showSearch
-                                            style={{ width: 200 }}
-                                            placeholder="Select a category"
-                                            optionFilterProp="children"
-                                            onChange={onChangeCategories}
-                                            onSearch
-                                        >
-                                            <Option  value='-1'>All Categories</Option>
-                                            {
-                                                listCategory.map((data,index)=>{
-                                                    return(
-                                                        <Option key={index} value={data.id}>{data.name}</Option>
-                                                    )
-                                                })
-                                            }
-                                        </Select>,
-                                        <div className="btn-group">
-                                            <a href="#" className="btn btn-outline-secondary" data-toggle="tooltip"
-                                               title="List view">
-                                                <i className="fa fa-bars"></i></a>
-                                            <a href="#" className="btn  btn-outline-secondary active" data-toggle="tooltip"
-                                               title="Grid view">
-                                                <i className="fa fa-th"></i></a>
-                                        </div>
+
+                                        {/*<Select*/}
+                                        {/*    showSearch*/}
+                                        {/*    style={{ width: 200 }}*/}
+                                        {/*    placeholder="Select a category"*/}
+                                        {/*    optionFilterProp="children"*/}
+                                        {/*    onChange={onChangeCategories}*/}
+                                        {/*    onSearch*/}
+                                        {/*>*/}
+                                        {/*    <Option  value='-1'>All Categories</Option>*/}
+                                        {/*    {*/}
+                                        {/*        listCategory.map((data,index)=>{*/}
+                                        {/*            return(*/}
+                                        {/*                <Option key={index} value={data.id}>{data.name}</Option>*/}
+                                        {/*            )*/}
+                                        {/*        })*/}
+                                        {/*    }*/}
+                                        {/*</Select>,*/}
+                                        <Menu onClick={handleChooseCategories} style={{ width: 200,border:'1' }} mode="vertical">
+                                            <SubMenu key="sub2" title="Choose field level">
+                                                <Menu.Item key="-1">All categories</Menu.Item>
+                                                <SubMenu key="subMenuWeb" title="Web programming">
+                                                    {
+                                                        listCategoryWeb.map((data)=>{
+                                                            return(
+                                                                <Menu.Item key={data.id}>{data.name}</Menu.Item>
+                                                            )
+                                                        })
+                                                    }
+                                                </SubMenu>
+                                                <SubMenu key="subMenuMobile" title="Mobile programming">
+                                                    {
+                                                        listCategoryMobile.map((data)=>{
+                                                            return(
+                                                                <Menu.Item key={data.id}>{data.name}</Menu.Item>
+                                                            )
+                                                        })
+                                                    }
+                                                </SubMenu>
+                                            </SubMenu>
+                                        </Menu>
+                                        {/*<div className="btn-group">*/}
+                                        {/*    <a href="#" className="btn btn-outline-secondary" data-toggle="tooltip"*/}
+                                        {/*       title="List view">*/}
+                                        {/*        <i className="fa fa-bars"></i></a>*/}
+                                        {/*    <a href="#" className="btn  btn-outline-secondary active" data-toggle="tooltip"*/}
+                                        {/*       title="Grid view">*/}
+                                        {/*        <i className="fa fa-th"></i></a>*/}
+                                        {/*</div>*/}
+                                        <span className="ml-md-auto">Items found </span>
                                     </div>
                                 </header>
                                 <div className="row">
@@ -223,7 +258,7 @@ const ProductList=()=>{
 
                                 </div>
                                 <div style={{textAlign:"center"}}>
-                                    <Pagination  simple onChange={onChangeCurrentPage} total={pages*10} />
+                                    <Pagination simple onChange={onChangeCurrentPage} total={pages*10}/>
                                 </div>
 
                             </main>

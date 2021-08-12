@@ -52,7 +52,7 @@ const MostHighLightComponent=()=>{
                                         >
                                             <div style={{marginTop: '15px'}}>
 
-                                                <p style={{float: 'left'}}>
+                                                <p style={{float: 'left',color:'black'}}>
                                                     Number of subscribers : {data.tNumber}
                                                         </p>
                                             </div>

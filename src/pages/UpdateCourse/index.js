@@ -6,19 +6,22 @@ import Header from "../../component/header";
 import CallAPI from "../../until/callAPI"
 import {toast, ToastContainer} from "react-toastify";
 import Checkbox from "antd/es/checkbox/Checkbox";
-import {Select} from "antd";
+import {Menu, Select} from "antd";
 import 'react-toastify/dist/ReactToastify.css';
 import {Card, Button} from "antd"
 import {useParams} from "react-router";
 import LoadingMask from "react-loadingmask";
 import "react-loadingmask/dist/react-loadingmask.css";
+import CallUnAuthorize from "../../until/callUnAuthorize";
+
+const { SubMenu } = Menu;
 
 const {Option} = Select;
 
 
 const UpdateCourse = () => {
     const [isLoading, setIsloading] = useState(false);
-    const [idCategory, setIdCategory] = useState();
+    const [idCategory, setIdCategory] = useState('-1');
     const [title, setTitle] = useState();
     const [summary, setSummary] = useState();
     const [price, setPrice] = useState();
@@ -26,8 +29,9 @@ const UpdateCourse = () => {
     const [srcImage, setSrcImage] = useState();
     const [valueDes, setValueDes] = useState('');
     const [status, setStatus] = useState(false);
-    const [listCategory, setListCategory] = useState([]);
     const [showImg, setShowImg] = useState();
+    const [listCategoryWeb,setListCategoryWeb]=useState([]);
+    const [listCategoryMobile,setListCategoryMobile]=useState([]);
 
     const [lstFileDoc, setLstFileDoc] = useState([]);
     const [lstFileVideo, setLstFileVideo] = useState([]);
@@ -76,12 +80,20 @@ const UpdateCourse = () => {
         }
         fetchData();
     }, [id])
+
     useEffect(() => {
         const fetchData = async () => {
-            const res = await CallAPI("GET", null, `/categories`);
-            if (res.status === 1) {
-                setListCategory(res.data);
-            } else return (res.err);
+            const resCateWeb = await CallUnAuthorize("GET", null, `/categories/field_id/1`);
+            const resCateMobile = await CallUnAuthorize("GET", null, `/categories/field_id/2`);
+            console.log(resCateWeb.data)
+            if(resCateMobile.status === 1 && resCateWeb.status === 1) {
+
+                setListCategoryWeb(resCateWeb.data)
+                setListCategoryMobile(resCateMobile.data);
+                //setListCategory(res.data);
+            }
+            else
+                toast.error("Something went wrong. Try later")
         }
         fetchData();
     }, [])
@@ -299,23 +311,45 @@ const UpdateCourse = () => {
                                 </div>
                                 <div className="form-group" style={{marginTop: 60}}>
                                     <h6>Category</h6>
-                                    <Select
-                                        showSearch
-                                        style={{width: 200}}
-                                        placeholder="Select a category"
-                                        optionFilterProp="children"
-                                        onChange={onChangeCategories}
-                                        onSearsh
-                                        value={idCategory}
-                                    >
-                                        {
-                                            listCategory.map((data, index) => {
-                                                return (
-                                                    <Option key={index} value={data.id}>{data.name}</Option>
-                                                )
-                                            })
-                                        }
-                                    </Select>,
+                                    {/*<Select*/}
+                                    {/*    showSearch*/}
+                                    {/*    style={{width: 200}}*/}
+                                    {/*    placeholder="Select a category"*/}
+                                    {/*    optionFilterProp="children"*/}
+                                    {/*    onChange={onChangeCategories}*/}
+                                    {/*    onSearsh*/}
+                                    {/*    value={idCategory}*/}
+                                    {/*>*/}
+                                    {/*    {*/}
+                                    {/*        listCategory.map((data, index) => {*/}
+                                    {/*            return (*/}
+                                    {/*                <Option key={index} value={data.id}>{data.name}</Option>*/}
+                                    {/*            )*/}
+                                    {/*        })*/}
+                                    {/*    }*/}
+                                    {/*</Select>,*/}
+                                    <Menu onClick={onChangeCategories} style={{ width: 200,border:'1' }} mode="vertical">
+                                        <SubMenu key="sub2" title="Choose field level">
+                                            <SubMenu key="subMenuWeb" title="Web programming">
+                                                {
+                                                    listCategoryWeb.map((data)=>{
+                                                        return(
+                                                            <Menu.Item key={data.id}>{data.name}</Menu.Item>
+                                                        )
+                                                    })
+                                                }
+                                            </SubMenu>
+                                            <SubMenu key="subMenuMobile" title="Mobile programming">
+                                                {
+                                                    listCategoryMobile.map((data)=>{
+                                                        return(
+                                                            <Menu.Item key={data.id}>{data.name}</Menu.Item>
+                                                        )
+                                                    })
+                                                }
+                                            </SubMenu>
+                                        </SubMenu>
+                                    </Menu>
                                     <Checkbox style={{float: "right"}} checked={status}
                                               onChange={onChangeStatus}>Accomplished</Checkbox>
                                 </div>

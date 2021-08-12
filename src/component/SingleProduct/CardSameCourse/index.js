@@ -22,11 +22,11 @@ const CardSameCourse=({mostBuySameCategory})=>{
                                         textAlign: 'center',
                                     }}
                                     >
-                                        <div style={{textAlign: 'left'}}>
-                                            <p>Description: {data.description}</p>
+                                        <div style={{textAlign: 'left',color:'black'}}>
+                                            <p  style={{textAlign: 'left',color:'black',fontWeight:'100'}}>Description: {data.description}</p>
                                         </div>
                                         <div style={{marginTop: '15px'}}>
-                                            <p style={{float: 'left'}}>Rating: {data.rating_average}<span
+                                            <p style={{float: 'left',color:'black'}}>Rating: {data.rating_average}<span
                                                 className="fa fa-star checked"></span></p>
                                             <p className="card-price">Price: {data.price}$</p>
                                         </div>
