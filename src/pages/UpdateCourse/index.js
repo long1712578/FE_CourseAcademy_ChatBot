@@ -13,6 +13,8 @@ import {useParams} from "react-router";
 import LoadingMask from "react-loadingmask";
 import "react-loadingmask/dist/react-loadingmask.css";
 import CallUnAuthorize from "../../until/callUnAuthorize";
+import {useHistory} from "react-router-dom";
+import jwt_decode from "jwt-decode";
 
 const { SubMenu } = Menu;
 
@@ -37,6 +39,24 @@ const UpdateCourse = () => {
     const [lstFileVideo, setLstFileVideo] = useState([]);
     const refImg = useRef();
     const id = useParams();
+
+    let decode = null;
+    let userId = null;
+    const router = useHistory();
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user) {
+        localStorage.removeItem("user");
+        router.push("/login");
+    } else {
+        const accessToken = user.accessToken;
+        if (accessToken) {
+            decode = jwt_decode(accessToken);
+            userId = decode.userId;
+        }else{
+            localStorage.removeItem("user");
+            router.push("/login");
+        }
+    }
 
     useEffect(() => {
         let isLoadSucces = true;
@@ -116,7 +136,8 @@ const UpdateCourse = () => {
         const resDoc = await CallAPI('POST', dataDoc, `/documents`);
         setIsloading(false);
         if (resDoc.status === 1) {
-            setLstFileDoc(lstFileDoc => [...lstFileDoc, param]);
+            console.log(resDoc.data)
+            setLstFileDoc(lstFileDoc => [...lstFileDoc, resDoc.data]);
             return toast.success("Updated", {toastId: 10, autoClose: 2000})
         } else {
             return toast.error("Update document failed, try again", {
@@ -134,10 +155,10 @@ const UpdateCourse = () => {
         dataVideo.append('course_id', id.id)
         dataVideo.append('name', param.name);
 
-        const resDoc = await CallAPI('POST', dataVideo, `/videos`);
+        const resVideo = await CallAPI('POST', dataVideo, `/videos`);
         setIsloading(false);
-        if (resDoc.status === 1) {
-            setLstFileVideo(lstFileVideo => [...lstFileVideo, param]);
+        if (resVideo.status === 1) {
+            setLstFileVideo(lstFileVideo => [...lstFileVideo, resVideo.data]);
             return toast.success("Updated", {toastId: 10, autoClose: 2000})
         } else {
             return toast.error("Update document failed, try again", {
@@ -148,7 +169,9 @@ const UpdateCourse = () => {
     }
 
     const handleRemoveDoc = async (name, id) => {
-        setIsloading(true);
+        console.log(id);
+        console.log(name)
+       setIsloading(true);
         const resRemoveDoc = await CallAPI('DELETE', null, `/documents/${id}`);
         setIsloading(false);
         if (resRemoveDoc.status === 1) {
@@ -242,6 +265,7 @@ const UpdateCourse = () => {
             setIsloading(false)
             return toast.success("Saved", {toastId: 10, autoClose: 2000})
         } else {
+            setIsloading(false);
             return toast.error("Save course failed, try again", {
                 toastId: -10,
                 autoClose: 2000,
@@ -255,7 +279,7 @@ const UpdateCourse = () => {
                 <div className="container main-container">
                     <div className="row">
                         <div className="col-lg-12 mt-5">
-                            <h3 className="text-center mt-5 mb-5">Reactjs Eccommerce Site - Update Course</h3>
+                            <h3 className="text-center mt-5 mb-5">Update Course</h3>
                             <div className="mt-5 mb-5">
                                 <div className="form-group">
                                     <h6>Course name:</h6>

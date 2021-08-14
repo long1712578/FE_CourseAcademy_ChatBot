@@ -14,6 +14,8 @@ import "react-loadingmask/dist/react-loadingmask.css";
 import CallUnAuthorize from "../../until/callUnAuthorize";
 
 import {Menu} from 'antd';
+import {useHistory} from "react-router-dom";
+import jwt_decode from "jwt-decode";
 
 const {SubMenu} = Menu;
 const {Option} = Select;
@@ -37,16 +39,26 @@ const AddCourse = () => {
     const [lstFileDoc, setLstFileDoc] = useState([]);
     const [lstFileVideo, setLstFileVideo] = useState([]);
 
+
     const refImg = useRef();
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         const res = await CallAPI("GET", null, `/categories`);
-    //         if (res.status === 1) {
-    //             setListCategory(res.data);
-    //         } else return (res.err);
-    //     }
-    //     fetchData();
-    // }, [])
+
+    let decode = null;
+    let userId = null;
+    const router = useHistory();
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user) {
+        localStorage.removeItem("user");
+        router.push("/login");
+    } else {
+        const accessToken = user.accessToken;
+        if (accessToken) {
+            decode = jwt_decode(accessToken);
+            userId = decode.userId;
+        }else{
+            localStorage.removeItem("user");
+            router.push("/login");
+        }
+    }
     useEffect(() => {
         const fetchData = async () => {
             const resCateWeb = await CallUnAuthorize("GET", null, `/categories/field_id/1`);
@@ -159,13 +171,13 @@ const AddCourse = () => {
         formData.append("summary", summary)
         formData.append("image", srcImage)
         formData.append("category_id", idCategory)
-        formData.append("created_by", 7)
+        formData.append("created_by", userId)
         if (status === true) {
             formData.append("course_status_id", 1)
         } else formData.append("course_status_id", 2)
         formData.append("price", price)
         formData.append("promotion_price", promotionPrice)
-        formData.append("course_field_id", 3);
+        formData.append("course_field_id", 1);
 
         const res = await CallAPI('POST', formData, `/courses`);
         if (res.status === 1) {
@@ -202,6 +214,7 @@ const AddCourse = () => {
             removeAllDataInsert();
             return toast.success("Saved", {toastId: 10, autoClose: 2000})
         } else {
+            setIsloading(false);
             return toast.error("Save course failed, try again", {
                 toastId: -10,
                 autoClose: 2000,
@@ -215,7 +228,7 @@ const AddCourse = () => {
                 <div class="container main-container">
                     <div class="row">
                         <div class="col-lg-12 mt-5">
-                            <h3 className="text-center mt-5 mb-5">Reactjs Eccommerce Site - Add Course</h3>
+                            <h3 className="text-center mt-5 mb-5">Add Course</h3>
                             <div className="mt-5 mb-5">
                                 <div className="form-group">
                                     <h6>Course name:</h6>
