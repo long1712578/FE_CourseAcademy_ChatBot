@@ -20,16 +20,22 @@ const ProductList=()=>{
     const [idCategory,setIdCategory]=useState('-1');
     const [search,setSearch]=useState('');
     const [filter,setFilter]=useState('-1');
+    const [listCourseHighLight, setListCourseHighLight] = useState([]);
+    const [listNewCourse, setListNewCourse] = useState([]);
+
     useEffect(() => {
         const fetchData = async () => {
             const resCateWeb = await CallUnAuthorize("GET", null, `/categories/field_id/1`);
             const resCateMobile = await CallUnAuthorize("GET", null, `/categories/field_id/2`);
+            const resCourseHighLight = await CallUnAuthorize("GET", null, "/guest-course/most-highlight");
+            const resNewCourse = await CallUnAuthorize("GET", null, "/guest-course/new-course");
+
             console.log(resCateWeb.data)
             if(resCateMobile.status === 1 && resCateWeb.status === 1) {
-
                 setListCategoryWeb(resCateWeb.data)
                 setListCategoryMobile(resCateMobile.data);
-                //setListCategory(res.data);
+                setListCourseHighLight(resCourseHighLight.data);
+                setListNewCourse(resNewCourse.data);
             }
             else
                 toast.error("Something went wrong. Try later")
@@ -171,24 +177,6 @@ const ProductList=()=>{
                             <main className="col-md-9">
                                 <header className="border-bottom mb-4 pb-3">
                                     <div className="form-inline">
-
-                                        {/*<Select*/}
-                                        {/*    showSearch*/}
-                                        {/*    style={{ width: 200 }}*/}
-                                        {/*    placeholder="Select a category"*/}
-                                        {/*    optionFilterProp="children"*/}
-                                        {/*    onChange={onChangeCategories}*/}
-                                        {/*    onSearch*/}
-                                        {/*>*/}
-                                        {/*    <Option  value='-1'>All Categories</Option>*/}
-                                        {/*    {*/}
-                                        {/*        listCategory.map((data,index)=>{*/}
-                                        {/*            return(*/}
-                                        {/*                <Option key={index} value={data.id}>{data.name}</Option>*/}
-                                        {/*            )*/}
-                                        {/*        })*/}
-                                        {/*    }*/}
-                                        {/*</Select>,*/}
                                         <Menu onClick={handleChooseCategories} style={{ width: 200,border:'1' }} mode="vertical">
                                             <SubMenu key="sub2" title="Choose field level">
                                                 <Menu.Item key="-1">All categories</Menu.Item>
@@ -212,14 +200,6 @@ const ProductList=()=>{
                                                 </SubMenu>
                                             </SubMenu>
                                         </Menu>
-                                        {/*<div className="btn-group">*/}
-                                        {/*    <a href="#" className="btn btn-outline-secondary" data-toggle="tooltip"*/}
-                                        {/*       title="List view">*/}
-                                        {/*        <i className="fa fa-bars"></i></a>*/}
-                                        {/*    <a href="#" className="btn  btn-outline-secondary active" data-toggle="tooltip"*/}
-                                        {/*       title="Grid view">*/}
-                                        {/*        <i className="fa fa-th"></i></a>*/}
-                                        {/*</div>*/}
                                         <span className="ml-md-auto">Items found </span>
                                     </div>
                                 </header>
@@ -236,6 +216,9 @@ const ProductList=()=>{
                                                                          promotionPrice={data.course.promotion_price}
                                                                          rating={data.course.rating_average}
                                                                          nameCategory={data.category.name}
+                                                                         srcImg={data.course.image}
+                                                                         listCourseHighLight={listCourseHighLight}
+                                                                         listCourseNew={listNewCourse}
                                                             >
                                                             </ProductCart>
                                                         </div>
