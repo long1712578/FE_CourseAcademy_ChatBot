@@ -4,23 +4,6 @@ import CallUnAuthorize from "../../until/callUnAuthorize";
 import {toast} from "react-toastify";
 
 const ProductCart= ({idCourse,nameCourse,nameTeacher,price,promotionPrice,rating,nameCategory,srcImg,listCourseHighLight,listCourseNew})=>{
-    // const [listCourseHighLight, setListCourseHighLight] = useState([]);
-    // const [listNewCourse, setListNewCourse] = useState([]);
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         const resCourseHighLight = await CallUnAuthorize("GET", null, "/guest-course/most-highlight");
-    //         const resNewCourse = await CallUnAuthorize("GET", null, "/guest-course/new-course");
-    //         if(resCourseHighLight.status===1&&resNewCourse===1)
-    //         {
-    //             console.log(resNewCourse)
-    //             console.log("hi")
-    //             setListCourseHighLight(resCourseHighLight.data);
-    //             setListNewCourse(resNewCourse.data);
-    //         }
-    //         else{
-    //             toast.error("Something went wrong. Try later")
-    //         }
-    //     }},[])
     return(
         <figure className="card card-product-grid">
             <Link className="link-no-decoration" to={`courses/${idCourse}`}>
@@ -69,8 +52,13 @@ const ProductCart= ({idCourse,nameCourse,nameTeacher,price,promotionPrice,rating
                                 <span className="price">{price}</span>
                             </>
                         }
-                        <span style={{float:"right"}}>Rating: {rating}<span
-                            className="fa fa-star checked"></span></span>
+                        {
+                            rating!==0&&
+                                <>
+                                    <span style={{float:"right"}}>Rating: {rating}<span
+                                    className="fa fa-star checked"></span></span>
+                                </>
+                        }
                     </div>
                 </div>
                 <a href="#" className="btn btn-block btn-primary">Register Now! </a>

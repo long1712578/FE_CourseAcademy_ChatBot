@@ -54,7 +54,7 @@ const AddCourse = () => {
         if (accessToken) {
             decode = jwt_decode(accessToken);
             userId = decode.userId;
-        }else{
+        } else {
             localStorage.removeItem("user");
             router.push("/login");
         }
@@ -129,7 +129,8 @@ const AddCourse = () => {
     }
 
     const onChangeCategories = (value) => {
-        setIdCategory(value);
+        console.log(<value className="key"></value>)
+        setIdCategory(value.key);
     }
 
     const onChangeStatus = (e) => {
@@ -225,6 +226,9 @@ const AddCourse = () => {
         <React.Fragment>
             <LoadingMask loading={isLoading} text={"loading..."}>
                 <Header/>
+                <form>
+
+                </form>
                 <div class="container main-container">
                     <div class="row">
                         <div class="col-lg-12 mt-5">
@@ -268,8 +272,6 @@ const AddCourse = () => {
                                                    step="0.01"/>
                                         </div>
                                     </div>
-
-
                                 </div>
                                 <div className="form-group">
                                     <h6>Course image</h6>
@@ -285,26 +287,6 @@ const AddCourse = () => {
                                 </div>
                                 <div className="form-group" style={{marginTop: 60}}>
                                     <h6>Category</h6>
-                                    {/*    <Select*/}
-                                    {/*        showSearch*/}
-                                    {/*        style={{width: 200}}*/}
-                                    {/*        placeholder="Select a category"*/}
-                                    {/*        optionFilterProp="children"*/}
-                                    {/*        onChange={onChangeCategories}*/}
-                                    {/*        onSearch*/}
-
-                                    {/*    >*/}
-                                    {/*        {*/}
-                                    {/*            listCategory.map((data, index) => {*/}
-                                    {/*                return (*/}
-                                    {/*                    <Option key={index} value={data.id}>{data.name}</Option>*/}
-                                    {/*                )*/}
-                                    {/*            })*/}
-                                    {/*        }*/}
-                                    {/*    </Select>,*/}
-                                    {/*    <Checkbox style={{float: "right"}} checked={status}*/}
-                                    {/*              onChange={onChangeStatus}>Accomplished</Checkbox>*/}
-                                    {/*</div>*/}
                                     <Menu onClick={onChangeCategories} style={{width: 200, border: '1'}}
                                           mode="vertical">
                                         <SubMenu key="sub2" title="Choose field level">
@@ -328,80 +310,79 @@ const AddCourse = () => {
                                             </SubMenu>
                                         </SubMenu>
                                     </Menu>
-                                    <Checkbox style={{float: "right"}} checked={status}
-                                              onChange={onChangeStatus}>Accomplished</Checkbox>
-                                </div>
                                     {
                                         idCategory === '0' &&
                                         <div>
-                                    <span id="warningOption"
-                                          style={{color: "red", marginTop: 5}}>Please select category</span>
+                                            <span id="warningOption"
+                                                  style={{color: "red", marginTop: 5,marginLeft:10}}>Please select category</span>
                                         </div>
                                     }
-                                    <Button className="mt-2 b-group-color" type="primary"
-                                            onClick={handleAddDoc}>
-                                        <i className="fa fa-plus" style={{marginRight: 5, paddingTop: 2}}/>
-                                        Add an document
-                                    </Button>
-                                    <input type="file" id="btnAddDocument" accept=".docs, .pdf"
-                                           style={{cursor: "pointer", display: "none"}} onChange={handleAddFileDoc}/>
-                                    <div>
-                                        {lstFileDoc.length === 0 && <></>
-                                        }
-                                        {lstFileDoc.length > 0 &&
-                                        lstFileDoc.map((data, index) => {
-                                            return (
-                                                <Card title={`Document ${index + 1}`} key={index}
-                                                      extra={<a onClick={() => handleRemoveDoc(data.name)}><i
-                                                          className="fa fa-trash"></i></a>} style={{marginTop: 20}}>
-                                                    <div style={{marginBottom: 20}}>
-                                                        <h6>Name:</h6>
-                                                        <span>{data.name}</span>
-                                                    </div>
-                                                </Card>
-                                            )
-                                        })}
-                                    </div>
-                                    <br/>
-                                    <Button className="mt-2 b-group-color" type="primary"
-                                            onClick={handleAddVideo}>
-                                        <i className="fa fa-plus" style={{marginRight: 5, paddingTop: 2}}/>
-                                        Add an video
-                                    </Button>
-                                    <input type="file" id="btnAddVideo" accept=".avi,.mp4,.flv"
-                                           style={{cursor: "pointer", display: "none"}} onChange={handleAddFileVideo}/>
-                                    <div>
-                                        {lstFileVideo.length > 0 &&
-                                        lstFileVideo.map((data, index) => {
-                                            return (
-                                                <Card title={`Video ${index + 1}`} key={index}
-                                                      extra={<a onClick={() => handleRemoveVideo(data.name)}><i
-                                                          className="fa fa-trash"></i></a>} style={{marginTop: 20}}>
-                                                    <div style={{marginBottom: 20}}>
-                                                        <h6>Name:</h6>
-                                                        <span>{data.name}</span>
-                                                    </div>
-                                                </Card>
-                                            )
-                                        })}
-                                    </div>
-                                    <br/>
-                                    <button type="submit" className="btn btn-primary" style={{marginTop: 30}}
-                                            onClick={handleSaveCourse}>
-                                        {isLoading ? '... ' :
-                                            <i className="fas fa-save" style={{marginRight: 5, paddingTop: 2}}></i>}
-                                        Save
-                                    </button>
                                 </div>
+                                <Button className="mt-2 b-group-color" type="primary"
+                                        onClick={handleAddDoc}>
+                                    <i className="fa fa-plus" style={{marginRight: 5, paddingTop: 2}}/>
+                                    Add an document
+                                </Button>
+                                <input type="file" id="btnAddDocument" accept=".docs, .pdf"
+                                       style={{cursor: "pointer", display: "none"}} onChange={handleAddFileDoc}/>
+                                <div>
+                                    {lstFileDoc.length > 0 &&
+                                    lstFileDoc.map((data, index) => {
+                                        return (
+                                            <Card title={`Document ${index + 1}`} key={index}
+                                                  extra={<a onClick={() => handleRemoveDoc(data.name)}><i
+                                                      className="fa fa-trash"></i></a>} style={{marginTop: 20}}>
+                                                <div style={{marginBottom: 20}}>
+                                                    <h6>Name:</h6>
+                                                    <span>{data.name}</span>
+                                                </div>
+                                            </Card>
+                                        )
+                                    })}
+                                </div>
+                                <br/>
+                                <Button className="mt-2 b-group-color" type="primary"
+                                        onClick={handleAddVideo}>
+                                    <i className="fa fa-plus" style={{marginRight: 5, paddingTop: 2}}/>
+                                    Add an video
+                                </Button>
+                                <input type="file" id="btnAddVideo" accept=".avi,.mp4,.flv"
+                                       style={{cursor: "pointer", display: "none"}} onChange={handleAddFileVideo}/>
+                                <div>
+                                    {lstFileVideo.length > 0 &&
+                                    lstFileVideo.map((data, index) => {
+                                        return (
+                                            <Card title={`Video ${index + 1}`} key={index}
+                                                  extra={<a onClick={() => handleRemoveVideo(data.name)}><i
+                                                      className="fa fa-trash"></i></a>} style={{marginTop: 20}}>
+                                                <div style={{marginBottom: 20}}>
+                                                    <h6>Name:</h6>
+                                                    <span>{data.name}</span>
+                                                </div>
+                                            </Card>
+                                        )
+                                    })}
+                                </div>
+                                <br/>
+                                <button type="submit" className="btn btn-primary" style={{marginTop: 30}}
+                                        onClick={handleSaveCourse}>
+                                    {isLoading ? '... ' :
+                                        <i className="fas fa-save" style={{marginRight: 5, paddingTop: 2}}></i>}
+                                    Save
+                                </button>
+                                <Checkbox style={{float: "right"}} checked={status}
+                                          onChange={onChangeStatus}>Accomplished</Checkbox>
                             </div>
-                        </div>
 
+                        </div>
                     </div>
-                    <ToastContainer position="bottom-center"/>
+
+                </div>
+                <ToastContainer position="bottom-center"/>
                 <Footer/>
             </LoadingMask>
         </React.Fragment>
 
-)
+    )
 }
 export default AddCourse;

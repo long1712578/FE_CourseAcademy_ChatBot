@@ -248,7 +248,7 @@ const UpdateCourse = () => {
         formData.append("summary", summary)
         formData.append("image", srcImage)
         formData.append("category_id", idCategory)
-        formData.append("created_by", 11)
+        formData.append("created_by", userId)
         if (status === true) {
             formData.append("course_status_id", 1)
         } else formData.append("course_status_id", 2)
