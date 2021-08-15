@@ -1,13 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {Button } from "antd";
 import { useForm } from "react-hook-form";
 import CallAPI from "../../../until/callAPI";
 import { toast } from "react-toastify";
 
-
-function callback(key) {
-  console.log(key);
-}
 
 const Information = ({userInfo}) => {
   // Goi api de load user
@@ -42,7 +38,7 @@ const Information = ({userInfo}) => {
           <div className="row">
             <div className="col-md-4">
               <div className="profile-image">
-                <img src="/images/logo-course.jpg"></img>
+                <img src="/images/logo-course.jpg" alt=""></img>
               </div>
             </div>
             <div className="col-md-6">

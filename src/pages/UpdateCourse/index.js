@@ -15,14 +15,15 @@ import "react-loadingmask/dist/react-loadingmask.css";
 import CallUnAuthorize from "../../until/callUnAuthorize";
 import {useHistory} from "react-router-dom";
 import jwt_decode from "jwt-decode";
+import Loader from "../../component/loader";
 
 const { SubMenu } = Menu;
 
-const {Option} = Select;
 
 
 const UpdateCourse = () => {
     const [isLoading, setIsloading] = useState(false);
+    const [isFirstLoading, setIsFirstloading] = useState(false);
     const [idCategory, setIdCategory] = useState('-1');
     const [title, setTitle] = useState();
     const [summary, setSummary] = useState();
@@ -60,6 +61,7 @@ const UpdateCourse = () => {
 
     useEffect(() => {
         let isLoadSucces = true;
+        setIsFirstloading(true);
         const fetchData = async () => {
             const res = await CallAPI("GET", null, `/guest-course/information/${id.id}`);
             if (res.status === 1) {
@@ -90,6 +92,7 @@ const UpdateCourse = () => {
                     setLstFileVideo(lstFileVideo => [...lstFileVideo, item.video])
                 })
             } else isLoadSucces = false;
+            setIsFirstloading(false);
             if (!isLoadSucces) {
                 return toast.error("Load course to update failed,try again", {
                     toastId: -10,
@@ -272,6 +275,16 @@ const UpdateCourse = () => {
             });
         }
     }
+
+    if (isFirstLoading) return (
+        <>
+            <Header/>
+            <div style={{marginTop: 200}}>
+                <Loader/>
+            </div>
+        </>
+    )
+
     return (
         <React.Fragment>
             <LoadingMask loading={isLoading} text={"loading..."}>
@@ -291,7 +304,6 @@ const UpdateCourse = () => {
                                 <div className="form-group">
                                     <h6>Summary:</h6>
                                     <input onChange={handleChangeSummary}
-                                           type="text"
                                            className="form-control" id="summary"
                                            value={summary}
                                            placeholder="Summary"/>

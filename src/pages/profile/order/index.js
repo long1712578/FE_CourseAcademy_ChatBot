@@ -5,12 +5,12 @@ import CallAPI from "../../../until/callAPI";
 
 const Order = ({ id }) => {
   const [orders, setOrders] = useState([]);
-  const [loading, setloading] = useState(true);
+  // const [loading, setloading] = useState(true);
   useEffect(() => {
     const fetchData = async () => {
-      const res = await CallAPI("GET", null, `/orders?user_id=${id}`).then(
+      await CallAPI("GET", null, `/orders?user_id=${id}`).then(
         res  => {
-          setloading(false);
+          // setloading(false);
           setOrders((res.data)?
             res.data.courseOrders.map((row) => ({
               key: row.id,
@@ -25,7 +25,7 @@ const Order = ({ id }) => {
       );
     };
     fetchData();
-  }, []);
+  }, [id]);
 
   const columns = [
     {
@@ -37,7 +37,7 @@ const Order = ({ id }) => {
       dataIndex: "image",
       render: (text, record) => {
         return (
-         <img src={record.image}/>
+         <img src={record.image} alt=""/>
        );},
     },
     {

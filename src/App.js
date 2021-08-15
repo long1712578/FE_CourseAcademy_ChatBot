@@ -9,7 +9,6 @@ import './App.css';
 import HomePage from "./pages/homepage";
 import ProductList from "./pages/ProductList";
 import Product from "./pages/SingleProduct";
-import { createTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from "@material-ui/core/styles";
 import Login from './pages/authentication/login';
 import Signup from './pages/authentication/signup';

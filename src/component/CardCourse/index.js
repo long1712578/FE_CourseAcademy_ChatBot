@@ -7,8 +7,8 @@ const ProductCart = ({idCourse, nameCourse, nameTeacher, price, promotionPrice, 
             <Link className="link-no-decoration" to={`courses/${idCourse}`}>
                 <div className="img-wrap">
                     <span className="badge badge-gray" style={{float: "right"}}>Category: {nameCategory}</span>
-                    <img src={srcImg} style={{width: 293, height: 220}}/>
-                    <a className="btn-overlay" href="#"><i
+                    <img src={srcImg} style={{width: 293, height: 220}} alt=""/>
+                    <a className="btn-overlay"><i
                         className="fa fa-search-plus"></i> Quick view</a>
                 </div>
             </Link>

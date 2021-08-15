@@ -6,19 +6,15 @@ import Header from "../../component/header";
 import CallAPI from "../../until/callAPI"
 import {toast, ToastContainer} from "react-toastify";
 import Checkbox from "antd/es/checkbox/Checkbox";
-import {Select} from "antd";
 import 'react-toastify/dist/ReactToastify.css';
 import {Card, Button} from "antd"
 import LoadingMask from "react-loadingmask";
 import "react-loadingmask/dist/react-loadingmask.css";
 import CallUnAuthorize from "../../until/callUnAuthorize";
-
 import {Menu} from 'antd';
 import {useHistory} from "react-router-dom";
 import jwt_decode from "jwt-decode";
-
 const {SubMenu} = Menu;
-const {Option} = Select;
 
 
 const AddCourse = () => {
@@ -129,7 +125,6 @@ const AddCourse = () => {
     }
 
     const onChangeCategories = (value) => {
-        console.log(<value className="key"></value>)
         setIdCategory(value.key);
     }
 
@@ -184,30 +179,24 @@ const AddCourse = () => {
         if (res.status === 1) {
             isSuccess = true;
             const idCourse = res.data.id;
-            lstFileDoc.forEach(async (item) => {
+            for (const item of lstFileDoc) {
                 let dataDoc = new FormData();
                 dataDoc.append('url', item)
                 dataDoc.append('course_id', idCourse)
                 dataDoc.append('name', item.name);
 
                 const resDoc = await CallAPI('POST', dataDoc, '/documents');
-                if (resDoc.status === 1)
-                    isSuccess = true;
-                else
-                    isSuccess = false;
-            })
-            lstFileVideo.forEach(async (item) => {
+                isSuccess = resDoc.status === 1;
+            }
+            for (const item of lstFileVideo) {
                 let dataVideo = new FormData();
                 dataVideo.append('url', item)
                 dataVideo.append('course_id', idCourse)
                 dataVideo.append('name', item.name);
 
                 const resVideo = await CallAPI('POST', dataVideo, '/videos')
-                if (resVideo.status === 1)
-                    isSuccess = true;
-                else
-                    isSuccess = false;
-            })
+                isSuccess = resVideo.status === 1;
+            }
         }
 
         if (isSuccess === true) {
@@ -226,9 +215,6 @@ const AddCourse = () => {
         <React.Fragment>
             <LoadingMask loading={isLoading} text={"loading..."}>
                 <Header/>
-                <form>
-
-                </form>
                 <div class="container main-container">
                     <div class="row">
                         <div class="col-lg-12 mt-5">
@@ -244,7 +230,6 @@ const AddCourse = () => {
                                 <div className="form-group">
                                     <h6>Summary:</h6>
                                     <input onChange={handleChangeSummary}
-                                           type="text"
                                            className="form-control" id="summary"
                                            value={summary}
                                            placeholder="Summary"/>
