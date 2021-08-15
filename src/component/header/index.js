@@ -3,12 +3,14 @@ import jwt_decode from "jwt-decode";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "font-awesome/css/font-awesome.min.css";
 import { 
-  ShoppingCartOutlined,
   LoginOutlined,
   UserAddOutlined,
   LogoutOutlined,
   InfoCircleOutlined,
-  SearchOutlined
+  SearchOutlined,
+  FileAddOutlined,
+  UnorderedListOutlined
+
    } 
 from '@ant-design/icons';
 import "./header.css";
@@ -25,6 +27,7 @@ import {
 export default function Header(props) {
   const userToken = JSON.parse(localStorage.getItem("user"));
   const accessToken = userToken ? userToken.accessToken : null;
+  const role = userToken ? userToken.role : null;
   const decode = accessToken ? jwt_decode(accessToken) : null;
   const [loginState, setLoginState] = useState(decode ? {isLogin: true, user: decode} : {isLogin: false, user: null});
   const handleLogout = () => {
@@ -72,6 +75,16 @@ export default function Header(props) {
                     <NavDropdown.Item onClick={handleLogout}>
                     <LogoutOutlined /> &nbsp; Logout
                     </NavDropdown.Item>
+                    {(role ===2 ) &&
+                      <NavDropdown.Item href="/add-course">
+                      <FileAddOutlined /> &nbsp; Add course
+                      </NavDropdown.Item>
+                    }
+                    {(role ===2 ) &&
+                      <NavDropdown.Item href="/list-course-taught">
+                      <UnorderedListOutlined /> &nbsp; Courses taught
+                      </NavDropdown.Item>
+                    }
                   </div>
                   : 
                   <div>

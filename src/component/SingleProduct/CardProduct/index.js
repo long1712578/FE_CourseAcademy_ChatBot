@@ -2,6 +2,7 @@ import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { Modal } from "antd";
 import CallAPI from "../../../until/callAPI";
+import CallUnAuthorize from "until/callUnAuthorize";
 import { useHistory } from 'react-router-dom';
 import SweetAlert from "sweetalert2-react";
 import { Player } from "video-react";
@@ -25,6 +26,7 @@ const CardProduct = ({
   const [isLove, setIsLove] = useState({ show: false, content: "" });
   const [isOrder, setIsOrder] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [preview, setPreview] = useState("");
   // const [isPlay, setIsPlay] = useState(true);
   const [isMute, setIsMute] = useState(false);
   const router = useHistory();
@@ -39,6 +41,10 @@ const CardProduct = ({
         if (res1.status === 1 && res1.data.id) {
           setIsOrder(true);
         } else setIsOrder(false);
+      }
+      const res2 = await CallUnAuthorize("GET", null, `/videos/preview/${id}`);
+      if(res2.status === 1){
+        setPreview(res2.data);
       }
     };
     fetchData();
@@ -202,8 +208,8 @@ const CardProduct = ({
                   <Player
                     playauto
                     muted={isMute}
-                    poster="https://toidicodedao.files.wordpress.com/2018/07/react.png"
-                    src="https://media.w3.org/2010/05/sintel/trailer_hd.mp4"
+                    poster="https://ugc.futurelearn.com/uploads/images/4a/12/regular_4a12b6a5-747d-4997-8b4c-bae872272935.png"
+                    src={preview.url}
                   />
                 </Modal>
               </div>

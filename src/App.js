@@ -21,6 +21,8 @@ import AddCourse from "./pages/AddCourse";
 import Contact from "pages/contact";
 import Introduce from "pages/introduce";
 
+import ListCourseTaught from "./pages/ListCourseTaught"
+import UpdateCourse from "./pages/UpdateCourse";
 function App() {
   return (
     <ThemeProvider theme={theme}>
@@ -55,6 +57,12 @@ function App() {
               </Route>
               <Route path="/add-course">
                   <AddCourse/>
+              </Route>
+              <Route path="/list-course-taught">
+                  <ListCourseTaught/>
+              </Route>
+              <Route path="/update-course/:id">
+                  <UpdateCourse/>
               </Route>
               <Redirect from="/" to="/home" />
 

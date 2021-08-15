@@ -1,7 +1,7 @@
 import Header from "../../component/header";
 import Footer from "../../component/footer";
 import React, { useEffect, useState } from "react";
-import { Tabs, Button } from "antd";
+import { Tabs } from "antd";
 import {
   UserDeleteOutlined,
   BookOutlined,
