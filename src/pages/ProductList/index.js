@@ -86,7 +86,7 @@ const ProductList = () => {
         setCurrentPage(1);
     }
 
-    const btnsearch = () => {
+    const btnSearch = () => {
         const value = document.getElementById("txtSearch").value;
         setCurrentPage(1);
         setSearch(value);
@@ -137,7 +137,7 @@ const ProductList = () => {
                                                                    placeholder="Search"/>
                                                             <div className="input-group-append">
                                                                 <button className="btn btn-light" type="button"
-                                                                        onClick={btnsearch}><i
+                                                                        onClick={btnSearch}><i
                                                                     className="fa fa-search"></i></button>
                                                             </div>
                                                         </div>
