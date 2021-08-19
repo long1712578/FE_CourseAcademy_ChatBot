@@ -1,5 +1,4 @@
-import React, {useState} from "react";
-import jwt_decode from "jwt-decode";
+import React, {useContext} from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "font-awesome/css/font-awesome.min.css";
 import { 
@@ -22,17 +21,14 @@ import {
   Form,
   FormControl,
 } from "react-bootstrap";
+import {authenProvider} from "../../providers/authenProvider";
 
 
 export default function Header(props) {
-  const userToken = JSON.parse(localStorage.getItem("user"));
-  const accessToken = userToken ? userToken.accessToken : null;
-  const role = userToken ? userToken.role : null;
-  const decode = accessToken ? jwt_decode(accessToken) : null;
-  const [loginState, setLoginState] = useState(decode ? {isLogin: true, user: decode} : {isLogin: false, user: null});
+  const {authen, setAuthen} = useContext(authenProvider);
   const handleLogout = () => {
     localStorage.removeItem("user");
-    setLoginState({isLogin: false, user: null});
+    setAuthen({isLogin: false, user: null, token: null});
   }
   return (
     <div className="header-course">
@@ -65,9 +61,9 @@ export default function Header(props) {
               <Nav.Link className="link-home-header" href="/courses">&nbsp;COURSES</Nav.Link>
               <Nav.Link className="link-home-header" href="/introduce">&nbsp;INTRODUCE</Nav.Link>
               <Nav.Link className="link-home-header" href="/contact">&nbsp;CONTACT</Nav.Link>
-              <NavDropdown className="link-home-header" title={loginState.user ? loginState.user.fullName : "No user"} id="basic-nav-dropdown">
+              <NavDropdown className="link-home-header" title={authen.isLogin ? authen.user.fullname : "No user"} id="basic-nav-dropdown">
                 {
-                  loginState.isLogin ?
+                  authen.isLogin ?
                   <div>
                     <NavDropdown.Item href="/profile">
                     <InfoCircleOutlined /> &nbsp; Profile
@@ -75,12 +71,12 @@ export default function Header(props) {
                     <NavDropdown.Item onClick={handleLogout}>
                     <LogoutOutlined /> &nbsp; Logout
                     </NavDropdown.Item>
-                    {(role ===2 ) &&
+                    {(authen.user.role_id ===2 ) &&
                       <NavDropdown.Item href="/add-course">
                       <FileAddOutlined /> &nbsp; Add course
                       </NavDropdown.Item>
                     }
-                    {(role ===2 ) &&
+                    {(authen.user.role_id ===2 ) &&
                       <NavDropdown.Item href="/list-course-taught">
                       <UnorderedListOutlined /> &nbsp; Courses taught
                       </NavDropdown.Item>

@@ -79,31 +79,37 @@ body{
   text-align: center;
 }
 input#register_fullname {
+  color: #080808;
   border-radius: 0 !important;
   width: 302px;
   height: 30px;
 }
 input#register_avatar {
+  color: #080808;
   border-radius: 0 !important;
   width: 302px;
   height: 30px;
 }
 input#register_email {
+  color: #080808;
   border-radius: 0 !important;
   width: 302px;
   height: 30px;
 }
 input#register_phone {
+  color: #080808;
   border-radius: 0 !important;
   width: 233px;
   height: 30px;
 }
 input#register_username {
+  color: #080808;
   border-radius: 0 !important;
   width: 302px;
   height: 30px;
 }
 input#register_address {
+  color: #080808;
   border-radius: 0 !important;
   width: 302px;
   height: 30px;

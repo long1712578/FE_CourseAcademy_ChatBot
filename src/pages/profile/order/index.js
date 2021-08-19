@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import "antd/dist/antd.css";
 import { Table } from "antd";
 import CallAPI from "../../../until/callAPI";
+import { useHistory } from 'react-router-dom';
 
 const Order = ({ id }) => {
   const [orders, setOrders] = useState([]);
   const [loading, setloading] = useState(true);
+  const router = useHistory();
   useEffect(() => {
     const fetchData = async () => {
       const res = await CallAPI("GET", null, `/orders?user_id=${id}`).then(
@@ -13,7 +15,7 @@ const Order = ({ id }) => {
           setloading(false);
           setOrders((res.data)?
             res.data.courseOrders.map((row) => ({
-              key: row.id,
+              key: row.course.id,
               name: row.course.name,
               image: row.course.image,
               price:  row.course.price,
@@ -49,6 +51,10 @@ const Order = ({ id }) => {
       dataIndex: "dateBuy",
     },
   ];
-  return <Table columns={columns} dataSource={orders} />;
+  return <Table  onRow={(r) => ({
+    onClick: () => {
+      router.push(`/courses/${r.key}`)
+    }
+  })} columns={columns} dataSource={orders} />;
 };
 export default Order;

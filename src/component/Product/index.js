@@ -1,7 +1,30 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import {Link} from "react-router-dom";
+import CallAPI from "../../until/callAPI";
 
 const ProductCart=({idCourse,nameCourse,nameTeacher,price,promotionPrice,rating,nameCategory})=>{
+    const user = JSON.parse(localStorage.getItem("user"));
+    const [isOrder, setIsOrder] = useState(false);
+
+    const fetchOrder = async () => {
+        try{
+          if(user && user.authenticated){
+            const res = await CallAPI("GET", null, `/orders/${idCourse}`);
+            if (res.status === 1 && res.data.id) {
+              setIsOrder(true);
+            } else setIsOrder(false);
+          }
+        }catch(e){
+          setIsOrder(false);
+        }
+      };
+
+    useEffect(() => {
+            if(user){
+                fetchOrder();
+            }
+        
+      }, [idCourse]);
     return(
         <figure className="card card-product-grid">
             <Link className="link-no-decoration" to={`courses/${idCourse}`}>
@@ -26,7 +49,18 @@ const ProductCart=({idCourse,nameCourse,nameTeacher,price,promotionPrice,rating,
                             className="fa fa-star checked"></span></span>
                     </div>
                 </div>
-                <a href="#" className="btn btn-block btn-primary">Register Now! </a>
+                {
+                    (!user) ?
+                    <a href={`/login`} className="btn btn-block btn-primary">Register Now! </a>
+                    :
+                    (
+                        (isOrder)
+                        ?
+                        <div></div>
+                        :
+                        <a href={`/courses/${idCourse}/register`} className="btn btn-block btn-primary">Register Now! </a>
+                    )
+                }
             </figcaption>
         </figure>
 

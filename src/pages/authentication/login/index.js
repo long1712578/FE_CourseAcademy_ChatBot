@@ -1,30 +1,40 @@
-import React, {useState} from "react";
+import React, { useState, useContext } from "react";
 import "antd/dist/antd.css";
 import "./login.css";
-import { useHistory } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 import CallUnAuthorize from "../../../until/callUnAuthorize";
+import CallAPI from "../../../until/callAPI";
 import { Form, Input, Button, Checkbox } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
+import { authenProvider } from "../../../providers/authenProvider";
+import jwt_decode from "jwt-decode";
 function Login() {
+  const { setAuthen } = useContext(authenProvider);
   const [checkSignin, setCheckSignin] = useState(false);
   const router = useHistory();
   const onFinish = (data) => {
-    console.log('Received values of form: ', data);
     const fetchData = async () => {
-      const res = await CallUnAuthorize("POST", {...data}, '/sign-in');
-      if(res.status === 1) {
-          setCheckSignin(true);
-          localStorage.setItem('user', JSON.stringify(res.data));
-          router.push('/home');
-      }
-      else{
+      const res = await CallUnAuthorize("POST", { ...data }, "/sign-in");
+      if (res.status === 1) {
+        const decode = res.data.accessToken ? jwt_decode(res.data.accessToken) : null;
+        const userId = decode ? decode.userId : null;
+        setCheckSignin(true);
+        localStorage.setItem("user", JSON.stringify(res.data));
+        if (userId) {
+          const res1 = await CallAPI("GET", null, `/users/${userId}`);
+          if (res1.status === 1) {
+            setAuthen({ isLogin: true, user: res1.data });
+            router.push("/home");
+          }
+        }
+      } else {
         setCheckSignin(false);
+        setAuthen({ isLogin: false, user: {} });
         toast.error("login fail!");
       }
-
-  };
-  fetchData();
+    };
+    fetchData();
   };
   return (
     <div className="login">
@@ -50,7 +60,8 @@ function Login() {
                 },
               ]}
             >
-              <Input className="UserName"
+              <Input
+                className="UserName"
                 prefix={<UserOutlined className="site-form-item-icon" />}
                 placeholder="Username"
               />
@@ -72,10 +83,6 @@ function Login() {
               />
             </Form.Item>
             <Form.Item>
-              <Form.Item name="remember" valuePropName="checked" noStyle>
-                <Checkbox>Display</Checkbox>
-              </Form.Item>
-
               <a className="login-form-forgot" href="">
                 forget password
               </a>

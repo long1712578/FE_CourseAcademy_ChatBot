@@ -12,7 +12,6 @@ import moment from "moment";
 import CardTeacher from "../../component/SingleProduct/CardTeacher";
 import CardSameCourse from "../../component/SingleProduct/CardSameCourse";
 import CardComment from "../../component/SingleProduct/CardComment";
-import PreviewProduct from "../../component/SingleProduct/previewProduct";
 const Product = () => {
   const [course, setCourse] = useState();
   const [rating, setRating] = useState();
@@ -22,7 +21,6 @@ const Product = () => {
   const [teacher, setTeacher] = useState();
   const [listFeedback, setListFeedback] = useState([]);
   const id = useParams();
-  const { TabPane } = Tabs;
   const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
@@ -86,13 +84,8 @@ const Product = () => {
             lastUpdate={moment(course.last_update)
               .format("YYYY-MM-DD hh:mm:ss")
               .toString()}
+            course_status = {course.course_status_id}
           />
-          {
-            (isOrder)?
-            <PreviewProduct />
-            :
-            <div/>
-          }
           <CardTeacher teacher={teacher} />
           <CardSameCourse mostBuySameCategory={mostBuySameCategory} />
           <CardComment courseId={id.id}/>

@@ -22,7 +22,7 @@ const Information = ({userInfo}) => {
       email: data.email,
       phone: data.phone,
       username: data.username,
-      date_of_birth: data.birth_date
+      // date_of_birth: data.birth_date
     }
     const fetchData = async () => {
       const res = await CallAPI("put", userUpdate, `/users/${userInfo.userId}`);
@@ -47,7 +47,7 @@ const Information = ({userInfo}) => {
             </div>
             <div className="col-md-6">
               <fieldset>
-                <legend>Student: Pham Dinh Long. </legend>
+                <legend>Student:{userInfo.fullName}. </legend>
                 <div className="row">
                   <label className="col-sm-3 control-label">Email: </label>
                   <input

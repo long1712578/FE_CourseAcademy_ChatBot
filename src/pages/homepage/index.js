@@ -1,10 +1,9 @@
 import React from 'react'
-import MostHighLightComponent from '../../component/homepage/MostHighLightComponent';
+import MostHighLightComponent from "../../component/homepage/mostHighLightComponent";
 import MostViewComponent from "../../component/homepage/MostViewComponent";
 import NewCourse from "../../component/homepage/NewCourse";
 import MostCategoryRegis from "../../component/homepage/MostCategoryRegis";
 import Header from "../../component/header";
-import Footer from "../../component/footer";
 
 const HomePage = () =>
 {
