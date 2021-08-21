@@ -48,20 +48,20 @@ const ProductList = () => {
             setIsLoading(true);
             let res = null;
             if (idCategory === '-1' && filter === '-1') {
-                res = await CallUnAuthorize("GET", null, `/courses?page=${currentPage}&search=${search}`);
+                res = await CallUnAuthorize("GET", null, `/courses?page=${currentPage}&search=${search}&&is_delete=false`);
             } else if (idCategory !== '-1' && filter === '-1') {
-                res = await CallUnAuthorize("GET", null, `/courses?page=${currentPage}&category_id=${idCategory}&search=${search}`);
+                res = await CallUnAuthorize("GET", null, `/courses?page=${currentPage}&category_id=${idCategory}&search=${search}&&is_delete=false`);
             } else if (idCategory === '-1' && filter !== '-1') {
                 if (filter === '1') {
-                    res = await CallUnAuthorize("GET", null, `/courses?page=${currentPage}&search=${search}&sort_by=rating_average&sort_type=desc`);
+                    res = await CallUnAuthorize("GET", null, `/courses?page=${currentPage}&search=${search}&sort_by=rating_average&sort_type=desc&&is_delete=false`);
                 } else if (filter === '2') {
-                    res = await CallUnAuthorize("GET", null, `/courses?page=${currentPage}&search=${search}&sort_by=promotion_price&sort_type=asc`);
+                    res = await CallUnAuthorize("GET", null, `/courses?page=${currentPage}&search=${search}&sort_by=promotion_price&sort_type=asc&&is_delete=false`);
                 }
             } else if (idCategory !== '-1' && filter !== '-1') {
                 if (filter === '1') {
-                    res = await CallUnAuthorize("GET", null, `/courses?page=${currentPage}&category_id=${idCategory}&search=${search}&sort_by=rating_average&sort_type=desc`);
+                    res = await CallUnAuthorize("GET", null, `/courses?page=${currentPage}&category_id=${idCategory}&search=${search}&sort_by=rating_average&sort_type=desc&&is_delete=false`);
                 } else if (filter === '2') {
-                    res = await CallUnAuthorize("GET", null, `/courses?page=${currentPage}&category_id=${idCategory}&search=${search}&sort_by=promotion_price&sort_type=asc`);
+                    res = await CallUnAuthorize("GET", null, `/courses?page=${currentPage}&category_id=${idCategory}&search=${search}&sort_by=promotion_price&sort_type=asc&&is_delete=false`);
                 }
             }
             if (res.status === 1) {
