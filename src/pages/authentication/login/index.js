@@ -14,6 +14,7 @@ function Login() {
   const [checkSignin, setCheckSignin] = useState(false);
   const router = useHistory();
   const onFinish = (data) => {
+    console.log('data', data);
     const fetchData = async () => {
       const res = await CallUnAuthorize("POST", { ...data }, "/sign-in");
       if (res.status === 1) {
@@ -81,11 +82,6 @@ function Login() {
                 type="password"
                 placeholder="Password"
               />
-            </Form.Item>
-            <Form.Item>
-              <a className="login-form-forgot" href="">
-                forget password
-              </a>
             </Form.Item>
 
             <Form.Item>

@@ -65,12 +65,12 @@ function Signup() {
         const res = await CallUnAuthorize("POST", { ...user }, "/sign-up");
         if (res.status === 1) {
           // Chyen sang mang hinh dang nhap
-          setIsSignup({ show: true, content: "Register success :)" });
+          setIsSignup({ show: true, content: "Please check youremail to finish signup!" });
           setCheckRegister(true);
           router.push("/login");
         } else {
           setCheckRegister(false);
-          setIsSignup({ show: true, content: "Register fail :(" });
+          setIsSignup({ show: true, content: "Register fail !" });
         }
       } else {
         setIsSignup({ show: true, content: "Register fail because account exist" });
@@ -217,7 +217,7 @@ function Signup() {
                   },
                 ]}
               >
-                <Select placeholder="select your gender">
+                <Select placeholder="Select your gender">
                   <Option value={0}>Female</Option>
                   <Option value={1}>Male</Option>
                 </Select>
