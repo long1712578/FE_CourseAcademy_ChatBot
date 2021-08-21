@@ -238,13 +238,36 @@ const UpdateCourse = () => {
         setStatus(e.target.checked);
     }
 
+    const isValidate= ()=>{
+        let temp=true;
+        if (title==='')
+        {
+            temp=false
+        }
+        if(price<=0)
+        {
+            temp=false
+        }
+        if (idCategory === '-1') {
+            temp=false
+        }
+
+        return temp;
+    }
+
     const handleSaveCourse = async () => {
         setIsloading(true);
         let isSuccess = false;
-        if (idCategory === '-1') {
-            setIdCategory('0');
-            return;
+
+        if(isValidate()===false)
+        {
+            setIsloading(false);
+            return toast.error('Please enter full course information!', {
+                toastId: -10,
+                autoClose: 2000,
+            });
         }
+
         const formData = new FormData();
         formData.append("name", title);
         formData.append("description", valueDes.replace(/<(.|\n)*?>/g, '').trim())
@@ -347,25 +370,8 @@ const UpdateCourse = () => {
                                 </div>
                                 <div className="form-group" style={{marginTop: 60}}>
                                     <h6>Category</h6>
-                                    {/*<Select*/}
-                                    {/*    showSearch*/}
-                                    {/*    style={{width: 200}}*/}
-                                    {/*    placeholder="Select a category"*/}
-                                    {/*    optionFilterProp="children"*/}
-                                    {/*    onChange={onChangeCategories}*/}
-                                    {/*    onSearsh*/}
-                                    {/*    value={idCategory}*/}
-                                    {/*>*/}
-                                    {/*    {*/}
-                                    {/*        listCategory.map((data, index) => {*/}
-                                    {/*            return (*/}
-                                    {/*                <Option key={index} value={data.id}>{data.name}</Option>*/}
-                                    {/*            )*/}
-                                    {/*        })*/}
-                                    {/*    }*/}
-                                    {/*</Select>,*/}
                                     <Menu onClick={onChangeCategories} style={{ width: 200,border:'1' }} mode="vertical">
-                                        <SubMenu key="sub2" title="Choose field level">
+                                        <SubMenu key="sub2" title="Change category">
                                             <SubMenu key="subMenuWeb" title="Web programming">
                                                 {
                                                     listCategoryWeb.map((data)=>{
@@ -389,13 +395,6 @@ const UpdateCourse = () => {
                                     <Checkbox style={{float: "right"}} checked={status}
                                               onChange={onChangeStatus}>Accomplished</Checkbox>
                                 </div>
-                                {
-                                    idCategory === '0' &&
-                                    <div>
-                                    <span id="warningOption"
-                                          style={{color: "red", marginTop: 5}}>Please select category</span>
-                                    </div>
-                                }
                                 <Button className="mt-2 b-group-color" type="primary"
                                         onClick={handleAddDoc}>
                                     <i className="fa fa-plus" style={{marginRight: 5, paddingTop: 2}}/>

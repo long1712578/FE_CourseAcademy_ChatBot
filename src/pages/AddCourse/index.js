@@ -20,10 +20,10 @@ const {SubMenu} = Menu;
 const AddCourse = () => {
     const [isLoading, setIsloading] = useState(false);
     const [idCategory, setIdCategory] = useState('-1');
-    const [title, setTitle] = useState();
-    const [summary, setSummary] = useState();
-    const [price, setPrice] = useState();
-    const [promotionPrice, setPromotionPrice] = useState();
+    const [title, setTitle] = useState('');
+    const [summary, setSummary] = useState('');
+    const [price, setPrice] = useState(0);
+    const [promotionPrice, setPromotionPrice] = useState(0);
     const [srcImage, setSrcImage] = useState();
     const [valueDes, setValueDes] = useState('');
     const [status, setStatus] = useState(false);
@@ -34,7 +34,6 @@ const AddCourse = () => {
     const [listCategoryMobile, setListCategoryMobile] = useState([]);
     const [lstFileDoc, setLstFileDoc] = useState([]);
     const [lstFileVideo, setLstFileVideo] = useState([]);
-
 
     const refImg = useRef();
 
@@ -59,7 +58,7 @@ const AddCourse = () => {
         const fetchData = async () => {
             const resCateWeb = await CallUnAuthorize("GET", null, `/categories/field_id/1`);
             const resCateMobile = await CallUnAuthorize("GET", null, `/categories/field_id/2`);
-            console.log(resCateWeb.data)
+
             if (resCateMobile.status === 1 && resCateWeb.status === 1) {
 
                 setListCategoryWeb(resCateWeb.data)
@@ -151,14 +150,35 @@ const AddCourse = () => {
 
     }
 
+    const isValidate= ()=>{
+        let temp=true;
+        if (title==='')
+        {
+            temp=false
+        }
+        if(price<=0)
+        {
+            temp=false
+        }
+        if (idCategory === '-1') {
+            temp=false
+        }
+
+        return temp;
+    }
+
     const handleSaveCourse = async () => {
         setIsloading(true);
-        let isSuccess = false;
-        if (idCategory === '-1') {
-            setIdCategory('0');
+        if(isValidate()===false)
+        {
             setIsloading(false);
-            return;
+            return toast.error('Please enter full course information!', {
+                toastId: -10,
+                autoClose: 2000,
+            });
         }
+
+        let isSuccess = false;
 
         const formData = new FormData();
 
@@ -274,7 +294,7 @@ const AddCourse = () => {
                                     <h6>Category</h6>
                                     <Menu onClick={onChangeCategories} style={{width: 200, border: '1'}}
                                           mode="vertical">
-                                        <SubMenu key="sub2" title="Choose field level">
+                                        <SubMenu key="sub2" title="Choose category">
                                             <SubMenu key="subMenuWeb" title="Web programming">
                                                 {
                                                     listCategoryWeb.map((data) => {
@@ -295,13 +315,6 @@ const AddCourse = () => {
                                             </SubMenu>
                                         </SubMenu>
                                     </Menu>
-                                    {
-                                        idCategory === '0' &&
-                                        <div>
-                                            <span id="warningOption"
-                                                  style={{color: "red", marginTop: 5,marginLeft:10}}>Please select category</span>
-                                        </div>
-                                    }
                                 </div>
                                 <Button className="mt-2 b-group-color" type="primary"
                                         onClick={handleAddDoc}>

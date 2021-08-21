@@ -19,8 +19,17 @@ const ProductCart = ({idCourse, nameCourse, nameTeacher, price, promotionPrice, 
                     </Link>
                     <a style={{color: "darkred"}}>Teacher: {nameTeacher}</a>
                     <div className="price-wrap mt-2">
-                        <span className="price">{promotionPrice}</span>
-                        <del className="price-old">{price}</del>
+                        {
+                            (promotionPrice!==null&&promotionPrice!==0)&&<>
+                                <span className="price">{promotionPrice}</span>
+                                <del className="price-old">{price}</del>
+                            </>
+                        }
+                        {
+                            (promotionPrice===null||promotionPrice===0)&&<>
+                                <span className="price">{price}</span>
+                            </>
+                        }
                         {
                             rating!==0&&
                             <>
