@@ -33,6 +33,7 @@ const PreviewProduct = () => {
       });
     });
     fetchVideo((res) => {
+      console.log('res1', res);
       setState1({
         data: res,
       });
@@ -52,6 +53,7 @@ const PreviewProduct = () => {
   const fetchVideo = async (callback) => {
     const res = await CallAPI("GET", null, `/videos/course/${id.id}`);
     if (res.status === 1) {
+      console.log('vdeo', res.data);
       callback(res.data);
     } else toast.error("Something went wrong. Try later");
   };

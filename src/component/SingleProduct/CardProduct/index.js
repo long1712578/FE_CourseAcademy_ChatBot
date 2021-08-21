@@ -35,7 +35,6 @@ const CardProduct = ({
     const fetchData = async () => {
       const res2 = await CallUnAuthorize("GET", null, `/videos/preview/${id}`);
       if (res2.status === 1) {
-        console.log('res', res2.data);
         setPreview(res2.data);
       }
       if (login) {

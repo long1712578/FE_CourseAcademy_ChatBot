@@ -40,7 +40,7 @@ const ChangePassword = ({id}) => {
                     {...register("password_now", {required: true})}
                     
                   ></input>
-                  <span className="error-span">* {errors.password_now && 'Pass fail.'}</span>
+                  <span className="error-span">{errors.password_now && '*Pass fail.'}</span>
                 </div>
                 <div className="row">
                   <label className="col-sm-2 control-label">Password new: </label>
@@ -48,14 +48,14 @@ const ChangePassword = ({id}) => {
                     className="col-sm-10" type="password"
                     {...register("password_new", {required: true})}
                   ></input>
-                   <span className="error-span">* {errors.password_new && 'Pass new not choose.'}</span>
+                   <span className="error-span">{errors.password_new && '*Pass new not choose.'}</span>
                 </div>
                 <div className="row">
                   <label className="col-sm-2 control-label">Again password: </label>
                   <input
                     className="col-sm-10" type="password"
                     {...register("again_password", {required: true, validate: value => value ===  watch("password_new")})}></input>
-                     <span className="error-span">* {errors.again_password && 'Password new not choose or  not same password new.'}</span>
+                     <span className="error-span">{errors.again_password && '*Password new not choose or  not same password new.'}</span>
                 </div>
               </fieldset>
               <Button type="primary" htmlType="submit"  danger>

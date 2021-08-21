@@ -20,6 +20,7 @@ const Order = ({ id }) => {
               image: row.course.image,
               price:  row.course.price,
               dateBuy: row.course_order.enroll_at,
+              status: (row.course.course_status_id === 1) ?"Incomplete" : "Complete"
             }))
             : []
           )
@@ -49,6 +50,10 @@ const Order = ({ id }) => {
     {
       title: "Date buy",
       dataIndex: "dateBuy",
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
     },
   ];
   return <Table  onRow={(r) => ({

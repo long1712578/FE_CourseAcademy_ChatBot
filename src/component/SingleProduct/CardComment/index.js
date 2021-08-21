@@ -23,6 +23,7 @@ const CardComment = ({ courseId }) => {
     fetchData();
   }, []);
   const ratingChanged = (newRating) => {
+    console.log(newRating);
     setRating(newRating);
   };
   const onSubmit = (data, e) => {
@@ -39,11 +40,12 @@ const CardComment = ({ courseId }) => {
       `/comments`
     );
     if (res.status === 1) {
-      setRating(0);
       setCheckReview({ show: true });
       const res = await CallUnAuthorize("GET", null, `/comments/course/${courseId}`);
       if (res.status === 1) {
         setListFeedback(res.data.cmd);
+        setRating(0);
+        document.getElementById('comment').innerHTML = '';
       } else {
         setListFeedback([]);
       }
@@ -105,6 +107,7 @@ const CardComment = ({ courseId }) => {
                   <div className="content-review">
                   <ReactStars
                     count={5}
+                    value={rating}
                     onChange={ratingChanged}
                     size={24}
                     activeColor="#ffd700"
