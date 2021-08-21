@@ -6,7 +6,7 @@ import Header from "../../component/header";
 import CallAPI from "../../until/callAPI"
 import {toast, ToastContainer} from "react-toastify";
 import Checkbox from "antd/es/checkbox/Checkbox";
-import {Menu, Select} from "antd";
+import {Menu} from "antd";
 import 'react-toastify/dist/ReactToastify.css';
 import {Card, Button} from "antd"
 import {useParams} from "react-router";
@@ -108,7 +108,6 @@ const UpdateCourse = () => {
         const fetchData = async () => {
             const resCateWeb = await CallUnAuthorize("GET", null, `/categories/field_id/1`);
             const resCateMobile = await CallUnAuthorize("GET", null, `/categories/field_id/2`);
-            console.log(resCateWeb.data)
             if(resCateMobile.status === 1 && resCateWeb.status === 1) {
 
                 setListCategoryWeb(resCateWeb.data)
@@ -139,7 +138,6 @@ const UpdateCourse = () => {
         const resDoc = await CallAPI('POST', dataDoc, `/documents`);
         setIsloading(false);
         if (resDoc.status === 1) {
-            console.log(resDoc.data)
             setLstFileDoc(lstFileDoc => [...lstFileDoc, resDoc.data]);
             return toast.success("Updated", {toastId: 10, autoClose: 2000})
         } else {
@@ -172,8 +170,6 @@ const UpdateCourse = () => {
     }
 
     const handleRemoveDoc = async (name, id) => {
-        console.log(id);
-        console.log(name)
        setIsloading(true);
         const resRemoveDoc = await CallAPI('DELETE', null, `/documents/${id}`);
         setIsloading(false);
@@ -283,9 +279,7 @@ const UpdateCourse = () => {
         formData.append("course_field_id", 3);
 
         const res = await CallAPI('PUT', formData, `/courses/${id.id}`);
-        if (res.status === 1) {
-            isSuccess = true;
-        } else isSuccess = false;
+        isSuccess = res.status === 1;
 
         if (isSuccess === true) {
             setIsloading(false)
@@ -359,7 +353,7 @@ const UpdateCourse = () => {
                                 </div>
                                 <div className="form-group">
                                     <h6>Course image</h6>
-                                    <img src={showImg} style={{width: 293, height: 220, marginRight: 20}}/>
+                                    <img src={showImg} style={{width: 293, height: 220, marginRight: 20}} alt=""/>
                                     <input type="file" id="image" accept=".png, .jpg" style={{cursor: "pointer"}}
                                            onChange={handleImage} ref={refImg}/>
                                 </div>
