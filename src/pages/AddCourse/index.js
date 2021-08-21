@@ -6,26 +6,24 @@ import Header from "../../component/header";
 import CallAPI from "../../until/callAPI"
 import {toast, ToastContainer} from "react-toastify";
 import Checkbox from "antd/es/checkbox/Checkbox";
-import {Select} from "antd";
 import 'react-toastify/dist/ReactToastify.css';
 import {Card, Button} from "antd"
 import LoadingMask from "react-loadingmask";
 import "react-loadingmask/dist/react-loadingmask.css";
 import CallUnAuthorize from "../../until/callUnAuthorize";
-
 import {Menu} from 'antd';
-
+import {useHistory} from "react-router-dom";
+import jwt_decode from "jwt-decode";
 const {SubMenu} = Menu;
-const {Option} = Select;
 
 
 const AddCourse = () => {
     const [isLoading, setIsloading] = useState(false);
     const [idCategory, setIdCategory] = useState('-1');
-    const [title, setTitle] = useState();
-    const [summary, setSummary] = useState();
-    const [price, setPrice] = useState();
-    const [promotionPrice, setPromotionPrice] = useState();
+    const [title, setTitle] = useState('');
+    const [summary, setSummary] = useState('');
+    const [price, setPrice] = useState(0);
+    const [promotionPrice, setPromotionPrice] = useState(0);
     const [srcImage, setSrcImage] = useState();
     const [valueDes, setValueDes] = useState('');
     const [status, setStatus] = useState(false);
@@ -38,20 +36,29 @@ const AddCourse = () => {
     const [lstFileVideo, setLstFileVideo] = useState([]);
 
     const refImg = useRef();
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         const res = await CallAPI("GET", null, `/categories`);
-    //         if (res.status === 1) {
-    //             setListCategory(res.data);
-    //         } else return (res.err);
-    //     }
-    //     fetchData();
-    // }, [])
+
+    let decode = null;
+    let userId = null;
+    const router = useHistory();
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user) {
+        localStorage.removeItem("user");
+        router.push("/login");
+    } else {
+        const accessToken = user.accessToken;
+        if (accessToken) {
+            decode = jwt_decode(accessToken);
+            userId = decode.userId;
+        } else {
+            localStorage.removeItem("user");
+            router.push("/login");
+        }
+    }
     useEffect(() => {
         const fetchData = async () => {
             const resCateWeb = await CallUnAuthorize("GET", null, `/categories/field_id/1`);
             const resCateMobile = await CallUnAuthorize("GET", null, `/categories/field_id/2`);
-            console.log(resCateWeb.data)
+
             if (resCateMobile.status === 1 && resCateWeb.status === 1) {
 
                 setListCategoryWeb(resCateWeb.data)
@@ -117,7 +124,7 @@ const AddCourse = () => {
     }
 
     const onChangeCategories = (value) => {
-        setIdCategory(value);
+        setIdCategory(value.key);
     }
 
     const onChangeStatus = (e) => {
@@ -143,14 +150,35 @@ const AddCourse = () => {
 
     }
 
+    const isValidate= ()=>{
+        let temp=true;
+        if (title==='')
+        {
+            temp=false
+        }
+        if(price<=0)
+        {
+            temp=false
+        }
+        if (idCategory === '-1') {
+            temp=false
+        }
+
+        return temp;
+    }
+
     const handleSaveCourse = async () => {
         setIsloading(true);
-        let isSuccess = false;
-        if (idCategory === '-1') {
-            setIdCategory('0');
+        if(isValidate()===false)
+        {
             setIsloading(false);
-            return;
+            return toast.error('Please enter full course information!', {
+                toastId: -10,
+                autoClose: 2000,
+            });
         }
+
+        let isSuccess = false;
 
         const formData = new FormData();
 
@@ -159,42 +187,36 @@ const AddCourse = () => {
         formData.append("summary", summary)
         formData.append("image", srcImage)
         formData.append("category_id", idCategory)
-        formData.append("created_by", 7)
+        formData.append("created_by", userId)
         if (status === true) {
             formData.append("course_status_id", 1)
         } else formData.append("course_status_id", 2)
         formData.append("price", price)
         formData.append("promotion_price", promotionPrice)
-        formData.append("course_field_id", 3);
+        formData.append("course_field_id", 1);
 
         const res = await CallAPI('POST', formData, `/courses`);
         if (res.status === 1) {
             isSuccess = true;
             const idCourse = res.data.id;
-            lstFileDoc.forEach(async (item) => {
+            for (const item of lstFileDoc) {
                 let dataDoc = new FormData();
                 dataDoc.append('url', item)
                 dataDoc.append('course_id', idCourse)
                 dataDoc.append('name', item.name);
 
                 const resDoc = await CallAPI('POST', dataDoc, '/documents');
-                if (resDoc.status === 1)
-                    isSuccess = true;
-                else
-                    isSuccess = false;
-            })
-            lstFileVideo.forEach(async (item) => {
+                isSuccess = resDoc.status === 1;
+            }
+            for (const item of lstFileVideo) {
                 let dataVideo = new FormData();
                 dataVideo.append('url', item)
                 dataVideo.append('course_id', idCourse)
                 dataVideo.append('name', item.name);
 
                 const resVideo = await CallAPI('POST', dataVideo, '/videos')
-                if (resVideo.status === 1)
-                    isSuccess = true;
-                else
-                    isSuccess = false;
-            })
+                isSuccess = resVideo.status === 1;
+            }
         }
 
         if (isSuccess === true) {
@@ -202,6 +224,7 @@ const AddCourse = () => {
             removeAllDataInsert();
             return toast.success("Saved", {toastId: 10, autoClose: 2000})
         } else {
+            setIsloading(false);
             return toast.error("Save course failed, try again", {
                 toastId: -10,
                 autoClose: 2000,
@@ -215,7 +238,7 @@ const AddCourse = () => {
                 <div class="container main-container">
                     <div class="row">
                         <div class="col-lg-12 mt-5">
-                            <h3 className="text-center mt-5 mb-5">Reactjs Eccommerce Site - Add Course</h3>
+                            <h3 className="text-center mt-5 mb-5">Add Course</h3>
                             <div className="mt-5 mb-5">
                                 <div className="form-group">
                                     <h6>Course name:</h6>
@@ -227,7 +250,6 @@ const AddCourse = () => {
                                 <div className="form-group">
                                     <h6>Summary:</h6>
                                     <input onChange={handleChangeSummary}
-                                           type="text"
                                            className="form-control" id="summary"
                                            value={summary}
                                            placeholder="Summary"/>
@@ -255,8 +277,6 @@ const AddCourse = () => {
                                                    step="0.01"/>
                                         </div>
                                     </div>
-
-
                                 </div>
                                 <div className="form-group">
                                     <h6>Course image</h6>
@@ -272,29 +292,9 @@ const AddCourse = () => {
                                 </div>
                                 <div className="form-group" style={{marginTop: 60}}>
                                     <h6>Category</h6>
-                                    {/*    <Select*/}
-                                    {/*        showSearch*/}
-                                    {/*        style={{width: 200}}*/}
-                                    {/*        placeholder="Select a category"*/}
-                                    {/*        optionFilterProp="children"*/}
-                                    {/*        onChange={onChangeCategories}*/}
-                                    {/*        onSearch*/}
-
-                                    {/*    >*/}
-                                    {/*        {*/}
-                                    {/*            listCategory.map((data, index) => {*/}
-                                    {/*                return (*/}
-                                    {/*                    <Option key={index} value={data.id}>{data.name}</Option>*/}
-                                    {/*                )*/}
-                                    {/*            })*/}
-                                    {/*        }*/}
-                                    {/*    </Select>,*/}
-                                    {/*    <Checkbox style={{float: "right"}} checked={status}*/}
-                                    {/*              onChange={onChangeStatus}>Accomplished</Checkbox>*/}
-                                    {/*</div>*/}
                                     <Menu onClick={onChangeCategories} style={{width: 200, border: '1'}}
                                           mode="vertical">
-                                        <SubMenu key="sub2" title="Choose field level">
+                                        <SubMenu key="sub2" title="Choose category">
                                             <SubMenu key="subMenuWeb" title="Web programming">
                                                 {
                                                     listCategoryWeb.map((data) => {
@@ -315,80 +315,72 @@ const AddCourse = () => {
                                             </SubMenu>
                                         </SubMenu>
                                     </Menu>
-                                    <Checkbox style={{float: "right"}} checked={status}
-                                              onChange={onChangeStatus}>Accomplished</Checkbox>
                                 </div>
-                                    {
-                                        idCategory === '0' &&
-                                        <div>
-                                    <span id="warningOption"
-                                          style={{color: "red", marginTop: 5}}>Please select category</span>
-                                        </div>
-                                    }
-                                    <Button className="mt-2 b-group-color" type="primary"
-                                            onClick={handleAddDoc}>
-                                        <i className="fa fa-plus" style={{marginRight: 5, paddingTop: 2}}/>
-                                        Add an document
-                                    </Button>
-                                    <input type="file" id="btnAddDocument" accept=".docs, .pdf"
-                                           style={{cursor: "pointer", display: "none"}} onChange={handleAddFileDoc}/>
-                                    <div>
-                                        {lstFileDoc.length === 0 && <></>
-                                        }
-                                        {lstFileDoc.length > 0 &&
-                                        lstFileDoc.map((data, index) => {
-                                            return (
-                                                <Card title={`Document ${index + 1}`} key={index}
-                                                      extra={<a onClick={() => handleRemoveDoc(data.name)}><i
-                                                          className="fa fa-trash"></i></a>} style={{marginTop: 20}}>
-                                                    <div style={{marginBottom: 20}}>
-                                                        <h6>Name:</h6>
-                                                        <span>{data.name}</span>
-                                                    </div>
-                                                </Card>
-                                            )
-                                        })}
-                                    </div>
-                                    <br/>
-                                    <Button className="mt-2 b-group-color" type="primary"
-                                            onClick={handleAddVideo}>
-                                        <i className="fa fa-plus" style={{marginRight: 5, paddingTop: 2}}/>
-                                        Add an video
-                                    </Button>
-                                    <input type="file" id="btnAddVideo" accept=".avi,.mp4,.flv"
-                                           style={{cursor: "pointer", display: "none"}} onChange={handleAddFileVideo}/>
-                                    <div>
-                                        {lstFileVideo.length > 0 &&
-                                        lstFileVideo.map((data, index) => {
-                                            return (
-                                                <Card title={`Video ${index + 1}`} key={index}
-                                                      extra={<a onClick={() => handleRemoveVideo(data.name)}><i
-                                                          className="fa fa-trash"></i></a>} style={{marginTop: 20}}>
-                                                    <div style={{marginBottom: 20}}>
-                                                        <h6>Name:</h6>
-                                                        <span>{data.name}</span>
-                                                    </div>
-                                                </Card>
-                                            )
-                                        })}
-                                    </div>
-                                    <br/>
-                                    <button type="submit" className="btn btn-primary" style={{marginTop: 30}}
-                                            onClick={handleSaveCourse}>
-                                        {isLoading ? '... ' :
-                                            <i className="fas fa-save" style={{marginRight: 5, paddingTop: 2}}></i>}
-                                        Save
-                                    </button>
+                                <Button className="mt-2 b-group-color" type="primary"
+                                        onClick={handleAddDoc}>
+                                    <i className="fa fa-plus" style={{marginRight: 5, paddingTop: 2}}/>
+                                    Add an document
+                                </Button>
+                                <input type="file" id="btnAddDocument" accept=".docs, .pdf"
+                                       style={{cursor: "pointer", display: "none"}} onChange={handleAddFileDoc}/>
+                                <div>
+                                    {lstFileDoc.length > 0 &&
+                                    lstFileDoc.map((data, index) => {
+                                        return (
+                                            <Card title={`Document ${index + 1}`} key={index}
+                                                  extra={<a onClick={() => handleRemoveDoc(data.name)}><i
+                                                      className="fa fa-trash"></i></a>} style={{marginTop: 20}}>
+                                                <div style={{marginBottom: 20}}>
+                                                    <h6>Name:</h6>
+                                                    <span>{data.name}</span>
+                                                </div>
+                                            </Card>
+                                        )
+                                    })}
                                 </div>
+                                <br/>
+                                <Button className="mt-2 b-group-color" type="primary"
+                                        onClick={handleAddVideo}>
+                                    <i className="fa fa-plus" style={{marginRight: 5, paddingTop: 2}}/>
+                                    Add an video
+                                </Button>
+                                <input type="file" id="btnAddVideo" accept=".avi,.mp4,.flv"
+                                       style={{cursor: "pointer", display: "none"}} onChange={handleAddFileVideo}/>
+                                <div>
+                                    {lstFileVideo.length > 0 &&
+                                    lstFileVideo.map((data, index) => {
+                                        return (
+                                            <Card title={`Video ${index + 1}`} key={index}
+                                                  extra={<a onClick={() => handleRemoveVideo(data.name)}><i
+                                                      className="fa fa-trash"></i></a>} style={{marginTop: 20}}>
+                                                <div style={{marginBottom: 20}}>
+                                                    <h6>Name:</h6>
+                                                    <span>{data.name}</span>
+                                                </div>
+                                            </Card>
+                                        )
+                                    })}
+                                </div>
+                                <br/>
+                                <button type="submit" className="btn btn-primary" style={{marginTop: 30}}
+                                        onClick={handleSaveCourse}>
+                                    {isLoading ? '... ' :
+                                        <i className="fas fa-save" style={{marginRight: 5, paddingTop: 2}}></i>}
+                                    Save
+                                </button>
+                                <Checkbox style={{float: "right"}} checked={status}
+                                          onChange={onChangeStatus}>Accomplished</Checkbox>
                             </div>
-                        </div>
 
+                        </div>
                     </div>
-                    <ToastContainer position="bottom-center"/>
+
+                </div>
+                <ToastContainer position="bottom-center"/>
                 <Footer/>
             </LoadingMask>
         </React.Fragment>
 
-)
+    )
 }
 export default AddCourse;

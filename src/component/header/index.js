@@ -68,6 +68,13 @@ export default function Header(props) {
                     <NavDropdown.Item href="/profile">
                     <InfoCircleOutlined /> &nbsp; Profile
                     </NavDropdown.Item>
+
+                      <NavDropdown.Item href="/add-course">
+                          <i className="far fa-plus-square"></i> &nbsp; Add Course
+                      </NavDropdown.Item>
+                      <NavDropdown.Item href="/list-course-taught">
+                          <i className="far fa-list-alt"></i> &nbsp; List of courses being taught
+                      </NavDropdown.Item>
                     <NavDropdown.Item onClick={handleLogout}>
                     <LogoutOutlined /> &nbsp; Logout
                     </NavDropdown.Item>

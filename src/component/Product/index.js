@@ -1,8 +1,10 @@
-import React, {useState, useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import {Link} from "react-router-dom";
-import CallAPI from "../../until/callAPI";
+import CallUnAuthorize from "../../until/callUnAuthorize";
+import CallAPI from 'until/callAPI';
+import {toast} from "react-toastify";
 
-const ProductCart=({idCourse,nameCourse,nameTeacher,price,promotionPrice,rating,nameCategory})=>{
+const ProductCart= ({idCourse,nameCourse,nameTeacher,price,promotionPrice,rating,nameCategory,srcImg,listCourseHighLight,listCourseNew})=>{
     const user = JSON.parse(localStorage.getItem("user"));
     const [isOrder, setIsOrder] = useState(false);
 
@@ -29,9 +31,28 @@ const ProductCart=({idCourse,nameCourse,nameTeacher,price,promotionPrice,rating,
         <figure className="card card-product-grid">
             <Link className="link-no-decoration" to={`courses/${idCourse}`}>
             <div className="img-wrap">
-                <span className="badge badge-danger"> NEW </span>
+                {
+                    listCourseHighLight.map((data,index)=>{
+                        return(
+                                data.id===idCourse&&<>
+                                    <span className="badge badge-danger"> HOT </span>
+                                </>
+                        )
+                    })
+                }
+                {
+                    listCourseNew.map((data,index)=>{
+                        return(
+                            data.id===idCourse&&<>
+                                <span className="badge badge-danger" style={{backgroundColor:"green"}}> New </span>
+                            </>
+                        )
+                    })
+
+                }
+
                 <span className="badge badge-gray" style={{float:"right"}}>Category: {nameCategory}</span>
-                <img src="assets/images/items/course.jpg"/>
+                <img src={srcImg}/>
                 <a className="btn-overlay" href="#"><i
                     className="fa fa-search-plus"></i> Quick view</a>
             </div>
@@ -43,10 +64,24 @@ const ProductCart=({idCourse,nameCourse,nameTeacher,price,promotionPrice,rating,
                     </Link>
                     <a style={{color:"darkred"}}>Teacher: {nameTeacher}</a>
                     <div className="price-wrap mt-2">
-                        <span className="price">{promotionPrice}</span>
-                        <del className="price-old">{price}</del>
-                        <span style={{float:"right"}}>Rating: {rating}<span
-                            className="fa fa-star checked"></span></span>
+                        {
+                            (promotionPrice!==null&&promotionPrice!==0)&&<>
+                                <span className="price">{promotionPrice}</span>
+                                <del className="price-old">{price}</del>
+                            </>
+                        }
+                        {
+                            (promotionPrice===null||promotionPrice===0)&&<>
+                                <span className="price">{price}</span>
+                            </>
+                        }
+                        {
+                            rating!==0&&
+                                <>
+                                    <span style={{float:"right"}}>Rating: {rating}<span
+                                    className="fa fa-star checked"></span></span>
+                                </>
+                        }
                     </div>
                 </div>
                 {

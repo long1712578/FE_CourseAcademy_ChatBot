@@ -10,9 +10,9 @@ const Order = ({ id }) => {
   const router = useHistory();
   useEffect(() => {
     const fetchData = async () => {
-      const res = await CallAPI("GET", null, `/orders?user_id=${id}`).then(
+      await CallAPI("GET", null, `/orders?user_id=${id}`).then(
         res  => {
-          setloading(false);
+          // setloading(false);
           setOrders((res.data)?
             res.data.courseOrders.map((row) => ({
               key: row.course.id,
@@ -27,7 +27,7 @@ const Order = ({ id }) => {
       );
     };
     fetchData();
-  }, []);
+  }, [id]);
 
   const columns = [
     {
@@ -39,7 +39,7 @@ const Order = ({ id }) => {
       dataIndex: "image",
       render: (text, record) => {
         return (
-         <img src={record.image}/>
+         <img src={record.image} alt=""/>
        );},
     },
     {

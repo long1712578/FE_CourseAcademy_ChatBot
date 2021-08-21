@@ -6,21 +6,24 @@ import Header from "../../component/header";
 import CallAPI from "../../until/callAPI"
 import {toast, ToastContainer} from "react-toastify";
 import Checkbox from "antd/es/checkbox/Checkbox";
-import {Menu, Select} from "antd";
+import {Menu} from "antd";
 import 'react-toastify/dist/ReactToastify.css';
 import {Card, Button} from "antd"
 import {useParams} from "react-router";
 import LoadingMask from "react-loadingmask";
 import "react-loadingmask/dist/react-loadingmask.css";
 import CallUnAuthorize from "../../until/callUnAuthorize";
+import {useHistory} from "react-router-dom";
+import jwt_decode from "jwt-decode";
+import Loader from "../../component/loader";
 
 const { SubMenu } = Menu;
 
-const {Option} = Select;
 
 
 const UpdateCourse = () => {
     const [isLoading, setIsloading] = useState(false);
+    const [isFirstLoading, setIsFirstloading] = useState(false);
     const [idCategory, setIdCategory] = useState('-1');
     const [title, setTitle] = useState();
     const [summary, setSummary] = useState();
@@ -38,8 +41,27 @@ const UpdateCourse = () => {
     const refImg = useRef();
     const id = useParams();
 
+    let decode = null;
+    let userId = null;
+    const router = useHistory();
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user) {
+        localStorage.removeItem("user");
+        router.push("/login");
+    } else {
+        const accessToken = user.accessToken;
+        if (accessToken) {
+            decode = jwt_decode(accessToken);
+            userId = decode.userId;
+        }else{
+            localStorage.removeItem("user");
+            router.push("/login");
+        }
+    }
+
     useEffect(() => {
         let isLoadSucces = true;
+        setIsFirstloading(true);
         const fetchData = async () => {
             const res = await CallAPI("GET", null, `/guest-course/information/${id.id}`);
             if (res.status === 1) {
@@ -70,6 +92,7 @@ const UpdateCourse = () => {
                     setLstFileVideo(lstFileVideo => [...lstFileVideo, item.video])
                 })
             } else isLoadSucces = false;
+            setIsFirstloading(false);
             if (!isLoadSucces) {
                 return toast.error("Load course to update failed,try again", {
                     toastId: -10,
@@ -85,7 +108,6 @@ const UpdateCourse = () => {
         const fetchData = async () => {
             const resCateWeb = await CallUnAuthorize("GET", null, `/categories/field_id/1`);
             const resCateMobile = await CallUnAuthorize("GET", null, `/categories/field_id/2`);
-            console.log(resCateWeb.data)
             if(resCateMobile.status === 1 && resCateWeb.status === 1) {
 
                 setListCategoryWeb(resCateWeb.data)
@@ -116,7 +138,7 @@ const UpdateCourse = () => {
         const resDoc = await CallAPI('POST', dataDoc, `/documents`);
         setIsloading(false);
         if (resDoc.status === 1) {
-            setLstFileDoc(lstFileDoc => [...lstFileDoc, param]);
+            setLstFileDoc(lstFileDoc => [...lstFileDoc, resDoc.data]);
             return toast.success("Updated", {toastId: 10, autoClose: 2000})
         } else {
             return toast.error("Update document failed, try again", {
@@ -134,10 +156,10 @@ const UpdateCourse = () => {
         dataVideo.append('course_id', id.id)
         dataVideo.append('name', param.name);
 
-        const resDoc = await CallAPI('POST', dataVideo, `/videos`);
+        const resVideo = await CallAPI('POST', dataVideo, `/videos`);
         setIsloading(false);
-        if (resDoc.status === 1) {
-            setLstFileVideo(lstFileVideo => [...lstFileVideo, param]);
+        if (resVideo.status === 1) {
+            setLstFileVideo(lstFileVideo => [...lstFileVideo, resVideo.data]);
             return toast.success("Updated", {toastId: 10, autoClose: 2000})
         } else {
             return toast.error("Update document failed, try again", {
@@ -148,7 +170,7 @@ const UpdateCourse = () => {
     }
 
     const handleRemoveDoc = async (name, id) => {
-        setIsloading(true);
+       setIsloading(true);
         const resRemoveDoc = await CallAPI('DELETE', null, `/documents/${id}`);
         setIsloading(false);
         if (resRemoveDoc.status === 1) {
@@ -212,20 +234,43 @@ const UpdateCourse = () => {
         setStatus(e.target.checked);
     }
 
+    const isValidate= ()=>{
+        let temp=true;
+        if (title==='')
+        {
+            temp=false
+        }
+        if(price<=0)
+        {
+            temp=false
+        }
+        if (idCategory === '-1') {
+            temp=false
+        }
+
+        return temp;
+    }
+
     const handleSaveCourse = async () => {
         setIsloading(true);
         let isSuccess = false;
-        if (idCategory === '-1') {
-            setIdCategory('0');
-            return;
+
+        if(isValidate()===false)
+        {
+            setIsloading(false);
+            return toast.error('Please enter full course information!', {
+                toastId: -10,
+                autoClose: 2000,
+            });
         }
+
         const formData = new FormData();
         formData.append("name", title);
         formData.append("description", valueDes.replace(/<(.|\n)*?>/g, '').trim())
         formData.append("summary", summary)
         formData.append("image", srcImage)
         formData.append("category_id", idCategory)
-        formData.append("created_by", 11)
+        formData.append("created_by", userId)
         if (status === true) {
             formData.append("course_status_id", 1)
         } else formData.append("course_status_id", 2)
@@ -234,20 +279,29 @@ const UpdateCourse = () => {
         formData.append("course_field_id", 3);
 
         const res = await CallAPI('PUT', formData, `/courses/${id.id}`);
-        if (res.status === 1) {
-            isSuccess = true;
-        } else isSuccess = false;
+        isSuccess = res.status === 1;
 
         if (isSuccess === true) {
             setIsloading(false)
             return toast.success("Saved", {toastId: 10, autoClose: 2000})
         } else {
+            setIsloading(false);
             return toast.error("Save course failed, try again", {
                 toastId: -10,
                 autoClose: 2000,
             });
         }
     }
+
+    if (isFirstLoading) return (
+        <>
+            <Header/>
+            <div style={{marginTop: 200}}>
+                <Loader/>
+            </div>
+        </>
+    )
+
     return (
         <React.Fragment>
             <LoadingMask loading={isLoading} text={"loading..."}>
@@ -255,7 +309,7 @@ const UpdateCourse = () => {
                 <div className="container main-container">
                     <div className="row">
                         <div className="col-lg-12 mt-5">
-                            <h3 className="text-center mt-5 mb-5">Reactjs Eccommerce Site - Update Course</h3>
+                            <h3 className="text-center mt-5 mb-5">Update Course</h3>
                             <div className="mt-5 mb-5">
                                 <div className="form-group">
                                     <h6>Course name:</h6>
@@ -267,7 +321,6 @@ const UpdateCourse = () => {
                                 <div className="form-group">
                                     <h6>Summary:</h6>
                                     <input onChange={handleChangeSummary}
-                                           type="text"
                                            className="form-control" id="summary"
                                            value={summary}
                                            placeholder="Summary"/>
@@ -300,7 +353,7 @@ const UpdateCourse = () => {
                                 </div>
                                 <div className="form-group">
                                     <h6>Course image</h6>
-                                    <img src={showImg} style={{width: 293, height: 220, marginRight: 20}}/>
+                                    <img src={showImg} style={{width: 293, height: 220, marginRight: 20}} alt=""/>
                                     <input type="file" id="image" accept=".png, .jpg" style={{cursor: "pointer"}}
                                            onChange={handleImage} ref={refImg}/>
                                 </div>
@@ -311,25 +364,8 @@ const UpdateCourse = () => {
                                 </div>
                                 <div className="form-group" style={{marginTop: 60}}>
                                     <h6>Category</h6>
-                                    {/*<Select*/}
-                                    {/*    showSearch*/}
-                                    {/*    style={{width: 200}}*/}
-                                    {/*    placeholder="Select a category"*/}
-                                    {/*    optionFilterProp="children"*/}
-                                    {/*    onChange={onChangeCategories}*/}
-                                    {/*    onSearsh*/}
-                                    {/*    value={idCategory}*/}
-                                    {/*>*/}
-                                    {/*    {*/}
-                                    {/*        listCategory.map((data, index) => {*/}
-                                    {/*            return (*/}
-                                    {/*                <Option key={index} value={data.id}>{data.name}</Option>*/}
-                                    {/*            )*/}
-                                    {/*        })*/}
-                                    {/*    }*/}
-                                    {/*</Select>,*/}
                                     <Menu onClick={onChangeCategories} style={{ width: 200,border:'1' }} mode="vertical">
-                                        <SubMenu key="sub2" title="Choose field level">
+                                        <SubMenu key="sub2" title="Change category">
                                             <SubMenu key="subMenuWeb" title="Web programming">
                                                 {
                                                     listCategoryWeb.map((data)=>{
@@ -353,13 +389,6 @@ const UpdateCourse = () => {
                                     <Checkbox style={{float: "right"}} checked={status}
                                               onChange={onChangeStatus}>Accomplished</Checkbox>
                                 </div>
-                                {
-                                    idCategory === '0' &&
-                                    <div>
-                                    <span id="warningOption"
-                                          style={{color: "red", marginTop: 5}}>Please select category</span>
-                                    </div>
-                                }
                                 <Button className="mt-2 b-group-color" type="primary"
                                         onClick={handleAddDoc}>
                                     <i className="fa fa-plus" style={{marginRight: 5, paddingTop: 2}}/>

@@ -6,13 +6,31 @@ import CallAPI from "../../until/callAPI";
 import Loader from "../../component/loader";
 import {Col, Pagination, Row} from "antd";
 import CardCourse from "../../component/CardCourse";
+import {useHistory} from "react-router-dom";
+import jwt_decode from "jwt-decode";
 
 const ListCourseTaught = () => {
     const [listCourseTaught, setListCourseTaught] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [pages,setPages]= useState(1);
     const [currentPage, setCurrentPage] = useState(1);
-    const userId = 7;
+    let decode = null;
+    let userId = null;
+    const router = useHistory();
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user) {
+        localStorage.removeItem("user");
+        router.push("/login");
+    } else {
+        const accessToken = user.accessToken;
+        if (accessToken) {
+            decode = jwt_decode(accessToken);
+            userId = decode.userId;
+        }else{
+            localStorage.removeItem("user");
+            router.push("/login");
+        }
+    }
     useEffect(() => {
         const fetchData = async () => {
             const resList = await CallAPI("GET", null, `/courses?page=${currentPage}&&created_by=${userId}`);
@@ -78,6 +96,9 @@ const ListCourseTaught = () => {
                                         })
                                     }
                                 </Row>
+                                <div style={{textAlign:"center"}}>
+                                    <Pagination  simple onChange={onChangeCurrentPage} total={pages*10} />
+                                </div>
                             </>
                             :
                             <div style={{marginTop: 50, marginBottom: 50, textAlign: "center"}}>
@@ -89,9 +110,7 @@ const ListCourseTaught = () => {
                             </div>
                         }
                     </div>
-                    <div style={{textAlign:"center"}}>
-                        <Pagination  simple onChange={onChangeCurrentPage} total={pages*10} />
-                    </div>
+
                 </Container>
             </div>
             <Footer/>

@@ -25,9 +25,6 @@
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
   </component>
-  <component name="ProblemsViewState">
-    <option name="selectedIndex" value="1" />
-  </component>
   <component name="ProjectId" id="1uOsVodvOGF2SnMmNhb2w8OpOCG" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -96,10 +93,30 @@
       <workItem from="1628178172256" duration="669000" />
       <workItem from="1628308441537" duration="10815000" />
       <workItem from="1628781928696" duration="8368000" />
+      <workItem from="1628931849685" duration="21337000" />
+      <workItem from="1629196182542" duration="2966000" />
+      <workItem from="1629301901933" duration="1239000" />
+      <workItem from="1629469278384" duration="6738000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/component/SingleProduct/CardTeacher/index.js</url>
+          <line>69</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/pages/SingleProduct/index.js</url>
+          <line>86</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
