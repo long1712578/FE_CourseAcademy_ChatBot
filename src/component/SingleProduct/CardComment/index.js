@@ -12,7 +12,6 @@ const CardComment = ({ courseId }) => {
   const [listFeedback, setListFeedback] = useState([]);
   const { register, handleSubmit } = useForm();
   const [rating, setRating] = useState(0);
-  // const [checkReview, setCheckReview] = useState({ show: false });
   useEffect(() => {
     const fetchData = async () => {
       const res = await CallUnAuthorize("GET", null, `/comments/course/${courseId}`);

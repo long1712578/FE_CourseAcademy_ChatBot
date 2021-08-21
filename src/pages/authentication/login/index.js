@@ -14,7 +14,7 @@ function Login() {
   const [checkSignin, setCheckSignin] = useState(false);
   const router = useHistory();
   const onFinish = (data) => {
-    console.log('data', data);
+    // console.log('data', data);
     const fetchData = async () => {
       const res = await CallUnAuthorize("POST", { ...data }, "/sign-in");
       if (res.status === 1) {

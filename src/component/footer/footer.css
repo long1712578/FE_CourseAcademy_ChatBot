@@ -15,6 +15,11 @@ footer{
     font-size: 15px;
     font-weight: 400;
     line-height: 1.667;
+    clear: both;
+    position: relative;
+    /* height: 200px; */
+    margin-top: 225px;
+    /* margin-bottom: 0px; */
 }
 .footer-area {
     background-color: #28a745;
