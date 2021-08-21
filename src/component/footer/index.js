@@ -33,7 +33,7 @@ export default function Footer() {
                 </div>
               </div>
               <div className="col-lg-2 col-md-6 col-sm-6">
-                <div className="single-footer-widget instafeed">
+                {/* <div className="single-footer-widget instafeed">
                   <h4 className="footer_title">Gallery</h4>
                   <ul className="list instafeed d-flex flex-wrap">
                     <li><img className="title-course" src="/images/logo-course.jpg" alt="" /></li>
@@ -43,7 +43,7 @@ export default function Footer() {
                     <li><img className="title-course" src="/images/logo-course.jpg" alt="" /></li>
                     <li><img className="title-course" src="/images/logo-course.jpg" alt="" /></li>
                   </ul>
-                </div>
+                </div> */}
               </div>
               <div className="offset-lg-1 col-lg-3 col-md-6 col-sm-6">
                 <div className="single-footer-widget tp_widgets">

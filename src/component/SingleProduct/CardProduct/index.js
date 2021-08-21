@@ -2,7 +2,7 @@ import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { Modal } from "antd";
 import CallAPI from "../../../until/callAPI";
-import CallUnAuthorize from "until/callUnAuthorize";
+import CallUnAuthorize from "../../../until/callUnAuthorize";
 import { useHistory } from "react-router-dom";
 import SweetAlert from "sweetalert2-react";
 import { Player } from "video-react";
@@ -40,7 +40,9 @@ const CardProduct = ({
         }
       }
       const res2 = await CallUnAuthorize("GET", null, `/videos/preview/${id}`);
+      console.log('ress20', res2);
       if (res2.status === 1) {
+        console.log('res', res2.data);
         setPreview(res2.data);
       }
     };
