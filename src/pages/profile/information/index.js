@@ -61,7 +61,7 @@ const Information = ({userInfo}) => {
                     {...register("phone", { value: `${userInfo.phone}` })}
                   ></input>
                 </div>
-                <div className="row">
+                {/* <div className="row">
                   <label className="col-sm-3 control-label">Birth date: </label>
                   <input
                     className="col-sm-9"
@@ -69,7 +69,7 @@ const Information = ({userInfo}) => {
                     disabled={disableInput}
                     {...register("birth_date", { value: `${userInfo.birthDate}` })}
                   ></input>
-                </div>
+                </div> */}
                 <div className="row">
                   <label className="col-sm-3 control-label">Username: </label>
                   <input

@@ -63,7 +63,6 @@ function Description({courseId, userId}) {
     setRating(newRating);
   };
   const createReview = async () => {
-
     const res = await CallAPI(
       "POST",
       { 
@@ -73,7 +72,9 @@ function Description({courseId, userId}) {
       },
       `/comments`
     );
+    console.log(res.status)
     if (res.status === 1) {
+      console.log('vo day')
       setRating(0);
       setCheckReview({show: true});
     } else {
@@ -170,6 +171,7 @@ function Description({courseId, userId}) {
                     count={5}
                     onChange={ratingChanged}
                     size={24}
+                    value={rating}
                     activeColor="#ffd700"
                 />
                 <button

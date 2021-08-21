@@ -43,7 +43,6 @@ const Product = () => {
       try{
         if(user && user.authenticated){
           const res = await CallAPI("GET", null, `/orders/${id.id}`);
-          console.log('res preview', res);
           if (res.status === 1 && res.data.id) {
             setIsOrder(true);
           } else setIsOrder(false);

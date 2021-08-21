@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import CallAPI from "../../../until/callAPI";
 import CallUnAuthorize from "../../../until/callUnAuthorize";
-import ReactStars from "react-rating-stars-component";
-import SweetAlert from "sweetalert2-react";
+// import ReactStars from "react-rating-stars-component";
+import StarRatings from 'react-star-ratings';
+// import SweetAlert from "sweetalert2-react";
+import {toast, ToastContainer} from "react-toastify";
 import { useForm } from "react-hook-form";
 import "./comment.css";
 
@@ -10,12 +12,12 @@ const CardComment = ({ courseId }) => {
   const [listFeedback, setListFeedback] = useState([]);
   const { register, handleSubmit } = useForm();
   const [rating, setRating] = useState(0);
-  const [checkReview, setCheckReview] = useState({ show: false });
+  // const [checkReview, setCheckReview] = useState({ show: false });
   useEffect(() => {
     const fetchData = async () => {
       const res = await CallUnAuthorize("GET", null, `/comments/course/${courseId}`);
       if (res.status === 1) {
-        setListFeedback(res.data.cmd);
+        setListFeedback(res.data.cmd)
       } else {
         setListFeedback([]);
       }
@@ -40,17 +42,23 @@ const CardComment = ({ courseId }) => {
       `/comments`
     );
     if (res.status === 1) {
-      setCheckReview({ show: true });
+      setRating(0);
+      document.getElementById('txtComment').value='';
+      toast.success("Comment success", {toastId: 10, autoClose: 2000});
       const res = await CallUnAuthorize("GET", null, `/comments/course/${courseId}`);
       if (res.status === 1) {
         setListFeedback(res.data.cmd);
         setRating(0);
-        document.getElementById('comment').innerHTML = '';
       } else {
         setListFeedback([]);
       }
     } else {
-      setCheckReview({ show: false });
+      document.getElementById('txtComment').value='';
+      setRating(0);
+      return toast.error("Comment fail, because you had comment!", {
+        toastId: -10,
+        autoClose: 2000,
+    });
     }
   };
 
@@ -82,9 +90,9 @@ const CardComment = ({ courseId }) => {
                       <small>{data.rating.create_at}</small>
                     </div>
                     <div className="action d-flex justify-content-between mt-2 align-items-center">
-                      <div className="icons align-items-center">
+                      <div style={{marginLeft: 20}} className="icons align-items-center">
+                        {data.rating.rating}
                         <i className="fa fa-star text-warning"></i>{" "}
-                        <i className="fa fa-check-circle-o check-icon"></i>
                       </div>
                     </div>
                   </div>
@@ -105,13 +113,13 @@ const CardComment = ({ courseId }) => {
               <div className="review">
                 <div className="review_box">
                   <div className="content-review">
-                  <ReactStars
-                    count={5}
-                    value={rating}
-                    onChange={ratingChanged}
-                    size={24}
-                    activeColor="#ffd700"
-                  />
+                    <StarRatings
+                        rating={rating}
+                        starRatedColor="yellow"
+                        changeRating={ratingChanged}
+                        numberOfStars={5}
+                        name='rating'
+                    />
                   <form
                     className="row contact_form"
                     id="contactForm"
@@ -122,7 +130,7 @@ const CardComment = ({ courseId }) => {
                       <div className="form-group">
                         <textarea
                           className="form-control"
-                          id="comment"
+                          id="txtComment"
                           rows={2}
                           placeholder="Comment"
                           defaultValue={""}
@@ -137,18 +145,19 @@ const CardComment = ({ courseId }) => {
                     </div>
                   </form>
                   </div>
-                  <SweetAlert
+                  {/* <SweetAlert
                     show={checkReview.show}
                     title="Review"
                     text="Sucess!!!"
                     onConfirm={() => setCheckReview({ show: false })}
-                  />
+                  /> */}
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+      <ToastContainer position="bottom-center"/>
     </article>
   );
 };

@@ -181,7 +181,7 @@ const CardProduct = ({
         </div>
       </div>
       { isOrder &&
-         <PreviewProduct />
+         <PreviewProduct  />
       }
     </article>
   );

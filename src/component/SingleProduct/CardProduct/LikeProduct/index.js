@@ -41,14 +41,14 @@ const LikeProduct = ({ id }) => {
           <i className="fas fa-heart-broken"></i> Cancle like
         </a>
       )}
-      <SweetAlert
+      {/* <SweetAlert
         show={isLove.show}
         title="course"
         text={isLove.content}
         onConfirm={() => {
           setIsLove({ show: false, content: "" });
         }}
-      />
+      /> */}
     </div>
   );
 };
