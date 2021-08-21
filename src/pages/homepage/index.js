@@ -1,5 +1,5 @@
 import React from 'react'
-// import MostHighLightComponent from "../../component/homepage/MostHighLightComponent";
+import MostHighLightComponent from "../../component/homepage/MostHighLightComponent";
 import MostViewComponent from "../../component/homepage/MostViewComponent";
 import NewCourse from "../../component/homepage/NewCourse";
 import MostCategoryRegis from "../../component/homepage/MostCategoryRegis";
@@ -12,7 +12,7 @@ const HomePage = () =>
         <div>
             <React.Fragment>
                 <Header/>
-                {/* <MostHighLightComponent/> */}
+                <MostHighLightComponent/>
                 <MostViewComponent/>
                 <NewCourse/>
                 <MostCategoryRegis/>
