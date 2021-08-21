@@ -1,6 +1,7 @@
 import React, {useContext} from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "font-awesome/css/font-awesome.min.css";
+import { useHistory } from "react-router-dom";
 import { 
   LoginOutlined,
   UserAddOutlined,
@@ -25,10 +26,12 @@ import {authenProvider} from "../../providers/authenProvider";
 
 
 export default function Header(props) {
+  const router = useHistory();
   const {authen, setAuthen} = useContext(authenProvider);
   const handleLogout = () => {
     localStorage.removeItem("user");
     setAuthen({isLogin: false, user: null, token: null});
+    router.push('/login');
   }
   return (
     <div className="header-course">
@@ -69,12 +72,12 @@ export default function Header(props) {
                     <InfoCircleOutlined /> &nbsp; Profile
                     </NavDropdown.Item>
 
-                      <NavDropdown.Item href="/add-course">
+                      {/* <NavDropdown.Item href="/add-course">
                           <i className="far fa-plus-square"></i> &nbsp; Add Course
                       </NavDropdown.Item>
                       <NavDropdown.Item href="/list-course-taught">
                           <i className="far fa-list-alt"></i> &nbsp; List of courses being taught
-                      </NavDropdown.Item>
+                      </NavDropdown.Item> */}
                     <NavDropdown.Item onClick={handleLogout}>
                     <LogoutOutlined /> &nbsp; Logout
                     </NavDropdown.Item>
