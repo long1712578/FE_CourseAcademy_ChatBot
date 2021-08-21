@@ -76,7 +76,6 @@ const ProductList = () => {
     }, [currentPage, pages, idCategory, search, filter])
 
     const onChangeCurrentPage = (data) => {
-        console.log(data);
         setCurrentPage(data);
         return data;
     }

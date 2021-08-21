@@ -1,32 +1,27 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useContext} from 'react'
 import {Link} from "react-router-dom";
-import CallUnAuthorize from "../../until/callUnAuthorize";
-import CallAPI from 'until/callAPI';
-import {toast} from "react-toastify";
+import CallAPI from '../../until/callAPI';
+import {authenProvider} from "../../providers/authenProvider";
 
 const ProductCart= ({idCourse,nameCourse,nameTeacher,price,promotionPrice,rating,nameCategory,srcImg,listCourseHighLight,listCourseNew})=>{
-    const user = JSON.parse(localStorage.getItem("user"));
     const [isOrder, setIsOrder] = useState(false);
+    const {authen} = useContext(authenProvider);
 
     const fetchOrder = async () => {
         try{
-          if(user && user.authenticated){
+          if(authen.isLogin){
             const res = await CallAPI("GET", null, `/orders/${idCourse}`);
-            if (res.status === 1 && res.data.id) {
+            if (res.status === 1) {
               setIsOrder(true);
-            } else setIsOrder(false);
+            }
           }
         }catch(e){
-          setIsOrder(false);
         }
       };
 
     useEffect(() => {
-            if(user){
-                fetchOrder();
-            }
-        
-      }, [idCourse]);
+        fetchOrder();
+      }, []);
     return(
         <figure className="card card-product-grid">
             <Link className="link-no-decoration" to={`courses/${idCourse}`}>
@@ -85,13 +80,15 @@ const ProductCart= ({idCourse,nameCourse,nameTeacher,price,promotionPrice,rating
                     </div>
                 </div>
                 {
-                    (!user) ?
+                    (!authen.isLogin) ?
                     <a href={`/login`} className="btn btn-block btn-primary">Register Now! </a>
                     :
                     (
                         (isOrder)
                         ?
-                        <div></div>
+                        <div>
+                            <a href="#" className="btn btn-block btn-primary">Registed! </a>
+                        </div>
                         :
                         <a href={`/courses/${idCourse}/register`} className="btn btn-block btn-primary">Register Now! </a>
                     )
