@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import CallAPI from "../../../until/callAPI";
 import CallUnAuthorize from "../../../until/callUnAuthorize";
-import ReactStars from "react-rating-stars-component";
+// import ReactStars from "react-rating-stars-component";
+import StarRatings from 'react-star-ratings';
 import SweetAlert from "sweetalert2-react";
 import { useForm } from "react-hook-form";
 import "./comment.css";
@@ -15,7 +16,7 @@ const CardComment = ({ courseId }) => {
     const fetchData = async () => {
       const res = await CallUnAuthorize("GET", null, `/comments/course/${courseId}`);
       if (res.status === 1) {
-        setListFeedback(res.data.cmd);
+        setListFeedback(res.data.cmd)
       } else {
         setListFeedback([]);
       }
@@ -39,7 +40,9 @@ const CardComment = ({ courseId }) => {
       `/comments`
     );
     if (res.status === 1) {
+      console.log('vo day')
       setRating(0);
+      document.getElementById('txtComment').value='';
       setCheckReview({ show: true });
       const res = await CallUnAuthorize("GET", null, `/comments/course/${courseId}`);
       if (res.status === 1) {
@@ -103,12 +106,20 @@ const CardComment = ({ courseId }) => {
               <div className="review">
                 <div className="review_box">
                   <div className="content-review">
-                  <ReactStars
-                    count={5}
-                    onChange={ratingChanged}
-                    size={24}
-                    activeColor="#ffd700"
-                  />
+                  {/*<ReactStars*/}
+                  {/*  count={5}*/}
+                  {/*  onChange={ratingChanged}*/}
+                  {/*  size={24}*/}
+                  {/*  value={rating}*/}
+                  {/*  activeColor="#ffd700"*/}
+                  {/*/>*/}
+                    <StarRatings
+                        rating={rating}
+                        starRatedColor="yellow"
+                        changeRating={ratingChanged}
+                        numberOfStars={5}
+                        name='rating'
+                    />
                   <form
                     className="row contact_form"
                     id="contactForm"
@@ -119,7 +130,7 @@ const CardComment = ({ courseId }) => {
                       <div className="form-group">
                         <textarea
                           className="form-control"
-                          id="comment"
+                          id="txtComment"
                           rows={2}
                           placeholder="Comment"
                           defaultValue={""}
