@@ -6,7 +6,7 @@ import CallUnAuthorize from "../../../until/callUnAuthorize";
 import CallAPI from "../../../until/callAPI";
 import { Form, Input, Button, Checkbox } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import { toast } from "react-toastify";
+import {toast, ToastContainer} from "react-toastify";
 import { authenProvider } from "../../../providers/authenProvider";
 import jwt_decode from "jwt-decode";
 function Login() {
@@ -32,7 +32,10 @@ function Login() {
       } else {
         setCheckSignin(false);
         setAuthen({ isLogin: false, user: {} });
-        toast.error("login fail!");
+        return toast.error("Login failed, try again", {
+          toastId: -10,
+          autoClose: 2000,
+      });
       }
     };
     fetchData();
@@ -42,6 +45,7 @@ function Login() {
       <div className="login-background">
         <div className="login-container">
           <div className="login-title">
+            <a href="/"><i  class="fas fa-home fa-3x"></i></a>
             <h2> Login</h2>
           </div>
           <Form
@@ -97,6 +101,7 @@ function Login() {
           </Form>
         </div>
       </div>
+      <ToastContainer position="bottom-center"/>
     </div>
   );
 }

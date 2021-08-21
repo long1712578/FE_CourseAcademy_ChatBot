@@ -65,7 +65,7 @@ function Signup() {
         const res = await CallUnAuthorize("POST", { ...user }, "/sign-up");
         if (res.status === 1) {
           // Chyen sang mang hinh dang nhap
-          setIsSignup({ show: true, content: "Please check youremail to finish signup!" });
+          setIsSignup({ show: true, content: "Please check your email to finish signup!" });
           setCheckRegister(true);
           router.push("/login");
         } else {

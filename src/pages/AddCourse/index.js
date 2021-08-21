@@ -13,6 +13,7 @@ import "react-loadingmask/dist/react-loadingmask.css";
 import CallUnAuthorize from "../../until/callUnAuthorize";
 import {Menu} from 'antd';
 import {useHistory} from "react-router-dom";
+import './index.css';
 import jwt_decode from "jwt-decode";
 const {SubMenu} = Menu;
 

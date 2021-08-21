@@ -33,17 +33,16 @@ const CardProduct = ({
   const router = useHistory();
   useEffect(() => {
     const fetchData = async () => {
+      const res2 = await CallUnAuthorize("GET", null, `/videos/preview/${id}`);
+      if (res2.status === 1) {
+        console.log('res', res2.data);
+        setPreview(res2.data);
+      }
       if (login) {
         const res1 = await CallAPI("GET", null, `/orders/${id}`);
         if (res1.status === 1 && res1.data.id) {
           setIsOrder(true);
         }
-      }
-      const res2 = await CallUnAuthorize("GET", null, `/videos/preview/${id}`);
-      console.log('ress20', res2);
-      if (res2.status === 1) {
-        console.log('res', res2.data);
-        setPreview(res2.data);
       }
     };
     fetchData();

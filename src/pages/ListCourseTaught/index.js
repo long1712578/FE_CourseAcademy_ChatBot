@@ -33,7 +33,7 @@ const ListCourseTaught = () => {
     }
     useEffect(() => {
         const fetchData = async () => {
-            const resList = await CallAPI("GET", null, `/courses?page=${currentPage}&&created_by=${userId}&&is_delete=false`);
+            const resList = await CallAPI("GET", null, `/courses?page=${currentPage}&created_by=${userId}&is_delete=false`);
             setIsLoading(false);
             if (resList.status === 1) {
                 setListCourseTaught(resList.data.courses)
