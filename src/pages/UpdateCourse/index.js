@@ -276,7 +276,7 @@ const UpdateCourse = () => {
         } else formData.append("course_status_id", 2)
         formData.append("price", price)
         formData.append("promotion_price", promotionPrice)
-        formData.append("course_field_id", 3);
+        formData.append("course_field_id", 1);
 
         const res = await CallAPI('PUT', formData, `/courses/${id.id}`);
         isSuccess = res.status === 1;

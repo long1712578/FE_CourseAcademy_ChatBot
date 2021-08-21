@@ -1,5 +1,5 @@
 import React from 'react'
-import MostHighLightComponent from "../../component/homepage/mostHighLightComponent";
+import MostHighLightComponent from "../../component/homepage/MostHighLightComponent";
 import MostViewComponent from "../../component/homepage/MostViewComponent";
 import NewCourse from "../../component/homepage/NewCourse";
 import MostCategoryRegis from "../../component/homepage/MostCategoryRegis";
