@@ -2,7 +2,7 @@ import React, { useEffect, Component, useState } from "react";
 import { Button } from "antd";
 import { useForm } from "react-hook-form";
 import CallAPI from "../../../until/callAPI";
-import { toast } from "react-toastify";
+import {toast, ToastContainer} from "react-toastify";
 import './changePassword.css';
 import SweetAlert from 'sweetalert2-react';
 
@@ -71,6 +71,7 @@ const ChangePassword = ({id}) => {
         text="Sucess!!!"
         onConfirm={() => setState({ show: false })}
       />
+       <ToastContainer position="bottom-center"/>
     </div>
   );
 };
